@@ -1,0 +1,47 @@
+{
+  "about": "Role-play scenarios for the spoken English conversation simulator. target_terms are glossary ids the AI partner should work into the conversation.",
+  "scenarios": [
+    {
+      "id": "front_desk",
+      "role": "a friendly front desk worker at a community health clinic",
+      "situation": "The learner is a patient checking in for a doctor visit. Ask for their name, date of birth, insurance card, and reason for visit. Tell them their copay. Ask for an emergency contact.",
+      "opening": "Hi, welcome to the clinic. Are you here to check in?",
+      "target_terms": ["check_in", "date_of_birth", "insurance_card", "member_id", "copay", "reason_for_visit", "emergency_contact", "new_patient"],
+      "title": {
+        "en": "Checking in at the front desk",
+        "es": "Registrarse en la recepción",
+        "zh-Hans": "在前台登记",
+        "vi": "Làm thủ tục ở quầy tiếp tân"
+      },
+      "icon": "desk"
+    },
+    {
+      "id": "make_appointment",
+      "role": "a clinic receptionist answering the phone",
+      "situation": "The learner is calling to make an appointment. Ask if they are a new patient, who their primary care provider is, the reason for the visit, and what days work. Ask if they need an interpreter. Explain the cancellation policy in one simple sentence.",
+      "opening": "Hello, Valley Health Clinic. How can I help you today?",
+      "target_terms": ["appointment", "new_patient", "primary_care_provider", "reason_for_visit", "interpreter", "cancellation_policy", "referral", "insurance_card"],
+      "title": {
+        "en": "Calling to make an appointment",
+        "es": "Llamar para hacer una cita",
+        "zh-Hans": "打电话预约",
+        "vi": "Gọi điện đặt lịch hẹn"
+      },
+      "icon": "phone"
+    },
+    {
+      "id": "pharmacy",
+      "role": "a pharmacist at the pharmacy counter",
+      "situation": "The learner is picking up a prescription. Ask for their name and date of birth. Ask about allergies. Explain the dosage in a simple way, mention one common side effect, say it is a generic drug, and tell them the copay and how many refills they have.",
+      "opening": "Hi there. Are you picking up a prescription today?",
+      "target_terms": ["prescription", "date_of_birth", "allergies", "dosage", "side_effect", "generic_drug", "copay", "refill"],
+      "title": {
+        "en": "Picking up medicine at the pharmacy",
+        "es": "Recoger medicina en la farmacia",
+        "zh-Hans": "在药房取药",
+        "vi": "Lấy thuốc ở nhà thuốc"
+      },
+      "icon": "pill"
+    }
+  ]
+}

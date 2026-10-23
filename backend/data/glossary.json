@@ -1,0 +1,716 @@
+{
+  "version": 1,
+  "about": "Plain-English healthcare form terms. Every explanation the app gives is grounded in these definitions. A teacher should review each entry and set vetted to true. Translations added under translations.<language code> are treated as teacher-approved and are shown word for word instead of a computer translation.",
+  "terms": [
+    {
+      "id": "copay",
+      "term": "Copay",
+      "aliases": ["co-pay", "copayment", "co-payment"],
+      "category": "costs",
+      "definition": "A set amount of money you pay each time you see a doctor or pick up a medicine.",
+      "example": "My copay for each doctor visit is $20.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "deductible",
+      "term": "Deductible",
+      "aliases": ["annual deductible"],
+      "category": "costs",
+      "definition": "The amount you must pay for care each year before your insurance starts to help pay.",
+      "example": "My deductible is $1,000, so I pay the first $1,000 of my care this year.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "coinsurance",
+      "term": "Coinsurance",
+      "aliases": ["co-insurance"],
+      "category": "costs",
+      "definition": "The part of a bill you share with your insurance, shown as a percent, like 20%.",
+      "example": "My coinsurance is 20%, so I pay $20 when the bill is $100.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "premium",
+      "term": "Premium",
+      "aliases": ["monthly premium", "insurance premium"],
+      "category": "costs",
+      "definition": "The money you pay every month to keep your health insurance.",
+      "example": "My insurance premium is $150 every month.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "out_of_pocket_max",
+      "term": "Out-of-pocket maximum",
+      "aliases": ["out-of-pocket max", "out of pocket maximum", "OOP max"],
+      "category": "costs",
+      "definition": "The most money you will have to pay for covered care in one year.",
+      "example": "After I reach my out-of-pocket maximum, my insurance pays for the rest of my covered care this year.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "insurance_card",
+      "term": "Insurance card",
+      "aliases": ["health insurance card", "member card", "ID card"],
+      "category": "costs",
+      "definition": "A card from your health plan that shows your name and your plan numbers.",
+      "example": "Please show your insurance card at the front desk.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "member_id",
+      "term": "Member ID",
+      "aliases": ["member ID number", "member number", "subscriber ID", "ID number", "ID #"],
+      "category": "costs",
+      "definition": "The number on your insurance card that shows who you are to your health plan.",
+      "example": "Write the member ID from the front of your card.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "group_number",
+      "term": "Group number",
+      "aliases": ["group #", "group no.", "grp #", "group ID"],
+      "category": "costs",
+      "definition": "The number on your insurance card for your plan, often the plan from your job.",
+      "example": "The group number is under my name on the card.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "policyholder",
+      "term": "Policyholder",
+      "aliases": ["policy holder", "subscriber", "insured", "primary insured", "subscriber name"],
+      "category": "costs",
+      "definition": "The person whose name the health insurance plan is under.",
+      "example": "My husband is the policyholder because the insurance comes from his job.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "primary_insurance",
+      "term": "Primary insurance",
+      "aliases": ["primary coverage", "primary plan"],
+      "category": "costs",
+      "definition": "Your main health plan, the one that pays first.",
+      "example": "My primary insurance is from my job, so they pay first.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "secondary_insurance",
+      "term": "Secondary insurance",
+      "aliases": ["secondary coverage", "other insurance", "additional insurance"],
+      "category": "costs",
+      "definition": "A second health plan that can help pay what your first plan does not pay.",
+      "example": "I have secondary insurance through my wife's job.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "in_network",
+      "term": "In-network",
+      "aliases": ["in network", "network provider", "participating provider"],
+      "category": "costs",
+      "definition": "Doctors and hospitals that have a deal with your insurance, so care costs you less.",
+      "example": "This clinic is in-network, so my visit costs less.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "out_of_network",
+      "term": "Out-of-network",
+      "aliases": ["out of network", "non-network", "non-participating"],
+      "category": "costs",
+      "definition": "Doctors and hospitals that do not have a deal with your insurance, so care often costs more.",
+      "example": "That hospital is out-of-network, so I might get a bigger bill.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "claim",
+      "term": "Claim",
+      "aliases": ["insurance claim", "claims"],
+      "category": "costs",
+      "definition": "A bill that is sent to your insurance company to ask them to pay for your care.",
+      "example": "The clinic sent a claim to my insurance after my visit.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "explanation_of_benefits",
+      "term": "Explanation of Benefits",
+      "aliases": ["EOB"],
+      "category": "costs",
+      "definition": "A paper from your insurance that shows what they paid and what you may owe; it is not a bill.",
+      "example": "My Explanation of Benefits says my insurance paid $80 for my visit.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "prior_authorization",
+      "term": "Prior authorization",
+      "aliases": ["prior auth", "pre-authorization", "preauthorization", "pre-approval", "precertification"],
+      "category": "costs",
+      "definition": "Permission your insurance must give before you get some tests, medicines, or treatments.",
+      "example": "My MRI needs prior authorization from my insurance first.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "referral",
+      "term": "Referral",
+      "aliases": ["referring doctor", "referred by"],
+      "category": "costs",
+      "definition": "A note from your main doctor that sends you to see a different, special doctor.",
+      "example": "I need a referral to see a heart doctor.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "medi_cal",
+      "term": "Medi-Cal",
+      "aliases": ["Medi Cal", "Medicaid"],
+      "category": "costs",
+      "definition": "California's free or low-cost health insurance for people with low income.",
+      "example": "My children have Medi-Cal, so their visits do not cost money.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "medicare",
+      "term": "Medicare",
+      "aliases": ["Medicare number", "Medicare card"],
+      "category": "costs",
+      "definition": "Health insurance from the U.S. government for people 65 or older and some people with disabilities.",
+      "example": "My grandmother uses Medicare to pay for her doctor visits.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "balance_due",
+      "term": "Balance due",
+      "aliases": ["amount due", "patient balance", "amount you owe", "balance"],
+      "category": "costs",
+      "definition": "The money you still need to pay on a bill.",
+      "example": "The balance due on my bill is $35.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "guarantor",
+      "term": "Guarantor",
+      "aliases": ["responsible party", "person responsible for payment", "financially responsible party"],
+      "category": "costs",
+      "definition": "The person who agrees to pay the bill, like a parent paying for a child.",
+      "example": "I am the guarantor for my son's doctor bills.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "self_pay",
+      "term": "Self-pay",
+      "aliases": ["self pay", "cash pay", "private pay", "uninsured"],
+      "category": "costs",
+      "definition": "Paying for care with your own money, without using insurance.",
+      "example": "I do not have insurance, so I am self-pay.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "financial_responsibility",
+      "term": "Financial responsibility",
+      "aliases": ["financial policy", "payment policy", "financial agreement"],
+      "category": "costs",
+      "definition": "An agreement that you will pay any part of the bill your insurance does not pay.",
+      "example": "I signed the financial responsibility form at the front desk.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "assignment_of_benefits",
+      "term": "Assignment of benefits",
+      "aliases": ["assignment of insurance benefits", "authorization to pay benefits"],
+      "category": "costs",
+      "definition": "Permission for your insurance to send payment straight to the doctor's office instead of to you.",
+      "example": "The assignment of benefits lets my insurance pay the clinic directly.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "primary_care_provider",
+      "term": "Primary care provider",
+      "aliases": ["PCP", "primary care physician", "primary care doctor", "family doctor", "primary doctor"],
+      "category": "visits",
+      "definition": "Your main doctor, who you see for checkups and common health problems.",
+      "example": "My primary care provider is Dr. Lee.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "specialist",
+      "term": "Specialist",
+      "aliases": ["specialty doctor"],
+      "category": "visits",
+      "definition": "A doctor who knows a lot about one part of the body or one kind of illness.",
+      "example": "My doctor sent me to a specialist for my skin.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "urgent_care",
+      "term": "Urgent care",
+      "aliases": ["urgent care clinic", "walk-in clinic"],
+      "category": "visits",
+      "definition": "A clinic for problems that need care today but are not life-threatening, like a bad cold or a small cut.",
+      "example": "I went to urgent care for my hurt ankle.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "emergency_room",
+      "term": "Emergency room",
+      "aliases": ["ER", "emergency department", "ED"],
+      "category": "visits",
+      "definition": "The hospital area for very serious problems, like chest pain or trouble breathing.",
+      "example": "Go to the emergency room or call 911 if you have chest pain.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "appointment",
+      "term": "Appointment",
+      "aliases": ["appt", "appointment date", "appointment time"],
+      "category": "visits",
+      "definition": "A set day and time to see a doctor or nurse.",
+      "example": "My appointment is on Monday at 9:00 a.m.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "check_in",
+      "term": "Check-in",
+      "aliases": ["check in", "checking in", "registration", "patient registration"],
+      "category": "visits",
+      "definition": "Telling the front desk you have arrived and giving them your information.",
+      "example": "Please come 15 minutes early for check-in.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "follow_up_visit",
+      "term": "Follow-up visit",
+      "aliases": ["follow-up", "follow up", "follow-up appointment"],
+      "category": "visits",
+      "definition": "Another visit after your first one, so the doctor can check how you are doing.",
+      "example": "The doctor wants a follow-up visit in two weeks.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "annual_physical",
+      "term": "Annual physical",
+      "aliases": ["physical", "checkup", "check-up", "annual exam", "wellness visit", "annual wellness visit"],
+      "category": "visits",
+      "definition": "A visit once a year to check your health, even when you are not sick.",
+      "example": "I get my annual physical every January.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "telehealth",
+      "term": "Telehealth",
+      "aliases": ["telemedicine", "video visit", "virtual visit"],
+      "category": "visits",
+      "definition": "Seeing a doctor by video or phone instead of going to the office.",
+      "example": "I had a telehealth visit on my phone.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "interpreter",
+      "term": "Interpreter",
+      "aliases": ["medical interpreter", "language assistance", "language services", "interpreter needed"],
+      "category": "visits",
+      "definition": "A person who helps you talk with the doctor in your language, usually for free.",
+      "example": "I asked for an interpreter for my appointment.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "cancellation_policy",
+      "term": "Cancellation policy",
+      "aliases": ["no-show policy", "no-show", "missed appointment policy", "late cancellation"],
+      "category": "visits",
+      "definition": "The rules about what happens, like a fee, if you miss a visit or cancel too late.",
+      "example": "The cancellation policy says to call one day before if you cannot come.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "reason_for_visit",
+      "term": "Reason for visit",
+      "aliases": ["chief complaint", "reason for today's visit", "purpose of visit", "what brings you in today"],
+      "category": "visits",
+      "definition": "The main health problem or need that brought you to the doctor today.",
+      "example": "My reason for visit is a cough that will not go away.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "new_patient",
+      "term": "New patient",
+      "aliases": ["new patient form", "new patient registration", "new patient intake"],
+      "category": "visits",
+      "definition": "Someone who has never seen this doctor or clinic before.",
+      "example": "I filled out a new patient form at my first visit.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "patient_portal",
+      "term": "Patient portal",
+      "aliases": ["online portal", "MyChart", "patient website"],
+      "category": "visits",
+      "definition": "A website or app where you can see test results, send messages to your doctor, and make visits.",
+      "example": "I can see my test results on the patient portal.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "lab_test",
+      "term": "Lab test",
+      "aliases": ["lab work", "labs", "blood test", "laboratory test"],
+      "category": "visits",
+      "definition": "A check of your blood, urine, or other samples to learn about your health.",
+      "example": "The doctor ordered a lab test to check my blood sugar.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "date_of_birth",
+      "term": "Date of birth",
+      "aliases": ["DOB", "birth date", "birthdate"],
+      "category": "personal_info",
+      "definition": "The day, month, and year you were born.",
+      "example": "Write your date of birth like this: 03/15/1985.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "mailing_address",
+      "term": "Mailing address",
+      "aliases": ["address", "home address", "street address"],
+      "category": "personal_info",
+      "definition": "The street, city, and ZIP code where you get your mail.",
+      "example": "Write your mailing address so the clinic can send you letters.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "emergency_contact",
+      "term": "Emergency contact",
+      "aliases": ["in case of emergency", "ICE", "emergency contact person"],
+      "category": "personal_info",
+      "definition": "A person the clinic can call if something serious happens to you.",
+      "example": "I put my sister as my emergency contact.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "relationship_to_patient",
+      "term": "Relationship to patient",
+      "aliases": ["relationship", "relation to patient", "relationship to insured"],
+      "category": "personal_info",
+      "definition": "How a person is connected to you, like mother, husband, or friend.",
+      "example": "Next to relationship to patient, I wrote daughter.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "signature",
+      "term": "Signature",
+      "aliases": ["sign here", "patient signature", "signed"],
+      "category": "personal_info",
+      "definition": "Your name written by hand in your own way to show you agree.",
+      "example": "Put your signature at the bottom of the page.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "legal_guardian",
+      "term": "Legal guardian",
+      "aliases": ["guardian", "parent/guardian", "parent or guardian"],
+      "category": "personal_info",
+      "definition": "An adult who has the legal right to make decisions for a child or another person.",
+      "example": "A parent or legal guardian must sign for children under 18.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "preferred_language",
+      "term": "Preferred language",
+      "aliases": ["primary language", "language preference", "language spoken at home"],
+      "category": "personal_info",
+      "definition": "The language you want to use when you talk with the doctor and read papers.",
+      "example": "I wrote my preferred language on the form so they can call an interpreter.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "marital_status",
+      "term": "Marital status",
+      "aliases": ["married / single"],
+      "category": "personal_info",
+      "definition": "Whether you are single, married, divorced, or widowed.",
+      "example": "For marital status, I checked married.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "not_applicable",
+      "term": "N/A",
+      "aliases": ["n/a", "not applicable"],
+      "category": "personal_info",
+      "definition": "Something you write when a question is not about you or your situation.",
+      "example": "I do not have a second insurance, so I wrote N/A.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "medical_record_number",
+      "term": "Medical record number",
+      "aliases": ["MRN", "patient ID", "chart number"],
+      "category": "personal_info",
+      "definition": "The number the clinic uses to find your health file.",
+      "example": "The clinic uses my medical record number to find my file.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "allergies",
+      "term": "Allergies",
+      "aliases": ["allergy", "drug allergies", "known allergies", "allergic to"],
+      "category": "health_history",
+      "definition": "Foods, medicines, plants, or other things that make your body react badly, like a rash or swelling.",
+      "example": "I have allergies to peanuts and penicillin.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "medical_history",
+      "term": "Medical history",
+      "aliases": ["past medical history", "health history", "PMH"],
+      "category": "health_history",
+      "definition": "Information about your past illnesses, health problems, and treatments.",
+      "example": "The doctor asked about my medical history.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "family_history",
+      "term": "Family history",
+      "aliases": ["family medical history", "family health history"],
+      "category": "health_history",
+      "definition": "Health problems that your parents, brothers, sisters, or grandparents have had.",
+      "example": "Diabetes is in my family history because my mother has it.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "symptoms",
+      "term": "Symptoms",
+      "aliases": ["symptom", "signs and symptoms", "current symptoms"],
+      "category": "health_history",
+      "definition": "Changes in your body that show you may be sick, like fever, pain, or cough.",
+      "example": "My symptoms are a sore throat and a fever.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "diagnosis",
+      "term": "Diagnosis",
+      "aliases": ["diagnoses", "dx"],
+      "category": "health_history",
+      "definition": "The name the doctor gives to your illness or health problem after checking you.",
+      "example": "The diagnosis was an ear infection.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "chronic_condition",
+      "term": "Chronic condition",
+      "aliases": ["chronic illness", "chronic disease", "long-term condition", "ongoing condition"],
+      "category": "health_history",
+      "definition": "A health problem that lasts a long time, like diabetes or high blood pressure.",
+      "example": "High blood pressure is a chronic condition.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "surgery",
+      "term": "Surgery",
+      "aliases": ["surgeries", "operation", "past surgeries", "surgical history"],
+      "category": "health_history",
+      "definition": "Treatment where a doctor opens part of your body to fix a problem, usually in a hospital.",
+      "example": "I had surgery on my knee in 2019.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "immunizations",
+      "term": "Immunizations",
+      "aliases": ["immunization", "vaccinations", "vaccines", "vaccine record", "shots"],
+      "category": "health_history",
+      "definition": "Medicine, usually given with a needle, that protects you from certain diseases, like the flu.",
+      "example": "My son needs his immunizations before school starts.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "tobacco_use",
+      "term": "Tobacco use",
+      "aliases": ["smoking", "do you smoke", "smoking status"],
+      "category": "health_history",
+      "definition": "Whether you smoke cigarettes, vape, or use chewing products.",
+      "example": "The form asks about tobacco use, so I checked never.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "current_medications",
+      "term": "Current medications",
+      "aliases": ["medications", "current meds", "medication list", "list all medications"],
+      "category": "medicine",
+      "definition": "All the medicines, vitamins, and pills you take now.",
+      "example": "Bring a list of your current medications to every visit.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "prescription",
+      "term": "Prescription",
+      "aliases": ["Rx", "prescribed"],
+      "category": "medicine",
+      "definition": "A doctor's written order for a medicine you can only get from a pharmacy.",
+      "example": "The doctor sent my prescription to the pharmacy.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "dosage",
+      "term": "Dosage",
+      "aliases": ["dose", "strength"],
+      "category": "medicine",
+      "definition": "How much medicine to take and how often to take it.",
+      "example": "The dosage is one pill two times a day.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "refill",
+      "term": "Refill",
+      "aliases": ["refills", "renewal"],
+      "category": "medicine",
+      "definition": "Getting more of the same medicine after you finish it.",
+      "example": "I called the pharmacy for a refill.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "pharmacy",
+      "term": "Pharmacy",
+      "aliases": ["preferred pharmacy", "drugstore"],
+      "category": "medicine",
+      "definition": "A store where you pick up your medicine.",
+      "example": "My pharmacy is the one near my house.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "generic_drug",
+      "term": "Generic drug",
+      "aliases": ["generic", "generic medicine", "generic substitution"],
+      "category": "medicine",
+      "definition": "A cheaper medicine that works the same as the brand-name one.",
+      "example": "The generic drug costs $4 instead of $40.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "side_effect",
+      "term": "Side effect",
+      "aliases": ["side effects", "adverse reaction"],
+      "category": "medicine",
+      "definition": "An unwanted change in your body from a medicine, like feeling sleepy or sick.",
+      "example": "One side effect of this medicine is a dry mouth.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "over_the_counter",
+      "term": "Over-the-counter",
+      "aliases": ["OTC", "over the counter", "nonprescription"],
+      "category": "medicine",
+      "definition": "Medicine you can buy at a store without a doctor's note, like many pain pills.",
+      "example": "I take an over-the-counter medicine for headaches.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "supplements",
+      "term": "Supplements",
+      "aliases": ["supplement", "dietary supplements", "herbal supplements"],
+      "category": "medicine",
+      "definition": "Vitamins, herbs, or other products you take to stay healthy that are not medicine from a doctor.",
+      "example": "Please list any supplements you take, like fish oil.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "consent",
+      "term": "Consent",
+      "aliases": ["consent to treat", "consent for treatment", "informed consent"],
+      "category": "consent",
+      "definition": "Saying yes, usually by signing, that you agree to a treatment or test.",
+      "example": "I signed a consent form before my blood test.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "privacy_notice",
+      "term": "Notice of Privacy Practices",
+      "aliases": ["HIPAA", "privacy notice", "HIPAA notice", "NPP"],
+      "category": "consent",
+      "definition": "A paper that explains how the clinic keeps your health information private and who can see it.",
+      "example": "The front desk gave me a Notice of Privacy Practices to read.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "release_of_information",
+      "term": "Release of information",
+      "aliases": ["authorization to release", "ROI", "records release", "authorization for release of health information"],
+      "category": "consent",
+      "definition": "Your permission for the clinic to share your health records with another person or office.",
+      "example": "I signed a release of information so my new doctor can see my records.",
+      "vetted": false,
+      "translations": {}
+    },
+    {
+      "id": "advance_directive",
+      "term": "Advance directive",
+      "aliases": ["living will", "healthcare power of attorney"],
+      "category": "consent",
+      "definition": "A paper that says what care you want, and who will decide for you, if you become too sick to speak.",
+      "example": "The hospital asked if I have an advance directive.",
+      "vetted": false,
+      "translations": {}
+    }
+  ]
+}
