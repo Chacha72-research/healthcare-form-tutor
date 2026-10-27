@@ -1,716 +1,1101 @@
 {
-  "version": 1,
-  "about": "Plain-English healthcare form terms. Every explanation the app gives is grounded in these definitions. A teacher should review each entry and set vetted to true. Translations added under translations.<language code> are treated as teacher-approved and are shown word for word instead of a computer translation.",
+  "version": 2,
+  "about": "Plain-English healthcare form terms. Lessons, quizzes, and role-plays are all built from these entries. 'say' shows syllables with the stressed part in capitals. 'check' holds two concept-checking questions in the order of the questioning hierarchy (either/or first, then yes/no); they ask about the meaning without using the word itself. 'casas' lists the CASAS competencies the term supports. A teacher should review each entry and set vetted to true.",
   "terms": [
     {
       "id": "copay",
       "term": "Copay",
+      "say": "CO-pay",
       "aliases": ["co-pay", "copayment", "co-payment"],
       "category": "costs",
+      "casas": ["3.1.6", "3.2.3"],
       "definition": "A set amount of money you pay each time you see a doctor or pick up a medicine.",
       "example": "My copay for each doctor visit is $20.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you pay it every visit or once a year?", "options": ["every visit", "once a year"], "answer": "every visit"},
+        "yes_no": {"q": "Is it a set amount, like $20?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "deductible",
       "term": "Deductible",
+      "say": "de-DUC-ti-ble",
       "aliases": ["annual deductible"],
       "category": "costs",
+      "casas": ["3.1.6", "3.2.3"],
       "definition": "The amount you must pay for care each year before your insurance starts to help pay.",
       "example": "My deductible is $1,000, so I pay the first $1,000 of my care this year.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you pay it before or after your insurance starts to help?", "options": ["before", "after"], "answer": "before"},
+        "yes_no": {"q": "Does it start again every year?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "coinsurance",
       "term": "Coinsurance",
+      "say": "co-in-SUR-ance",
       "aliases": ["co-insurance"],
       "category": "costs",
+      "casas": ["3.1.6", "3.2.3"],
       "definition": "The part of a bill you share with your insurance, shown as a percent, like 20%.",
       "example": "My coinsurance is 20%, so I pay $20 when the bill is $100.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a percent or a set amount?", "options": ["a percent", "a set amount"], "answer": "a percent"},
+        "yes_no": {"q": "If it is 20%, do you pay $20 of a $100 bill?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "premium",
       "term": "Premium",
+      "say": "PRE-mi-um",
       "aliases": ["monthly premium", "insurance premium"],
       "category": "costs",
+      "casas": ["3.1.6"],
       "definition": "The money you pay every month to keep your health insurance.",
       "example": "My insurance premium is $150 every month.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you pay it every month or only when you see a doctor?", "options": ["every month", "only when you see a doctor"], "answer": "every month"},
+        "yes_no": {"q": "Do you pay it to keep your insurance?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "out_of_pocket_max",
       "term": "Out-of-pocket maximum",
+      "say": "out-of-POCK-et MAX-i-mum",
       "aliases": ["out-of-pocket max", "out of pocket maximum", "OOP max"],
       "category": "costs",
+      "casas": ["3.1.6", "3.2.3"],
       "definition": "The most money you will have to pay for covered care in one year.",
       "example": "After I reach my out-of-pocket maximum, my insurance pays for the rest of my covered care this year.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it the most or the least you pay in a year?", "options": ["the most", "the least"], "answer": "the most"},
+        "yes_no": {"q": "After you reach it, does your insurance pay for the rest of your covered care?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "insurance_card",
       "term": "Insurance card",
+      "say": "in-SUR-ance CARD",
       "aliases": ["health insurance card", "member card", "ID card"],
       "category": "costs",
+      "casas": ["3.1.6", "3.2.3"],
       "definition": "A card from your health plan that shows your name and your plan numbers.",
       "example": "Please show your insurance card at the front desk.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you get it from your health plan or from the pharmacy?", "options": ["from your health plan", "from the pharmacy"], "answer": "from your health plan"},
+        "yes_no": {"q": "Does it show your name?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "member_id",
       "term": "Member ID",
+      "say": "MEM-ber I-D",
       "aliases": ["member ID number", "member number", "subscriber ID", "ID number", "ID #"],
       "category": "costs",
+      "casas": ["3.2.3"],
       "definition": "The number on your insurance card that shows who you are to your health plan.",
       "example": "Write the member ID from the front of your card.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a number or a name?", "options": ["a number", "a name"], "answer": "a number"},
+        "yes_no": {"q": "Is it on your insurance card?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "group_number",
       "term": "Group number",
+      "say": "GROUP NUM-ber",
       "aliases": ["group #", "group no.", "grp #", "group ID"],
       "category": "costs",
+      "casas": ["3.2.3"],
       "definition": "The number on your insurance card for your plan, often the plan from your job.",
       "example": "The group number is under my name on the card.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a number for your plan or for your doctor?", "options": ["for your plan", "for your doctor"], "answer": "for your plan"},
+        "yes_no": {"q": "Is it often for a plan from your job?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "policyholder",
       "term": "Policyholder",
+      "say": "POL-i-cy-hold-er",
       "aliases": ["policy holder", "subscriber", "insured", "primary insured", "subscriber name"],
       "category": "costs",
+      "casas": ["3.2.3"],
       "definition": "The person whose name the health insurance plan is under.",
       "example": "My husband is the policyholder because the insurance comes from his job.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a person or a number?", "options": ["a person", "a number"], "answer": "a person"},
+        "yes_no": {"q": "Is the health plan under this person's name?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "primary_insurance",
       "term": "Primary insurance",
+      "say": "PRI-mar-y in-SUR-ance",
       "aliases": ["primary coverage", "primary plan"],
       "category": "costs",
+      "casas": ["3.1.6", "3.2.3"],
       "definition": "Your main health plan, the one that pays first.",
       "example": "My primary insurance is from my job, so they pay first.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does it pay first or second?", "options": ["first", "second"], "answer": "first"},
+        "yes_no": {"q": "Is it your main plan?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "secondary_insurance",
       "term": "Secondary insurance",
+      "say": "SEC-ond-ar-y in-SUR-ance",
       "aliases": ["secondary coverage", "other insurance", "additional insurance"],
       "category": "costs",
+      "casas": ["3.1.6", "3.2.3"],
       "definition": "A second health plan that can help pay what your first plan does not pay.",
       "example": "I have secondary insurance through my wife's job.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it your first plan or your second plan?", "options": ["your first plan", "your second plan"], "answer": "your second plan"},
+        "yes_no": {"q": "Can it help pay what the first plan does not pay?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "in_network",
       "term": "In-network",
+      "say": "IN NET-work",
       "aliases": ["in network", "network provider", "participating provider"],
       "category": "costs",
+      "casas": ["3.1.6"],
       "definition": "Doctors and hospitals that have a deal with your insurance, so care costs you less.",
       "example": "This clinic is in-network, so my visit costs less.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does care there usually cost less or more?", "options": ["less", "more"], "answer": "less"},
+        "yes_no": {"q": "Does the doctor have a deal with your insurance?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "out_of_network",
       "term": "Out-of-network",
+      "say": "OUT of NET-work",
       "aliases": ["out of network", "non-network", "non-participating"],
       "category": "costs",
+      "casas": ["3.1.6"],
       "definition": "Doctors and hospitals that do not have a deal with your insurance, so care often costs more.",
       "example": "That hospital is out-of-network, so I might get a bigger bill.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does care there often cost less or more?", "options": ["less", "more"], "answer": "more"},
+        "yes_no": {"q": "Does the doctor have a deal with your insurance?", "answer": false}
+      },
+      "vetted": false
     },
     {
       "id": "claim",
       "term": "Claim",
+      "say": "CLAIM",
       "aliases": ["insurance claim", "claims"],
       "category": "costs",
+      "casas": ["3.2.3", "3.2.4"],
       "definition": "A bill that is sent to your insurance company to ask them to pay for your care.",
       "example": "The clinic sent a claim to my insurance after my visit.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it sent to your insurance or to your pharmacy?", "options": ["to your insurance", "to your pharmacy"], "answer": "to your insurance"},
+        "yes_no": {"q": "Does it ask the insurance company to pay?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "explanation_of_benefits",
       "term": "Explanation of Benefits",
+      "say": "ex-pla-NA-tion of BEN-e-fits",
       "aliases": ["EOB"],
       "category": "costs",
+      "casas": ["3.2.3", "3.2.4"],
       "definition": "A paper from your insurance that shows what they paid and what you may owe; it is not a bill.",
       "example": "My Explanation of Benefits says my insurance paid $80 for my visit.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does it come from your insurance or from your pharmacy?", "options": ["from your insurance", "from your pharmacy"], "answer": "from your insurance"},
+        "yes_no": {"q": "Is it a bill?", "answer": false}
+      },
+      "vetted": false
     },
     {
       "id": "prior_authorization",
       "term": "Prior authorization",
+      "say": "PRI-or au-thor-i-ZA-tion",
       "aliases": ["prior auth", "pre-authorization", "preauthorization", "pre-approval", "precertification"],
       "category": "costs",
+      "casas": ["3.1.6", "3.2.3"],
       "definition": "Permission your insurance must give before you get some tests, medicines, or treatments.",
       "example": "My MRI needs prior authorization from my insurance first.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you need it before or after the test?", "options": ["before", "after"], "answer": "before"},
+        "yes_no": {"q": "Does your insurance give it?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "referral",
       "term": "Referral",
+      "say": "re-FER-ral",
       "aliases": ["referring doctor", "referred by"],
       "category": "costs",
+      "casas": ["3.1.4", "3.1.6"],
       "definition": "A note from your main doctor that sends you to see a different, special doctor.",
       "example": "I need a referral to see a heart doctor.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does it come from your main doctor or from the pharmacy?", "options": ["from your main doctor", "from the pharmacy"], "answer": "from your main doctor"},
+        "yes_no": {"q": "Does it send you to a different doctor?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "medi_cal",
       "term": "Medi-Cal",
+      "say": "MED-i-cal",
       "aliases": ["Medi Cal", "Medicaid"],
       "category": "costs",
+      "casas": ["3.1.6"],
       "definition": "California's free or low-cost health insurance for people with low income.",
       "example": "My children have Medi-Cal, so their visits do not cost money.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a health plan or a doctor's name?", "options": ["a health plan", "a doctor's name"], "answer": "a health plan"},
+        "yes_no": {"q": "Is it free or low-cost?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "medicare",
       "term": "Medicare",
+      "say": "MED-i-care",
       "aliases": ["Medicare number", "Medicare card"],
       "category": "costs",
+      "casas": ["3.1.6"],
       "definition": "Health insurance from the U.S. government for people 65 or older and some people with disabilities.",
       "example": "My grandmother uses Medicare to pay for her doctor visits.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it mostly for people 65 and older or for children?", "options": ["people 65 and older", "children"], "answer": "people 65 and older"},
+        "yes_no": {"q": "Is it from the U.S. government?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "balance_due",
       "term": "Balance due",
+      "say": "BAL-ance DUE",
       "aliases": ["amount due", "patient balance", "amount you owe", "balance"],
       "category": "costs",
+      "casas": ["3.2.4"],
       "definition": "The money you still need to pay on a bill.",
       "example": "The balance due on my bill is $35.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it money you still owe or money you already paid?", "options": ["money you still owe", "money you already paid"], "answer": "money you still owe"},
+        "yes_no": {"q": "Do you need to pay it?", "answer": true}
+      },
+      "vetted": false
+    },
+    {
+      "id": "payment_plan",
+      "term": "Payment plan",
+      "say": "PAY-ment PLAN",
+      "aliases": ["payment plans", "payment arrangement", "installment plan"],
+      "category": "costs",
+      "casas": ["3.2.4"],
+      "definition": "A way to pay a big bill in small parts, a little each month.",
+      "example": "I set up a payment plan to pay $30 each month.",
+      "check": {
+        "either_or": {"q": "Do you pay a little each month or all at once?", "options": ["a little each month", "all at once"], "answer": "a little each month"},
+        "yes_no": {"q": "Is it for a big bill?", "answer": true}
+      },
+      "vetted": false
+    },
+    {
+      "id": "member_services",
+      "term": "Member services",
+      "say": "MEM-ber SER-vi-ces",
+      "aliases": ["member service", "customer service", "member services number"],
+      "category": "costs",
+      "casas": ["3.1.6"],
+      "definition": "The phone line for your health plan that answers questions about your coverage.",
+      "example": "I called member services to ask if my doctor is in-network.",
+      "check": {
+        "either_or": {"q": "Is it a phone line or a clinic?", "options": ["a phone line", "a clinic"], "answer": "a phone line"},
+        "yes_no": {"q": "Can it answer questions about your plan?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "guarantor",
       "term": "Guarantor",
+      "say": "GAR-an-tor",
       "aliases": ["responsible party", "person responsible for payment", "financially responsible party"],
       "category": "costs",
+      "casas": ["3.2.4"],
       "definition": "The person who agrees to pay the bill, like a parent paying for a child.",
       "example": "I am the guarantor for my son's doctor bills.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a person or a place?", "options": ["a person", "a place"], "answer": "a person"},
+        "yes_no": {"q": "Does this person agree to pay the bill?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "self_pay",
       "term": "Self-pay",
+      "say": "SELF-pay",
       "aliases": ["self pay", "cash pay", "private pay", "uninsured"],
       "category": "costs",
+      "casas": ["3.2.4"],
       "definition": "Paying for care with your own money, without using insurance.",
       "example": "I do not have insurance, so I am self-pay.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you pay with your own money or with insurance?", "options": ["your own money", "insurance"], "answer": "your own money"},
+        "yes_no": {"q": "Do you use insurance?", "answer": false}
+      },
+      "vetted": false
     },
     {
       "id": "financial_responsibility",
       "term": "Financial responsibility",
+      "say": "fi-NAN-cial re-spon-si-BIL-i-ty",
       "aliases": ["financial policy", "payment policy", "financial agreement"],
       "category": "costs",
+      "casas": ["3.2.4"],
       "definition": "An agreement that you will pay any part of the bill your insurance does not pay.",
       "example": "I signed the financial responsibility form at the front desk.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it about paying or about medicine?", "options": ["about paying", "about medicine"], "answer": "about paying"},
+        "yes_no": {"q": "Do you agree to pay what insurance does not pay?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "assignment_of_benefits",
       "term": "Assignment of benefits",
+      "say": "as-SIGN-ment of BEN-e-fits",
       "aliases": ["assignment of insurance benefits", "authorization to pay benefits"],
       "category": "costs",
+      "casas": ["3.2.3"],
       "definition": "Permission for your insurance to send payment straight to the doctor's office instead of to you.",
       "example": "The assignment of benefits lets my insurance pay the clinic directly.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does the insurance pay the doctor's office or you?", "options": ["the doctor's office", "you"], "answer": "the doctor's office"},
+        "yes_no": {"q": "Do you give permission?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "primary_care_provider",
       "term": "Primary care provider",
+      "say": "PRI-mar-y CARE pro-VI-der",
       "aliases": ["PCP", "primary care physician", "primary care doctor", "family doctor", "primary doctor"],
       "category": "visits",
+      "casas": ["3.1.4"],
       "definition": "Your main doctor, who you see for checkups and common health problems.",
       "example": "My primary care provider is Dr. Lee.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it your main doctor or a special doctor?", "options": ["your main doctor", "a special doctor"], "answer": "your main doctor"},
+        "yes_no": {"q": "Do you see this doctor for common health problems?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "specialist",
       "term": "Specialist",
+      "say": "SPE-cial-ist",
       "aliases": ["specialty doctor"],
       "category": "visits",
+      "casas": ["3.1.4"],
       "definition": "A doctor who knows a lot about one part of the body or one kind of illness.",
       "example": "My doctor sent me to a specialist for my skin.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does this doctor know a lot about one part of the body or about everything?", "options": ["one part of the body", "everything"], "answer": "one part of the body"},
+        "yes_no": {"q": "Is a heart doctor one?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "urgent_care",
       "term": "Urgent care",
+      "say": "UR-gent CARE",
       "aliases": ["urgent care clinic", "walk-in clinic"],
       "category": "visits",
+      "casas": ["3.1.3"],
       "definition": "A clinic for problems that need care today but are not life-threatening, like a bad cold or a small cut.",
       "example": "I went to urgent care for my hurt ankle.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it for a bad cold or for chest pain?", "options": ["a bad cold", "chest pain"], "answer": "a bad cold"},
+        "yes_no": {"q": "Is it for life-threatening problems?", "answer": false}
+      },
+      "vetted": false
     },
     {
       "id": "emergency_room",
       "term": "Emergency room",
+      "say": "e-MER-gen-cy ROOM",
       "aliases": ["ER", "emergency department", "ED"],
       "category": "visits",
+      "casas": ["3.1.3"],
       "definition": "The hospital area for very serious problems, like chest pain or trouble breathing.",
       "example": "Go to the emergency room or call 911 if you have chest pain.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it for a small cut or for trouble breathing?", "options": ["a small cut", "trouble breathing"], "answer": "trouble breathing"},
+        "yes_no": {"q": "Is it in a hospital?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "appointment",
       "term": "Appointment",
+      "say": "ap-POINT-ment",
       "aliases": ["appt", "appointment date", "appointment time"],
       "category": "visits",
+      "casas": ["3.1.2"],
       "definition": "A set day and time to see a doctor or nurse.",
       "example": "My appointment is on Monday at 9:00 a.m.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a day and time or a place?", "options": ["a day and time", "a place"], "answer": "a day and time"},
+        "yes_no": {"q": "Do you plan it before you see the doctor?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "check_in",
       "term": "Check-in",
+      "say": "CHECK-in",
       "aliases": ["check in", "checking in", "registration", "patient registration"],
       "category": "visits",
+      "casas": ["3.1.3"],
       "definition": "Telling the front desk you have arrived and giving them your information.",
       "example": "Please come 15 minutes early for check-in.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you do it when you arrive or when you leave?", "options": ["when you arrive", "when you leave"], "answer": "when you arrive"},
+        "yes_no": {"q": "Do you do it at the front desk?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "follow_up_visit",
       "term": "Follow-up visit",
+      "say": "FOL-low-up VIS-it",
       "aliases": ["follow-up", "follow up", "follow-up appointment"],
       "category": "visits",
+      "casas": ["3.1.2"],
       "definition": "Another visit after your first one, so the doctor can check how you are doing.",
       "example": "The doctor wants a follow-up visit in two weeks.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it your first visit or a visit after that?", "options": ["your first visit", "a visit after that"], "answer": "a visit after that"},
+        "yes_no": {"q": "Does the doctor check how you are doing?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "annual_physical",
       "term": "Annual physical",
+      "say": "AN-nu-al PHYS-i-cal",
       "aliases": ["physical", "checkup", "check-up", "annual exam", "wellness visit", "annual wellness visit"],
       "category": "visits",
+      "casas": ["3.5.9"],
       "definition": "A visit once a year to check your health, even when you are not sick.",
       "example": "I get my annual physical every January.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it once a year or once a week?", "options": ["once a year", "once a week"], "answer": "once a year"},
+        "yes_no": {"q": "Do you need to be sick to go?", "answer": false}
+      },
+      "vetted": false
     },
     {
       "id": "telehealth",
       "term": "Telehealth",
+      "say": "TEL-e-health",
       "aliases": ["telemedicine", "video visit", "virtual visit"],
       "category": "visits",
+      "casas": ["3.1.3"],
       "definition": "Seeing a doctor by video or phone instead of going to the office.",
       "example": "I had a telehealth visit on my phone.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you see the doctor on a screen or in the office?", "options": ["on a screen", "in the office"], "answer": "on a screen"},
+        "yes_no": {"q": "Can you do it on your phone?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "interpreter",
       "term": "Interpreter",
+      "say": "in-TER-pre-ter",
       "aliases": ["medical interpreter", "language assistance", "language services", "interpreter needed"],
       "category": "visits",
+      "casas": ["3.1.7", "0.1.6"],
       "definition": "A person who helps you talk with the doctor in your language, usually for free.",
       "example": "I asked for an interpreter for my appointment.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a person or a paper?", "options": ["a person", "a paper"], "answer": "a person"},
+        "yes_no": {"q": "Does this person help you talk with the doctor in your language?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "cancellation_policy",
       "term": "Cancellation policy",
+      "say": "can-cel-LA-tion POL-i-cy",
       "aliases": ["no-show policy", "no-show", "missed appointment policy", "late cancellation"],
       "category": "visits",
+      "casas": ["3.1.2"],
       "definition": "The rules about what happens, like a fee, if you miss a visit or cancel too late.",
       "example": "The cancellation policy says to call one day before if you cannot come.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it about missing a visit or about medicine?", "options": ["missing a visit", "medicine"], "answer": "missing a visit"},
+        "yes_no": {"q": "Can there be a fee if you cancel too late?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "reason_for_visit",
       "term": "Reason for visit",
+      "say": "REA-son for VIS-it",
       "aliases": ["chief complaint", "reason for today's visit", "purpose of visit", "what brings you in today"],
       "category": "visits",
+      "casas": ["3.1.3", "3.6.4"],
       "definition": "The main health problem or need that brought you to the doctor today.",
       "example": "My reason for visit is a cough that will not go away.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it your health problem today or your address?", "options": ["your health problem today", "your address"], "answer": "your health problem today"},
+        "yes_no": {"q": "Can a cough be the answer?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "new_patient",
       "term": "New patient",
+      "say": "NEW PA-tient",
       "aliases": ["new patient form", "new patient registration", "new patient intake"],
       "category": "visits",
+      "casas": ["3.1.3"],
       "definition": "Someone who has never seen this doctor or clinic before.",
       "example": "I filled out a new patient form at my first visit.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it your first time here or your tenth time?", "options": ["your first time", "your tenth time"], "answer": "your first time"},
+        "yes_no": {"q": "Have you seen this doctor before?", "answer": false}
+      },
+      "vetted": false
     },
     {
       "id": "patient_portal",
       "term": "Patient portal",
+      "say": "PA-tient POR-tal",
       "aliases": ["online portal", "MyChart", "patient website"],
       "category": "visits",
+      "casas": ["3.1.3"],
       "definition": "A website or app where you can see test results, send messages to your doctor, and make visits.",
       "example": "I can see my test results on the patient portal.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a website or a building?", "options": ["a website", "a building"], "answer": "a website"},
+        "yes_no": {"q": "Can you see test results there?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "lab_test",
       "term": "Lab test",
+      "say": "LAB TEST",
       "aliases": ["lab work", "labs", "blood test", "laboratory test"],
       "category": "visits",
+      "casas": ["3.6.2"],
       "definition": "A check of your blood, urine, or other samples to learn about your health.",
       "example": "The doctor ordered a lab test to check my blood sugar.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does it check your blood or your insurance?", "options": ["your blood", "your insurance"], "answer": "your blood"},
+        "yes_no": {"q": "Can it check your blood sugar?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "date_of_birth",
       "term": "Date of birth",
+      "say": "DATE of BIRTH",
       "aliases": ["DOB", "birth date", "birthdate"],
       "category": "personal_info",
+      "casas": ["0.2.2"],
       "definition": "The day, month, and year you were born.",
       "example": "Write your date of birth like this: 03/15/1985.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it the day you were born or today's date?", "options": ["the day you were born", "today's date"], "answer": "the day you were born"},
+        "yes_no": {"q": "Does it have a year?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "mailing_address",
       "term": "Mailing address",
+      "say": "MAIL-ing AD-dress",
       "aliases": ["address", "home address", "street address"],
       "category": "personal_info",
+      "casas": ["0.2.2"],
       "definition": "The street, city, and ZIP code where you get your mail.",
       "example": "Write your mailing address so the clinic can send you letters.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it where you get mail or your phone number?", "options": ["where you get mail", "your phone number"], "answer": "where you get mail"},
+        "yes_no": {"q": "Does it have a ZIP code?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "emergency_contact",
       "term": "Emergency contact",
+      "say": "e-MER-gen-cy CON-tact",
       "aliases": ["in case of emergency", "ICE", "emergency contact person"],
       "category": "personal_info",
+      "casas": ["0.2.2"],
       "definition": "A person the clinic can call if something serious happens to you.",
       "example": "I put my sister as my emergency contact.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a person or a hospital?", "options": ["a person", "a hospital"], "answer": "a person"},
+        "yes_no": {"q": "Will the clinic call this person if something serious happens?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "relationship_to_patient",
       "term": "Relationship to patient",
+      "say": "re-LA-tion-ship to PA-tient",
       "aliases": ["relationship", "relation to patient", "relationship to insured"],
       "category": "personal_info",
+      "casas": ["0.2.2"],
       "definition": "How a person is connected to you, like mother, husband, or friend.",
       "example": "Next to relationship to patient, I wrote daughter.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is the answer 'sister' or '555-1234'?", "options": ["sister", "555-1234"], "answer": "sister"},
+        "yes_no": {"q": "Can the answer be 'friend'?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "signature",
       "term": "Signature",
+      "say": "SIG-na-ture",
       "aliases": ["sign here", "patient signature", "signed"],
       "category": "personal_info",
+      "casas": ["0.2.2"],
       "definition": "Your name written by hand in your own way to show you agree.",
       "example": "Put your signature at the bottom of the page.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you write it by hand or type a number?", "options": ["write it by hand", "type a number"], "answer": "write it by hand"},
+        "yes_no": {"q": "Does it show that you agree?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "legal_guardian",
       "term": "Legal guardian",
+      "say": "LE-gal GUAR-di-an",
       "aliases": ["guardian", "parent/guardian", "parent or guardian"],
       "category": "personal_info",
+      "casas": ["0.2.2"],
       "definition": "An adult who has the legal right to make decisions for a child or another person.",
       "example": "A parent or legal guardian must sign for children under 18.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it an adult or a child?", "options": ["an adult", "a child"], "answer": "an adult"},
+        "yes_no": {"q": "Can this person make decisions for a child?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "preferred_language",
       "term": "Preferred language",
+      "say": "pre-FERRED LAN-guage",
       "aliases": ["primary language", "language preference", "language spoken at home"],
       "category": "personal_info",
+      "casas": ["0.2.2", "3.1.7"],
       "definition": "The language you want to use when you talk with the doctor and read papers.",
       "example": "I wrote my preferred language on the form so they can call an interpreter.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is the answer 'Spanish' or 'Monday'?", "options": ["Spanish", "Monday"], "answer": "Spanish"},
+        "yes_no": {"q": "Can it help the clinic get you someone who speaks your language?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "marital_status",
       "term": "Marital status",
+      "say": "MAR-i-tal STA-tus",
       "aliases": ["married / single"],
       "category": "personal_info",
+      "casas": ["0.2.2"],
       "definition": "Whether you are single, married, divorced, or widowed.",
       "example": "For marital status, I checked married.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is the answer 'married' or 'tall'?", "options": ["married", "tall"], "answer": "married"},
+        "yes_no": {"q": "Can the answer be 'single'?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "not_applicable",
       "term": "N/A",
+      "say": "N-A",
       "aliases": ["n/a", "not applicable"],
       "category": "personal_info",
+      "casas": ["0.2.2"],
       "definition": "Something you write when a question is not about you or your situation.",
       "example": "I do not have a second insurance, so I wrote N/A.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you write it when a question is about you or not about you?", "options": ["about you", "not about you"], "answer": "not about you"},
+        "yes_no": {"q": "If you have no second insurance, can you write it?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "medical_record_number",
       "term": "Medical record number",
+      "say": "MED-i-cal REC-ord NUM-ber",
       "aliases": ["MRN", "patient ID", "chart number"],
       "category": "personal_info",
+      "casas": ["3.2.1"],
       "definition": "The number the clinic uses to find your health file.",
       "example": "The clinic uses my medical record number to find my file.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a number or a name?", "options": ["a number", "a name"], "answer": "a number"},
+        "yes_no": {"q": "Does the clinic use it to find your file?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "allergies",
       "term": "Allergies",
+      "say": "AL-ler-gies",
       "aliases": ["allergy", "drug allergies", "known allergies", "allergic to"],
       "category": "health_history",
+      "casas": ["3.2.1"],
       "definition": "Foods, medicines, plants, or other things that make your body react badly, like a rash or swelling.",
       "example": "I have allergies to peanuts and penicillin.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do they make your body react badly or feel better?", "options": ["react badly", "feel better"], "answer": "react badly"},
+        "yes_no": {"q": "Can a food cause one?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "medical_history",
       "term": "Medical history",
+      "say": "MED-i-cal HIS-to-ry",
       "aliases": ["past medical history", "health history", "PMH"],
       "category": "health_history",
+      "casas": ["3.2.1"],
       "definition": "Information about your past illnesses, health problems, and treatments.",
       "example": "The doctor asked about my medical history.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it about your past or about your bill?", "options": ["your past", "your bill"], "answer": "your past"},
+        "yes_no": {"q": "Does it include illnesses you had before?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "family_history",
       "term": "Family history",
+      "say": "FAM-i-ly HIS-to-ry",
       "aliases": ["family medical history", "family health history"],
       "category": "health_history",
+      "casas": ["3.2.1"],
       "definition": "Health problems that your parents, brothers, sisters, or grandparents have had.",
       "example": "Diabetes is in my family history because my mother has it.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it about your parents' health or your job?", "options": ["your parents' health", "your job"], "answer": "your parents' health"},
+        "yes_no": {"q": "If your mother has diabetes, do you write it here?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "symptoms",
       "term": "Symptoms",
+      "say": "SYMP-toms",
       "aliases": ["symptom", "signs and symptoms", "current symptoms"],
       "category": "health_history",
+      "casas": ["3.6.3"],
       "definition": "Changes in your body that show you may be sick, like fever, pain, or cough.",
       "example": "My symptoms are a sore throat and a fever.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is a fever one, or is a bill one?", "options": ["a fever", "a bill"], "answer": "a fever"},
+        "yes_no": {"q": "Can pain be one?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "diagnosis",
       "term": "Diagnosis",
+      "say": "di-ag-NO-sis",
       "aliases": ["diagnoses", "dx"],
       "category": "health_history",
+      "casas": ["3.6.4"],
       "definition": "The name the doctor gives to your illness or health problem after checking you.",
       "example": "The diagnosis was an ear infection.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does the doctor give it or the front desk?", "options": ["the doctor", "the front desk"], "answer": "the doctor"},
+        "yes_no": {"q": "Is it the name of your health problem?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "chronic_condition",
       "term": "Chronic condition",
-      "aliases": ["chronic illness", "chronic disease", "long-term condition", "ongoing condition"],
+      "say": "CHRON-ic con-DI-tion",
+      "aliases": ["chronic conditions", "chronic illness", "chronic disease", "long-term condition", "ongoing condition"],
       "category": "health_history",
+      "casas": ["3.6.3"],
       "definition": "A health problem that lasts a long time, like diabetes or high blood pressure.",
       "example": "High blood pressure is a chronic condition.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does it last a long time or one day?", "options": ["a long time", "one day"], "answer": "a long time"},
+        "yes_no": {"q": "Is high blood pressure one?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "surgery",
       "term": "Surgery",
+      "say": "SUR-ger-y",
       "aliases": ["surgeries", "operation", "past surgeries", "surgical history"],
       "category": "health_history",
+      "casas": ["3.2.1"],
       "definition": "Treatment where a doctor opens part of your body to fix a problem, usually in a hospital.",
       "example": "I had surgery on my knee in 2019.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it usually in a hospital or at a pharmacy?", "options": ["in a hospital", "at a pharmacy"], "answer": "in a hospital"},
+        "yes_no": {"q": "Does a doctor open part of your body?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "immunizations",
       "term": "Immunizations",
+      "say": "im-mu-ni-ZA-tions",
       "aliases": ["immunization", "vaccinations", "vaccines", "vaccine record", "shots"],
       "category": "health_history",
+      "casas": ["3.4.6"],
       "definition": "Medicine, usually given with a needle, that protects you from certain diseases, like the flu.",
       "example": "My son needs his immunizations before school starts.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Are they usually given with a needle or by phone?", "options": ["with a needle", "by phone"], "answer": "with a needle"},
+        "yes_no": {"q": "Do they protect you from some diseases?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "tobacco_use",
       "term": "Tobacco use",
+      "say": "to-BAC-co USE",
       "aliases": ["smoking", "do you smoke", "smoking status"],
       "category": "health_history",
+      "casas": ["3.4.5"],
       "definition": "Whether you smoke cigarettes, vape, or use chewing products.",
       "example": "The form asks about tobacco use, so I checked never.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it about cigarettes or about sleep?", "options": ["cigarettes", "sleep"], "answer": "cigarettes"},
+        "yes_no": {"q": "Does vaping count?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "current_medications",
       "term": "Current medications",
+      "say": "CUR-rent med-i-CA-tions",
       "aliases": ["medications", "current meds", "medication list", "list all medications"],
       "category": "medicine",
+      "casas": ["3.2.1", "3.3.1"],
       "definition": "All the medicines, vitamins, and pills you take now.",
       "example": "Bring a list of your current medications to every visit.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it medicine you take now or medicine you took years ago?", "options": ["medicine you take now", "medicine you took years ago"], "answer": "medicine you take now"},
+        "yes_no": {"q": "Do vitamins go on this list?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "prescription",
       "term": "Prescription",
+      "say": "pre-SCRIP-tion",
       "aliases": ["Rx", "prescribed"],
       "category": "medicine",
+      "casas": ["3.3.1"],
       "definition": "A doctor's written order for a medicine you can only get from a pharmacy.",
       "example": "The doctor sent my prescription to the pharmacy.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does a doctor write it or a store?", "options": ["a doctor", "a store"], "answer": "a doctor"},
+        "yes_no": {"q": "Do you get the medicine from a pharmacy?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "dosage",
       "term": "Dosage",
+      "say": "DOS-age",
       "aliases": ["dose", "strength"],
       "category": "medicine",
+      "casas": ["3.3.2"],
       "definition": "How much medicine to take and how often to take it.",
       "example": "The dosage is one pill two times a day.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it how much medicine or how much money?", "options": ["how much medicine", "how much money"], "answer": "how much medicine"},
+        "yes_no": {"q": "Does it say how often to take the medicine?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "refill",
       "term": "Refill",
+      "say": "RE-fill",
       "aliases": ["refills", "renewal"],
       "category": "medicine",
+      "casas": ["3.3.1"],
       "definition": "Getting more of the same medicine after you finish it.",
       "example": "I called the pharmacy for a refill.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it more of the same medicine or a new medicine?", "options": ["more of the same medicine", "a new medicine"], "answer": "more of the same medicine"},
+        "yes_no": {"q": "Do you get it after you finish your medicine?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "pharmacy",
       "term": "Pharmacy",
+      "say": "PHAR-ma-cy",
       "aliases": ["preferred pharmacy", "drugstore"],
       "category": "medicine",
+      "casas": ["3.3.1"],
       "definition": "A store where you pick up your medicine.",
       "example": "My pharmacy is the one near my house.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a store or a doctor?", "options": ["a store", "a doctor"], "answer": "a store"},
+        "yes_no": {"q": "Do you pick up medicine there?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "generic_drug",
       "term": "Generic drug",
+      "say": "ge-NER-ic DRUG",
       "aliases": ["generic", "generic medicine", "generic substitution"],
       "category": "medicine",
+      "casas": ["3.3.1"],
       "definition": "A cheaper medicine that works the same as the brand-name one.",
       "example": "The generic drug costs $4 instead of $40.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it cheaper or more expensive?", "options": ["cheaper", "more expensive"], "answer": "cheaper"},
+        "yes_no": {"q": "Does it work the same as the brand-name medicine?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "side_effect",
       "term": "Side effect",
+      "say": "SIDE ef-FECT",
       "aliases": ["side effects", "adverse reaction"],
       "category": "medicine",
+      "casas": ["3.3.4"],
       "definition": "An unwanted change in your body from a medicine, like feeling sleepy or sick.",
       "example": "One side effect of this medicine is a dry mouth.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it a change you want or a change you don't want?", "options": ["a change you want", "a change you don't want"], "answer": "a change you don't want"},
+        "yes_no": {"q": "Can feeling sleepy be one?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "over_the_counter",
       "term": "Over-the-counter",
+      "say": "O-ver the COUN-ter",
       "aliases": ["OTC", "over the counter", "nonprescription"],
       "category": "medicine",
+      "casas": ["3.3.1"],
       "definition": "Medicine you can buy at a store without a doctor's note, like many pain pills.",
       "example": "I take an over-the-counter medicine for headaches.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Do you need a doctor's note or not?", "options": ["you need a doctor's note", "you don't need a doctor's note"], "answer": "you don't need a doctor's note"},
+        "yes_no": {"q": "Can you buy it at a store?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "supplements",
       "term": "Supplements",
+      "say": "SUP-ple-ments",
       "aliases": ["supplement", "dietary supplements", "herbal supplements"],
       "category": "medicine",
+      "casas": ["3.3.1"],
       "definition": "Vitamins, herbs, or other products you take to stay healthy that are not medicine from a doctor.",
       "example": "Please list any supplements you take, like fish oil.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Are they vitamins or bills?", "options": ["vitamins", "bills"], "answer": "vitamins"},
+        "yes_no": {"q": "Are they medicine from a doctor?", "answer": false}
+      },
+      "vetted": false
     },
     {
       "id": "consent",
       "term": "Consent",
+      "say": "con-SENT",
       "aliases": ["consent to treat", "consent for treatment", "informed consent"],
       "category": "consent",
+      "casas": ["3.1.7"],
       "definition": "Saying yes, usually by signing, that you agree to a treatment or test.",
       "example": "I signed a consent form before my blood test.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does it mean yes or no?", "options": ["yes", "no"], "answer": "yes"},
+        "yes_no": {"q": "Do you usually sign for it?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "privacy_notice",
       "term": "Notice of Privacy Practices",
+      "say": "NO-tice of PRI-va-cy PRAC-ti-ces",
       "aliases": ["HIPAA", "privacy notice", "HIPAA notice", "NPP"],
       "category": "consent",
+      "casas": ["3.1.7"],
       "definition": "A paper that explains how the clinic keeps your health information private and who can see it.",
       "example": "The front desk gave me a Notice of Privacy Practices to read.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it about keeping your information safe or about paying?", "options": ["keeping your information safe", "paying"], "answer": "keeping your information safe"},
+        "yes_no": {"q": "Does it say who can see your health information?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "release_of_information",
       "term": "Release of information",
+      "say": "re-LEASE of in-for-MA-tion",
       "aliases": ["authorization to release", "ROI", "records release", "authorization for release of health information"],
       "category": "consent",
+      "casas": ["3.1.7"],
       "definition": "Your permission for the clinic to share your health records with another person or office.",
       "example": "I signed a release of information so my new doctor can see my records.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Does it let the clinic share your records or delete them?", "options": ["share your records", "delete them"], "answer": "share your records"},
+        "yes_no": {"q": "Do you give permission?", "answer": true}
+      },
+      "vetted": false
     },
     {
       "id": "advance_directive",
       "term": "Advance directive",
+      "say": "ad-VANCE di-REC-tive",
       "aliases": ["living will", "healthcare power of attorney"],
       "category": "consent",
+      "casas": ["3.1.7"],
       "definition": "A paper that says what care you want, and who will decide for you, if you become too sick to speak.",
       "example": "The hospital asked if I have an advance directive.",
-      "vetted": false,
-      "translations": {}
+      "check": {
+        "either_or": {"q": "Is it for when you are too sick to speak or for when you are healthy?", "options": ["when you are too sick to speak", "when you are healthy"], "answer": "when you are too sick to speak"},
+        "yes_no": {"q": "Does it say who decides for you?", "answer": true}
+      },
+      "vetted": false
     }
   ]
 }

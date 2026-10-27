@@ -1,53 +1,73 @@
 # AI Healthcare Form Literacy Tutor
 
-A learner sits in a clinic waiting room with a clipboard. The form asks for her *copay*, her *member ID*, her *emergency contact*. She can speak some English, but the words on the page are a wall, so she waits for a family member or a staff person to read it to her.
+A learner sits in a clinic waiting room with a clipboard. The form asks for her *copay*, her *member ID*, her *emergency contact*. She speaks some English, but the words on the page are a wall, so she waits for a family member or a staff member to read it for her. Then, at the front desk, someone asks, "Is this doctor in-network?" and the wall goes up again.
 
-This app is built for that moment. Adult ESL learners take a photo of a real healthcare form, hear each key term explained in their own language in one plain sentence, and then take a short English quiz to check that the meaning stuck. A spoken practice mode (in progress) lets them rehearse the conversation itself: checking in at the front desk, calling for an appointment, or picking up medicine.
+This app is built for both moments. A learner uploads a real healthcare form and gets a casual voice lesson in their own language that walks through every word on it. Then they practice the actual situations: calling for an appointment, checking in, asking for an interpreter, picking up medicine, calling their insurance, and asking about a bill.
 
-It was made with a local adult school in Fremont, CA, and is designed for beginner learners on their own phones.
+It was made with a local adult school in Fremont, CA, for beginner adult English learners. It runs on **one free API key**.
 
-## What it does
+## How it works
 
-**1. Photo to plain-language audio.** The learner picks their language once, then photographs a form. The server sends the photo to Claude, which finds the healthcare terms printed on the form and explains each one in the learner's language. Every term and every explanation has a listen button, so learners who read slowly can hear it instead.
+**1. Upload a form.** Any PDF, picture, or text file of a healthcare form, or the built-in sample. Digital PDFs are read right on the server with no AI and no cost. The app finds every word on the form that is in its 73-word healthcare glossary.
 
-**2. Comprehension quiz.** Eight English questions on the words from that form (or any words a teacher chooses). Half ask "which word matches this meaning?" and half are fill-in-the-blank example sentences. Answers are shown as form checkboxes, and every question can be read aloud.
+**2. Learn the words, by voice.** A tutor talks the learner through the words, 6 at a time, in a chat beside their form. The text on screen follows along with the voice. For each word, the tutor:
 
-**3. Conversation simulator (beta).** The learner talks out loud with an AI partner playing a receptionist or pharmacist, using the Gemini Live API for real-time voice. The partner speaks slowly, asks one question at a time, and gives a hint in the learner's language if they get stuck twice.
+- introduces it, and the learner taps it on their own form
+- explains it casually in the learner's language
+- says it slowly in English, with the stressed syllable marked, so they can repeat it
+- shows it in a real sentence
+- checks understanding with an either/or question, then a yes/no question
 
-Languages ship as Spanish, Simplified Chinese, and Vietnamese. Adding another is one block in a config file, and right-to-left scripts like Dari or Farsi are supported.
+**3. Quiz.** Eight questions, easiest first: either/or, yes/no, which word matches, fill in the blank. Missed words come back at the start of the next lesson.
 
-## How the explanations stay accurate
+**4. Practice real situations.** Six situations follow a patient's journey, from easier to harder. Each one has three steps:
 
-A model that freely explains medical words can be confidently wrong, which is the last thing a beginner needs. So the explainer is grounded in a glossary of 71 plain-English healthcare definitions (`backend/data/glossary.json`) in three ways:
+- **Listen** to a model conversation, line by line, with the learner's language under each line and useful phrases to borrow.
+- **Check** understanding with a few short questions.
+- **Talk.** Role-play the situation out loud with a live AI partner (Gemini Live) playing the receptionist, nurse, pharmacist, insurance agent, or billing clerk. The learner reads from a pretend insurance card.
 
-1. **The glossary is the source.** The whole glossary goes into Claude's instructions, and Claude may only restate a term's glossary definition, not add facts, prices, or advice.
-2. **It can't invent terms.** Claude answers through a tool whose `term_id` field only accepts glossary ids. The server drops anything else. Words on the form that are not in the glossary are listed under "Ask your teacher," with no definition.
-3. **Teacher-approved translations win.** When a teacher approves a translation for a term, the app shows that exact sentence instead of a live computer translation. Unapproved ones are labeled "Computer translation."
+Languages: **Tamil, Spanish, Simplified Chinese, and Vietnamese**. Adding another is one block in `backend/data/languages.json`.
 
-The quiz is built straight from the same glossary (no AI call), so it is cheap, instant, and gives the same questions every time for the same seed.
+## Built on adult ESL teaching, not just AI
 
-```
-Phone                          Python server                         AI
------                          -------------                         --
-photo  ───────────────────────>  /api/explain  ── image + glossary ──> Claude (vision, forced tool)
-                                    keeps glossary terms only  <────── term ids + explanations
-term cards + audio  <──────────     swaps in approved translations
-quiz  <───────────────────────   /api/quiz (built from glossary)
-mic audio (16 kHz)  ──────────>  /ws/conversation  ──────────────────> Gemini Live
-partner audio + captions <─────     relays audio both ways <────────── (24 kHz audio)
-```
+The lesson steps, questions, and conversations are fixed teaching content. AI only fills in the learner's language and the voice. The design follows:
+
+- **WIPPEA**, the lesson cycle California adult schools use: warm-up, introduction, presentation, practice, evaluation, application.
+- **CASAS competencies** 3.1 to 3.3 (healthcare, insurance, medicine) and **California EL Civics objectives** 28, 29, and 30.
+- **The questioning hierarchy** for English learners: pointing first, then either/or, then yes/no, then wh- questions.
+- **Concept-checking questions** instead of "Do you understand?"
+- **Recasts** in role-play: the partner repeats the learner's idea correctly instead of pointing out the mistake.
+
+[`docs/curriculum.md`](docs/curriculum.md) explains each choice, with sources.
+
+### Keeping explanations accurate
+
+Every explanation comes from the glossary in `backend/data/glossary.json`. Each entry has a one-sentence plain definition, an example, a pronunciation guide, and two check questions, and teachers can review it. When the AI writes a meaning in the learner's language, it may only restate that definition. It's told not to add facts, prices, or advice.
+
+Everything the AI writes is saved in `backend/data/generated/<lang>.json`, so each word is written once and every learner sees the same text. A bilingual teacher can review it in a spreadsheet and approve or fix it.
+
+## Get your free key
+
+1. Go to [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and sign in with a Google account.
+2. Click **Create API key** and copy it. No credit card is needed.
+
+This one key powers the learner-language lessons, the tutor's voice, reading pictures of forms, and the live conversations.
+
+**Without any key**, the app still works for PDF and text forms in English: lessons, quizzes, and model conversations.
+
+One thing to know: on Gemini's free tier, Google may use what you send to improve its products. That's fine for testing. Before real learners record their voices, turn on billing in AI Studio to move to the paid tier, which costs a few cents per conversation.
 
 ## Run it locally
 
 You need Python 3.10+ and Node 20+.
 
-**1. Add your keys.** Copy the example file and fill it in. Only `ANTHROPIC_API_KEY` is required.
+**1. Add your key.**
 
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` and paste your Anthropic key. Add a `GEMINI_API_KEY` if you want the conversation simulator. Never commit `.env`; it is already ignored by git.
+Open `.env` and paste your key after `GEMINI_API_KEY=`. Git ignores `.env`, so the key never goes to GitHub.
 
 **2. Start the Python server.**
 
@@ -67,92 +87,73 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173.
+Open http://localhost:5173. Pick **தமிழ்**, tap the first button, then **Use a sample form**.
 
-### Using it on phones in class
+### On phones in class
 
-The photo feature works over plain Wi-Fi: run `npm run dev`, then open the "Network" address Vite prints (like `http://192.168.1.20:5173`) on a phone.
+Lessons work over plain Wi-Fi. Run `npm run dev` and open the "Network" address Vite prints on a phone. Talking practice needs the microphone, and phones only allow that on `https://` pages. For that, build the app (below) and use a deployment or a tunnel such as `cloudflared tunnel --url http://localhost:8000`.
 
-The **microphone** is different. Phones only allow mic access on `https://` pages, so the conversation simulator needs either a real deployment or a tunnel such as `cloudflared tunnel --url http://localhost:8000` (after building the app, see below).
-
-### One-server mode (for deployment)
-
-Build the React app once and the Python server will serve it too:
+### One-server mode
 
 ```bash
 cd frontend && npm run build
 cd ../backend && uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-Everything is then at http://localhost:8000. Any host that can run a Python web server works.
+Everything is then served from http://localhost:8000.
 
 ## For teachers
 
-### Measuring before and after a lesson
-
-Give each learner a short code (like `A3`, never a name) and a link:
+**Measure before and after a lesson.** Give each learner a short code (like `A3`, never a name) and a link:
 
 ```
-https://your-app/?phase=pre&learner=A3&terms=copay,deductible,member_id,referral,emergency_contact,date_of_birth,prescription,allergies
+https://your-app/?phase=pre&learner=A3&terms=copay,deductible,member_id,referral,in_network,prior_authorization
 ```
 
-The link opens the quiz directly with those eight words. After the lesson, send the same link with `phase=post`. Then run:
+Send the same link with `phase=post` after the lesson, then run `python scripts/comprehension_report.py` in `backend/`. It prints each learner's before and after scores, the class average, and the words still missed most.
+
+**Review the computer translations.**
 
 ```bash
 cd backend
-python scripts/comprehension_report.py
+python scripts/review_content.py export --lang ta      # writes review_ta.csv
+# fix the 'text' column in Excel or Google Sheets, put 'yes' under 'approved'
+python scripts/review_content.py import --lang ta --csv review_ta.csv
 ```
 
-It prints each learner's before and after scores, the class average, and the words that were still missed most after the lesson. Results are saved in `backend/data/results/`, which is kept out of git.
-
-### Reviewing translations
-
-```bash
-cd backend
-python scripts/translations.py export --lang es --draft     # writes review_es.csv with AI drafts
-# a bilingual teacher fixes the approved_translation column in Excel or Google Sheets
-python scripts/translations.py import --lang es --csv review_es.csv
-```
-
-Approved sentences are shown to learners word for word from then on.
-
-### Reviewing the glossary
-
-Each entry in `backend/data/glossary.json` has a `vetted` flag that starts as `false`. Read the definition and example, edit anything that does not fit your learners, and flip it to `true`. The tests check that every definition stays one short sentence and never contains the word it defines (otherwise the quiz would give the answer away).
-
-### Adding a language
-
-Copy a block in `backend/data/languages.json`, change the code and names, and translate the `ui` strings. Add a title for each scenario in `scenarios.json`. Set `"dir": "rtl"` for Dari, Farsi, Arabic, or Urdu.
+**Change the content.** Words, situations, and all app text live in `backend/data/` as JSON. The tests check that every definition stays one short sentence, every check question avoids the word it's checking, and every language has every string.
 
 ## Privacy
 
-- Photos are held in memory for one request and never saved.
-- Claude is told to report only printed labels and to ignore anything a person wrote on the form.
-- Quiz results store a short learner code, never a name. The server rejects codes with spaces.
-- In the conversation simulator, the AI partner tells learners to use a pretend name and numbers, and never asks for real ID or insurance numbers.
-- API keys stay on the server. The browser never sees them, including for Gemini Live, which is relayed through the Python server.
+- Uploaded forms are held in memory for one request and never saved. Digital PDFs never leave the server.
+- For pictures, the AI is told to copy only printed labels, never anything someone wrote on the form. Requests are sent with `store=False`.
+- Quiz results store a short learner code, never a name.
+- In practice situations, learners use a pretend patient and a pretend insurance card. The AI partner never asks for real information.
+- The API key stays on the server, including for live audio, which is relayed through the Python server.
 
 ## Project layout
 
 ```
 backend/
   app/
-    main.py           API routes and static file serving
-    explain.py        Claude vision call, grounding, approved translations
-    quiz.py           quiz builder (meaning + fill-in-the-blank)
-    conversation.py   Gemini Live relay for the speaking simulator
-    tts.py            optional Google Cloud text-to-speech
-    results.py        quiz result logging
+    main.py          API routes
+    forms.py         reads uploads; finds glossary words (no AI for digital PDFs)
+    lessons.py       learner-language lesson text, saved for review
+    speech.py        tutor voice with Gemini TTS, cached on disk
+    quiz.py          quiz in questioning-hierarchy order
+    conversation.py  live role-play relay to Gemini Live
+    ai.py            Gemini (default, free) or Claude (optional)
   data/
-    glossary.json     71 plain-language healthcare terms
-    languages.json    learner languages and UI text
-    scenarios.json    role-play scenarios
-  scripts/            comprehension report, translation review
-  tests/              pytest suite (no API calls; Claude and Gemini are faked)
+    glossary.json    73 words: definitions, pronunciation, check questions, CASAS codes
+    scenarios.json   6 practice situations with model conversations
+    languages.json   app text and tutor lines in each language
+  scripts/           comprehension report, translation review, sample form
+  tests/             pytest suite; AI is faked, so it runs offline
 frontend/
-  src/screens/        language picker, home, scan, results, quiz, talk
-  src/audio/live.ts   mic capture and audio playback for Gemini Live
-  public/pcm-recorder-worklet.js   converts mic audio to 16 kHz PCM
+  src/screens/       Upload, Lesson, Quiz, Practice, Scenario
+  src/speech.ts      voice playback with prefetching and phone-voice fallback
+  src/audio/live.ts  microphone and speaker audio for live practice
+docs/curriculum.md   the teaching design and its sources
 ```
 
 ## Tests
@@ -163,13 +164,7 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
-The suite checks the glossary rules, the quiz builder, the API (with a fake Claude client), and the Gemini relay (with a fake Live session), so it runs offline in under a second.
-
-## Status
-
-- Photo explainer and quiz: working.
-- Conversation simulator: working end to end with a relay and captions, still being tuned with learners. Turn-taking is walkie-talkie style (the mic mutes while the partner talks), which keeps the partner from hearing itself on phone speakers.
-- Model names live in `.env` (`CLAUDE_MODEL`, `GEMINI_LIVE_MODEL`), so they can be updated without code changes.
+The tests cover form reading, word matching, lessons and caching, the quiz order, the exact requests sent to Gemini and Claude, the voice cache, and the live relay.
 
 ## License
 

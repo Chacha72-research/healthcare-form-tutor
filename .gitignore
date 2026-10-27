@@ -13,6 +13,8 @@ venv/
 
 # Quiz results contain learner codes; keep them off GitHub
 backend/data/results/
+# Cached voice audio (rebuilt automatically)
+backend/data/audio_cache/
 
 # Node
 node_modules/

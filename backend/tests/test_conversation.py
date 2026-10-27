@@ -76,8 +76,14 @@ class FakeClient:
 
 def test_relay_forwards_audio_and_captions(monkeypatch, tmp_path):
     monkeypatch.setattr(genai, "Client", FakeClient)
-    settings = Settings(anthropic_api_key="", gemini_api_key="fake", results_path=tmp_path / "r.jsonl")
-    client = TestClient(create_app(settings=settings, content=content))
+    settings = Settings(
+        anthropic_api_key="",
+        gemini_api_key="fake",
+        results_path=tmp_path / "r.jsonl",
+        generated_dir=tmp_path / "generated",
+        audio_cache_dir=tmp_path / "audio",
+    )
+    client = TestClient(create_app(settings=settings, content=content, ai=None, voice=None))
 
     with client.websocket_connect("/ws/conversation?scenario=pharmacy&language=zh-Hans") as ws:
         assert ws.receive_json() == {"type": "ready"}

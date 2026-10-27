@@ -18,7 +18,7 @@ _lock = threading.Lock()
 
 class Answer(BaseModel):
     term_id: str = Field(max_length=64)
-    type: Literal["meaning", "fill"]
+    type: Literal["either_or", "yes_no", "meaning", "fill"]
     correct: bool
 
 

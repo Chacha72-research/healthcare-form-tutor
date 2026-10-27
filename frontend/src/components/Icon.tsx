@@ -57,6 +57,42 @@ const paths: Record<string, JSX.Element> = {
     </>
   ),
   stop: <rect x="6.5" y="6.5" width="11" height="11" rx="2" />,
+  upload: (
+    <>
+      <path d="M7 3.5h7l4.5 4.5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-15.5a1 1 0 0 1 1-1z" />
+      <path d="M14 3.5V8h4.5M12 18v-6.5M9.3 14 12 11.3l2.7 2.7" />
+    </>
+  ),
+  form: (
+    <>
+      <rect x="5" y="3.5" width="14" height="17" rx="1.5" />
+      <path d="M8 8h8M8 11.5h8M8 15h5" />
+    </>
+  ),
+  card: (
+    <>
+      <rect x="3" y="6" width="18" height="12" rx="2" />
+      <path d="M3 10h18M6.5 14.5h4" />
+    </>
+  ),
+  bill: (
+    <>
+      <path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z" />
+      <path d="M9 8h6M9 11.5h6M9 15h3" />
+    </>
+  ),
+  replay: (
+    <>
+      <path d="M5 12a7 7 0 1 0 2.1-5" />
+      <path d="M5 4.5V8h3.5" />
+    </>
+  ),
+  voiceoff: (
+    <>
+      <path d="M5 9.5h3l4.5-4v13L8 14.5H5z" />
+      <path d="m16 9.5 5 5M21 9.5l-5 5" />
+    </>
+  ),
 };
 
 export function Icon({ name, size = 28 }: { name: string; size?: number }) {

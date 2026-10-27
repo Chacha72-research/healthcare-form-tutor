@@ -4,39 +4,65 @@ from __future__ import annotations
 
 import logging
 
-from fastapi import FastAPI, File, Form, HTTPException, Query, Request, UploadFile, WebSocket
+from fastapi import FastAPI, File, HTTPException, Query, Request, UploadFile, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 
+from .ai import AIError, AIProvider, make_provider
 from .config import REPO_ROOT, Settings, settings as default_settings
 from .content import Content, get_content
-from .explain import ExplainError, Explainer
+from .forms import FormError, TermMatcher, read_form
+from .lessons import GeneratedStore, LessonService
 from .quiz import build_quiz
 from .results import QuizResult, save_result
-from .tts import GoogleTTS, TTSError
+from .speech import GeminiVoice
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("tutor")
 
-ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+_UNSET = object()
+
+EXTENSION_TYPES = {
+    ".pdf": "application/pdf",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".webp": "image/webp",
+    ".txt": "text/plain",
+}
+
+
+def _error(status: int, code: str) -> HTTPException:
+    return HTTPException(status, detail={"code": code})
+
+
+def _ai_status(exc: AIError) -> int:
+    return 429 if exc.code == "ai_busy" else 502
 
 
 def create_app(
     settings: Settings | None = None,
     content: Content | None = None,
-    explainer: Explainer | None = None,
-    tts: GoogleTTS | None = None,
+    ai: AIProvider | None | object = _UNSET,
+    voice: GeminiVoice | None | object = _UNSET,
 ) -> FastAPI:
     settings = settings or default_settings
     content = content or get_content()
+    if ai is _UNSET:
+        ai = make_provider(settings)
+    if voice is _UNSET:
+        voice = None
+        if settings.voice_enabled:
+            voice = GeminiVoice(
+                settings.gemini_api_key,
+                settings.gemini_tts_model,
+                {"tutor": settings.tutor_voice, "staff": settings.staff_voice, "learner": settings.learner_voice},
+                settings.audio_cache_dir,
+            )
 
-    if explainer is None and settings.scan_enabled:
-        from anthropic import AsyncAnthropic
-
-        explainer = Explainer(AsyncAnthropic(api_key=settings.anthropic_api_key), settings.claude_model, content)
-    if tts is None and settings.server_tts_enabled:
-        tts = GoogleTTS(settings.google_tts_api_key)
+    matcher = TermMatcher(content.terms)
+    lessons = LessonService(content, GeneratedStore(settings.generated_dir), ai)
 
     app = FastAPI(title="Healthcare Form Literacy Tutor")
     app.add_middleware(
@@ -49,7 +75,7 @@ def create_app(
     def language_or_400(code: str):
         language = content.language(code)
         if language is None:
-            raise HTTPException(400, f"Unknown language '{code}'.")
+            raise _error(400, "unknown_language")
         return language
 
     @app.get("/api/health")
@@ -73,12 +99,21 @@ def create_app(
             ],
             "english_ui": content.english_ui,
             "scenarios": [
-                {"id": s["id"], "title": s["title"], "icon": s.get("icon", "chat")} for s in content.scenarios
+                {
+                    "id": s["id"],
+                    "icon": s.get("icon", "chat"),
+                    "title": s["title"],
+                    "goal": s["goal"],
+                    "staff_label": s["staff_label"],
+                    "target_terms": s["target_terms"],
+                }
+                for s in content.scenarios
             ],
+            "pretend_patient": content.pretend_patient,
             "features": {
-                "scan": explainer is not None,
-                "conversation": settings.conversation_enabled,
-                "server_tts": tts is not None,
+                "ai": ai is not None,
+                "voice": voice is not None,
+                "live": settings.live_enabled,
             },
         }
 
@@ -86,9 +121,39 @@ def create_app(
     def glossary():
         return {"terms": [t.public() for t in content.terms]}
 
+    @app.post("/api/forms/read")
+    async def forms_read(file: UploadFile = File(...)):
+        limit = settings.max_upload_mb * 1024 * 1024
+        data = await file.read(limit + 1)
+        if len(data) > limit:
+            raise _error(413, "file_too_big")
+
+        mime = (file.content_type or "").split(";")[0].strip().lower()
+        if mime not in EXTENSION_TYPES.values():
+            name = (file.filename or "").lower()
+            mime = next((t for ext, t in EXTENSION_TYPES.items() if name.endswith(ext)), mime)
+
+        # The file is only held in memory for this request and never saved.
+        try:
+            reading = await read_form(data, mime, matcher=matcher, content=content, ai=ai)
+        except FormError as exc:
+            raise _error(exc.status, exc.code) from exc
+        except AIError as exc:
+            raise _error(_ai_status(exc), exc.code) from exc
+        return reading.to_dict()
+
+    @app.get("/api/lesson")
+    async def lesson(
+        terms: str = Query(min_length=1, max_length=2000),
+        language: str = Query(min_length=2, max_length=16),
+    ):
+        lang = language_or_400(language)
+        term_ids = [t.strip() for t in terms.split(",") if t.strip()][:12]
+        return await lessons.lesson(term_ids, lang)
+
     @app.get("/api/quiz")
     def quiz(
-        terms: str = Query(default="", description="Comma-separated glossary ids to include first"),
+        terms: str = Query(default="", description="Comma-separated glossary ids"),
         n: int = Query(default=8, ge=1, le=20),
         seed: str | None = Query(default=None, description="Same seed gives the same quiz"),
     ):
@@ -99,47 +164,34 @@ def create_app(
     def quiz_results(result: QuizResult):
         return save_result(result, settings.results_path)
 
-    @app.post("/api/explain")
-    async def explain(file: UploadFile = File(...), language: str = Form(...)):
-        if explainer is None:
-            raise HTTPException(503, "Photo reading is not set up. Add ANTHROPIC_API_KEY to .env.")
+    @app.get("/api/scenarios/{scenario_id}")
+    async def scenario(scenario_id: str, language: str = Query(min_length=2, max_length=16)):
         lang = language_or_400(language)
-        if file.content_type not in ALLOWED_IMAGE_TYPES:
-            raise HTTPException(415, "Please upload a JPEG, PNG, WebP, or GIF photo.")
+        data = await lessons.scenario(scenario_id, lang)
+        if data is None:
+            raise _error(404, "unknown_scenario")
+        return data
 
-        data = await file.read(settings.max_upload_mb * 1024 * 1024 + 1)
-        if len(data) > settings.max_upload_mb * 1024 * 1024:
-            raise HTTPException(413, f"Photo is larger than {settings.max_upload_mb} MB.")
-        if not data:
-            raise HTTPException(400, "The photo is empty.")
-
-        # The photo is only held in memory for this request and never saved.
-        try:
-            result = await explainer.explain(data, file.content_type, lang)
-        except ExplainError as exc:
-            raise HTTPException(502, str(exc)) from exc
-        return result.to_dict()
-
-    @app.get("/api/tts")
-    async def text_to_speech(
-        text: str = Query(min_length=1, max_length=400),
-        lang: str = Query(min_length=2, max_length=16),
-        slow: bool = False,
+    @app.get("/api/speech")
+    async def speech(
+        text: str = Query(min_length=1, max_length=500),
+        voice_role: str = Query(default="tutor", alias="voice", pattern="^(tutor|staff|learner)$"),
+        style: str = Query(default="tutor", pattern="^(tutor|model)$"),
     ):
-        if tts is None:
-            raise HTTPException(501, "Server text-to-speech is off. The app uses the device's voices.")
+        if voice is None:
+            raise _error(501, "voice_off")
         try:
-            audio = await tts.synthesize(text, lang, slow=slow)
-        except TTSError as exc:
-            raise HTTPException(502, str(exc)) from exc
-        return Response(content=audio, media_type="audio/mpeg", headers={"Cache-Control": "public, max-age=86400"})
+            audio = await voice.speak(text, voice_role, style)
+        except AIError as exc:
+            raise _error(_ai_status(exc), exc.code) from exc
+        return Response(content=audio, media_type="audio/wav", headers={"Cache-Control": "public, max-age=604800"})
 
     @app.websocket("/ws/conversation")
-    async def conversation(websocket: WebSocket, scenario: str = "front_desk", language: str = "es"):
+    async def conversation(websocket: WebSocket, scenario: str = "front_desk", language: str = "ta"):
         await websocket.accept()
         scenario_data = content.scenarios_by_id.get(scenario)
         lang = content.language(language)
-        if not settings.conversation_enabled:
+        if not settings.live_enabled:
             await websocket.send_json({"type": "error", "message": "not_configured"})
             await websocket.close()
             return
@@ -164,17 +216,17 @@ def create_app(
             except Exception:
                 pass
 
+    @app.middleware("http")
+    async def no_store_api(request: Request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith("/api/") and request.url.path != "/api/speech":
+            response.headers.setdefault("Cache-Control", "no-store")
+        return response
+
     # In production, serve the built React app from the same server.
     dist = REPO_ROOT / "frontend" / "dist"
     if dist.is_dir():
         app.mount("/", StaticFiles(directory=dist, html=True), name="frontend")
-
-    @app.middleware("http")
-    async def no_store_api(request: Request, call_next):
-        response = await call_next(request)
-        if request.url.path.startswith("/api/") and request.url.path != "/api/tts":
-            response.headers.setdefault("Cache-Control", "no-store")
-        return response
 
     return app
 

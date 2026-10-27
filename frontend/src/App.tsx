@@ -1,22 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { getConfig } from "./api";
 import { LangProvider, makeLangValue } from "./i18n";
-import { stopSpeaking, setServerTts } from "./speech";
-import type { AppConfig, ExplainResponse, TeacherParams } from "./types";
+import { setLearnerBrowserLang, setServerVoice, stopSpeaking } from "./speech";
+import type { AppConfig, FormReading, TeacherParams } from "./types";
 import { LanguagePicker } from "./screens/LanguagePicker";
 import { Home } from "./screens/Home";
-import { Scan } from "./screens/Scan";
-import { Results } from "./screens/Results";
+import { Upload } from "./screens/Upload";
+import { LessonScreen } from "./screens/Lesson";
 import { QuizScreen } from "./screens/Quiz";
-import { Talk } from "./screens/Talk";
+import { Practice } from "./screens/Practice";
+import { ScenarioScreen } from "./screens/Scenario";
+
+export const WORDS_PER_LESSON = 6;
 
 export type Screen =
   | { name: "language" }
   | { name: "home" }
-  | { name: "scan" }
-  | { name: "results"; data: ExplainResponse }
-  | { name: "quiz"; termIds: string[] }
-  | { name: "talk" };
+  | { name: "upload" }
+  | { name: "lesson"; reading: FormReading; index: number }
+  | { name: "quiz"; termIds: string[]; reading?: FormReading; index?: number }
+  | { name: "practice"; suggested?: string[] }
+  | { name: "scenario"; id: string };
 
 const LANG_KEY = "form-helper-language";
 
@@ -50,7 +54,7 @@ export default function App() {
     getConfig()
       .then((c) => {
         setConfig(c);
-        setServerTts(c.features.server_tts);
+        setServerVoice(c.features.voice);
       })
       .catch(() => setLoadError(true));
   }, []);
@@ -65,7 +69,10 @@ export default function App() {
   useEffect(() => {
     document.documentElement.lang = language?.code ?? "en";
     document.documentElement.dir = language?.dir ?? "ltr";
-    if (language) document.title = language.ui.app_title ?? "Form Helper";
+    if (language) {
+      document.title = language.ui.app_title ?? "Form Helper";
+      setLearnerBrowserLang(language.browser_tts_lang);
+    }
   }, [language]);
 
   function go(next: Screen) {
@@ -78,7 +85,7 @@ export default function App() {
     try {
       localStorage.setItem(LANG_KEY, code);
     } catch {
-      /* private browsing: just keep it for this visit */
+      /* private browsing: keep it for this visit */
     }
     setLangCode(code);
     go(screen.name === "language" ? { name: "home" } : screen);
@@ -100,10 +107,21 @@ export default function App() {
   return (
     <LangProvider value={makeLangValue(config, language)}>
       {screen.name === "home" && <Home go={go} />}
-      {screen.name === "scan" && <Scan go={go} />}
-      {screen.name === "results" && <Results data={screen.data} go={go} />}
-      {screen.name === "quiz" && <QuizScreen termIds={screen.termIds} teacher={teacher} go={go} />}
-      {screen.name === "talk" && <Talk go={go} />}
+      {screen.name === "upload" && <Upload go={go} />}
+      {screen.name === "lesson" && (
+        <LessonScreen key={`${screen.index}`} reading={screen.reading} index={screen.index} go={go} />
+      )}
+      {screen.name === "quiz" && (
+        <QuizScreen
+          termIds={screen.termIds}
+          teacher={teacher}
+          go={go}
+          reading={screen.reading}
+          index={screen.index}
+        />
+      )}
+      {screen.name === "practice" && <Practice go={go} suggested={screen.suggested} />}
+      {screen.name === "scenario" && <ScenarioScreen key={screen.id} id={screen.id} go={go} />}
     </LangProvider>
   );
 }

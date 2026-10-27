@@ -32,39 +32,56 @@ log = logging.getLogger(__name__)
 INPUT_MIME = "audio/pcm;rate=16000"
 
 
+def _patient_card(patient: dict) -> str:
+    copays = ", ".join(f"{k} {v}" for k, v in patient.get("copays", {}).items())
+    return (
+        f"Name: {patient['name']}. Date of birth: {patient['date_of_birth_spoken']}. "
+        f"Insurance: {patient['plan']} ({patient['plan_type']}). Member ID: {patient['member_id']}. "
+        f"Group number: {patient['group_number']}. Primary care provider: {patient['primary_care_provider']}. "
+        f"Copays: {copays}. Deductible: {patient['deductible']} a year. "
+        f"Allergy: {patient['allergy']}. Emergency contact: {patient['emergency_contact']}."
+    )
+
+
 def build_instruction(scenario: dict, language: Language, content: Content) -> str:
+    lang = language.english_name.split(" (")[0]
     words = []
     for tid in scenario.get("target_terms", []):
         term = content.terms_by_id.get(tid)
         if term:
             words.append(f"- {term.term}: {term.definition}")
     word_list = "\n".join(words)
+    phrases = "\n".join(f"- {p}" for p in scenario.get("useful_phrases", []))
+    card = _patient_card(content.pretend_patient)
 
-    return f"""You are helping an adult English learner practice a real healthcare conversation out loud. The learner is a beginner. Their first language is {language.english_name}.
+    return f"""You are a role-play partner for an adult English learner practicing a real U.S. healthcare situation out loud. The learner is a beginner (English level 1 to 2). Their first language is {lang}.
 
-Play this role: {scenario['role']}.
-Situation: {scenario['situation']}
+YOUR ROLE: {scenario['role']}.
+SITUATION: {scenario['situation']}
 
-How to talk:
-- Speak slowly and clearly, like you are talking to a new English learner.
-- Use short, simple sentences, under 12 words when you can.
-- Ask only one question at a time, then wait for the answer.
-- Use these healthcare words naturally during the conversation:
+THE LEARNER plays a patient named {content.pretend_patient['name']} and reads from a pretend insurance card:
+{card}
+Accept these pretend details as correct. Never ask for the learner's real name, real numbers, or address.
+
+WORDS TO USE NATURALLY (this is what the learner is studying):
 {word_list}
-- If the learner does not understand, say it again with easier words.
-- If the learner asks for help or is stuck twice in a row, give one short hint in {language.english_name}, then go back to English.
+
+PHRASES THE LEARNER PRACTICED (expect and welcome these):
+{phrases}
+
+HOW TO TALK (adult ESL teaching practice):
+- First, say one short, friendly sentence in {lang} that explains the situation. Then switch to English and start with: "{scenario['opening']}"
+- Speak slowly and clearly. Use short sentences, under 12 words when you can.
+- Ask one question at a time, then wait. Allow long pauses; beginners need time.
+- If the learner makes a mistake, don't correct them directly. Repeat their idea back correctly in your answer (a recast), then continue.
+- If they don't understand, say it again with easier words. If they are stuck twice in a row, give one short hint in {lang}, then go back to English.
+- If they ask what a word means, explain it in one simple English sentence.
+- Stay in the situation. Do not give medical advice beyond the facts in the situation.
 - Be warm and patient. Praise effort, not perfection.
 
-Safety and privacy:
-- This is practice. At the start, tell the learner they can use a pretend name and pretend numbers.
-- Never ask for real ID numbers, insurance numbers, or addresses.
-- Never give medical advice. Stay in the role-play.
-
-Ending:
-- After about 8 to 10 back-and-forth turns, finish the role-play kindly.
-- Then step out of the role and tell the learner one thing they did well and one word from the list to practice more.
-
-Start with this line: "{scenario['opening']}\""""
+ENDING:
+- After about 8 to 10 back-and-forth turns, finish the situation kindly.
+- Then step out of the role and say, in simple English and then in {lang}: one thing the learner did well, and one word from the list to practice more."""
 
 
 async def run_conversation(
@@ -81,10 +98,10 @@ async def run_conversation(
     client = genai.Client(api_key=settings.gemini_api_key)
 
     speech_config = None
-    if settings.gemini_voice:
+    if settings.staff_voice:
         speech_config = types.SpeechConfig(
             voice_config=types.VoiceConfig(
-                prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=settings.gemini_voice)
+                prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=settings.staff_voice)
             )
         )
 

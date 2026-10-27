@@ -1,4 +1,6 @@
-import { ListenButton } from "../components/ListenButton";
+import { useState } from "react";
+import { Icon } from "../components/Icon";
+import { setLearnerBrowserLang, speak } from "../speech";
 import type { AppConfig } from "../types";
 
 interface Props {
@@ -8,6 +10,8 @@ interface Props {
 }
 
 export function LanguagePicker({ config, current, onChoose }: Props) {
+  const [playing, setPlaying] = useState<string | null>(null);
+
   return (
     <main className="page">
       <h1 className="picker-title">{config.english_ui.choose_language}</h1>
@@ -34,11 +38,20 @@ export function LanguagePicker({ config, current, onChoose }: Props) {
                 {l.english_name}
               </span>
             </button>
-            <ListenButton
-              text={l.native_name}
-              voice={{ ttsLang: l.tts_lang, browserLang: l.browser_tts_lang }}
-              label={`${l.english_name}: listen`}
-            />
+            <button
+              type="button"
+              className={`listen listen-md${playing === l.code ? " is-playing" : ""}`}
+              aria-label={`${l.english_name}: listen`}
+              onClick={async () => {
+                setPlaying(l.code);
+                // Each language says "Choose your language" in its own voice.
+                setLearnerBrowserLang(l.browser_tts_lang);
+                await speak({ text: l.ui.choose_language, lang: "l1" });
+                setPlaying(null);
+              }}
+            >
+              <Icon name="speaker" size={22} />
+            </button>
           </li>
         ))}
       </ul>

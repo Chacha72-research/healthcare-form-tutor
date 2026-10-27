@@ -1,47 +1,356 @@
 {
-  "about": "Role-play scenarios for the spoken English conversation simulator. target_terms are glossary ids the AI partner should work into the conversation.",
+  "about": "Situational practice units, ordered from easier to harder along a real patient journey. Each unit follows the same cycle: listen to a model conversation, check understanding (either/or, then yes/no, then wh- questions), then role-play with a live AI partner. Learners always use the pretend patient below, never their real information. {language} in a line is replaced with the learner's language.",
+  "pretend_patient": {
+    "name": "Sam Lee",
+    "date_of_birth": "03/15/1990",
+    "date_of_birth_spoken": "March 15, 1990",
+    "plan": "Golden Valley Health Plan",
+    "plan_type": "PPO",
+    "member_id": "GVH 482 1137",
+    "group_number": "7720",
+    "primary_care_provider": "Dr. Ana Lopez",
+    "copays": {
+      "Office visit": "$25",
+      "Specialist": "$50",
+      "Urgent care": "$75",
+      "Emergency room": "$250",
+      "Generic drugs": "$10"
+    },
+    "deductible": "$1,000",
+    "member_services_phone": "1-800-555-0142",
+    "allergy": "penicillin",
+    "emergency_contact": "Mia Lee (sister)"
+  },
   "scenarios": [
     {
-      "id": "front_desk",
-      "role": "a friendly front desk worker at a community health clinic",
-      "situation": "The learner is a patient checking in for a doctor visit. Ask for their name, date of birth, insurance card, and reason for visit. Tell them their copay. Ask for an emergency contact.",
-      "opening": "Hi, welcome to the clinic. Are you here to check in?",
-      "target_terms": ["check_in", "date_of_birth", "insurance_card", "member_id", "copay", "reason_for_visit", "emergency_contact", "new_patient"],
-      "title": {
-        "en": "Checking in at the front desk",
-        "es": "Registrarse en la recepción",
-        "zh-Hans": "在前台登记",
-        "vi": "Làm thủ tục ở quầy tiếp tân"
-      },
-      "icon": "desk"
-    },
-    {
       "id": "make_appointment",
-      "role": "a clinic receptionist answering the phone",
-      "situation": "The learner is calling to make an appointment. Ask if they are a new patient, who their primary care provider is, the reason for the visit, and what days work. Ask if they need an interpreter. Explain the cancellation policy in one simple sentence.",
-      "opening": "Hello, Valley Health Clinic. How can I help you today?",
-      "target_terms": ["appointment", "new_patient", "primary_care_provider", "reason_for_visit", "interpreter", "cancellation_policy", "referral", "insurance_card"],
+      "icon": "phone",
+      "casas": ["3.1.2", "3.1.7", "0.1.6"],
+      "el_civics": "28 Accessing Health Care",
       "title": {
-        "en": "Calling to make an appointment",
+        "en": "Call to make an appointment",
         "es": "Llamar para hacer una cita",
         "zh-Hans": "打电话预约",
-        "vi": "Gọi điện đặt lịch hẹn"
+        "vi": "Gọi điện đặt lịch hẹn",
+        "ta": "அப்பாயின்ட்மென்ட் எடுக்க போன் செய்வது"
       },
-      "icon": "phone"
+      "goal": {
+        "en": "Make an appointment by phone and ask for an interpreter.",
+        "es": "Haz una cita por teléfono y pide un intérprete.",
+        "zh-Hans": "打电话预约，并要求翻译员。",
+        "vi": "Gọi điện đặt lịch hẹn và xin một thông dịch viên.",
+        "ta": "போன்ல அப்பாயின்ட்மென்ட் எடுத்து, ஒரு interpreter கேளுங்க."
+      },
+      "staff_label": "Receptionist",
+      "role": "a friendly receptionist answering the phone at Valley Health Clinic",
+      "situation": "The learner is calling to make a first appointment. Ask if they are a new patient, the reason for the visit, and what insurance they have. Say the clinic is in-network with Golden Valley Health Plan. Offer Monday at 9 a.m. If they ask for an interpreter, say yes, ask their preferred language, and say interpreters are free. Remind them to come 15 minutes early for check-in.",
+      "opening": "Hello, Valley Health Clinic. How can I help you?",
+      "target_terms": ["appointment", "new_patient", "reason_for_visit", "in_network", "interpreter", "preferred_language", "check_in"],
+      "useful_phrases": [
+        "I want to make an appointment, please.",
+        "I am a new patient.",
+        "Can I have an interpreter, please?",
+        "Can you say that again, please?",
+        "Please speak slowly."
+      ],
+      "dialogue": [
+        {"who": "staff", "text": "Hello, Valley Health Clinic. How can I help you?"},
+        {"who": "you", "text": "Hi. I want to make an appointment, please."},
+        {"who": "staff", "text": "Sure. Are you a new patient?"},
+        {"who": "you", "text": "Yes, I am a new patient."},
+        {"who": "staff", "text": "What is the reason for your visit?"},
+        {"who": "you", "text": "I have a bad cough."},
+        {"who": "staff", "text": "Okay. What insurance do you have?"},
+        {"who": "you", "text": "Golden Valley Health Plan."},
+        {"who": "staff", "text": "Good. We are in-network with that plan. Can you come on Monday at 9 a.m.?"},
+        {"who": "you", "text": "Yes, Monday at 9 is good. Can I have an interpreter, please?"},
+        {"who": "staff", "text": "Of course. What is your preferred language?"},
+        {"who": "you", "text": "{language}, please."},
+        {"who": "staff", "text": "No problem. The interpreter is free. Please come 15 minutes early for check-in."},
+        {"who": "you", "text": "Okay. Thank you!"}
+      ],
+      "questions": [
+        {"type": "either_or", "q": "Is the appointment on Monday or on Friday?", "options": ["Monday", "Friday"], "answer": "Monday"},
+        {"type": "yes_no", "q": "Is the patient new to this clinic?", "answer": true},
+        {"type": "yes_no", "q": "Does the interpreter cost money?", "answer": false},
+        {"type": "wh", "q": "What time is the appointment?", "options": ["9 a.m.", "10 a.m.", "3 p.m."], "answer": "9 a.m."},
+        {"type": "wh", "q": "Why does the patient need to see a doctor?", "options": ["a bad cough", "a broken arm", "a checkup"], "answer": "a bad cough"}
+      ]
+    },
+    {
+      "id": "front_desk",
+      "icon": "desk",
+      "casas": ["3.1.3", "0.2.1", "3.2.1", "3.2.3"],
+      "el_civics": "28 Accessing Health Care",
+      "title": {
+        "en": "Check in at the front desk",
+        "es": "Registrarte en la recepción",
+        "zh-Hans": "在前台登记",
+        "vi": "Làm thủ tục ở quầy tiếp tân",
+        "ta": "ஃப்ரண்ட் டெஸ்க்ல செக்-இன் செய்வது"
+      },
+      "goal": {
+        "en": "Check in, show your insurance card, and pay your copay.",
+        "es": "Regístrate, muestra tu tarjeta de seguro y paga tu copago.",
+        "zh-Hans": "办理登记，出示保险卡，支付自付额。",
+        "vi": "Làm thủ tục, đưa thẻ bảo hiểm và trả tiền copay.",
+        "ta": "செக்-இன் பண்ணி, இன்ஷூரன்ஸ் கார்டைக் காட்டி, copay கட்டுங்க."
+      },
+      "staff_label": "Receptionist",
+      "role": "a friendly front desk worker at a community health clinic",
+      "situation": "The learner is a patient checking in for a 9 a.m. appointment. Ask for their name, date of birth, insurance card, and photo ID. Tell them the copay is $25 and ask how they want to pay. Give them a new patient form and ask them to write an emergency contact and their current medications. If they ask what a word means, explain it in one short, simple sentence.",
+      "opening": "Good morning! Do you have an appointment today?",
+      "target_terms": ["appointment", "date_of_birth", "insurance_card", "copay", "new_patient", "emergency_contact", "current_medications", "check_in"],
+      "useful_phrases": [
+        "I have an appointment at 9.",
+        "Here is my insurance card.",
+        "How much is my copay?",
+        "Sorry, what does that mean?",
+        "Can I pay with a card?"
+      ],
+      "dialogue": [
+        {"who": "staff", "text": "Good morning! Do you have an appointment today?"},
+        {"who": "you", "text": "Yes, at 9 o'clock. My name is Sam Lee."},
+        {"who": "staff", "text": "What is your date of birth?"},
+        {"who": "you", "text": "March 15, 1990."},
+        {"who": "staff", "text": "Thank you. Can I see your insurance card and a photo ID?"},
+        {"who": "you", "text": "Here you go."},
+        {"who": "staff", "text": "Thanks. Your copay today is $25."},
+        {"who": "you", "text": "Okay. Can I pay with a card?"},
+        {"who": "staff", "text": "Yes. Please fill out this new patient form. Write your emergency contact and your current medications."},
+        {"who": "you", "text": "Sorry, what does emergency contact mean?"},
+        {"who": "staff", "text": "It is a person we can call if something serious happens to you."},
+        {"who": "you", "text": "Okay, my sister. Thank you."},
+        {"who": "staff", "text": "Great. Please have a seat. The nurse will call your name."}
+      ],
+      "questions": [
+        {"type": "either_or", "q": "Is the copay $25 or $50?", "options": ["$25", "$50"], "answer": "$25"},
+        {"type": "yes_no", "q": "Does Sam show an insurance card?", "answer": true},
+        {"type": "yes_no", "q": "Is Sam's emergency contact a doctor?", "answer": false},
+        {"type": "wh", "q": "Who is Sam's emergency contact?", "options": ["Sam's sister", "Sam's doctor", "Sam's boss"], "answer": "Sam's sister"},
+        {"type": "wh", "q": "What does Sam fill out?", "options": ["a new patient form", "a bill", "a prescription"], "answer": "a new patient form"}
+      ]
+    },
+    {
+      "id": "interpreter",
+      "icon": "chat",
+      "casas": ["3.1.7", "0.1.6", "3.2.1"],
+      "el_civics": "28 Accessing Health Care",
+      "title": {
+        "en": "Ask for an interpreter",
+        "es": "Pedir un intérprete",
+        "zh-Hans": "要求翻译员",
+        "vi": "Xin thông dịch viên",
+        "ta": "Interpreter கேட்பது"
+      },
+      "goal": {
+        "en": "Ask for a free interpreter, then answer questions about your health.",
+        "es": "Pide un intérprete gratis y luego contesta preguntas sobre tu salud.",
+        "zh-Hans": "要求免费翻译员，然后回答关于健康的问题。",
+        "vi": "Xin thông dịch viên miễn phí, rồi trả lời câu hỏi về sức khỏe.",
+        "ta": "இலவச interpreter கேளுங்க, அப்புறம் உங்க உடல்நலம் பற்றிய கேள்விகளுக்கு பதில் சொல்லுங்க."
+      },
+      "staff_label": "Nurse",
+      "role": "a kind nurse in an exam room who starts out speaking a little fast",
+      "situation": "Start by asking about the learner's medical history a little too fast. When the learner asks you to slow down or asks for an interpreter, say yes right away, ask their preferred language, and say the phone interpreter is free. Then ask, slowly, about chronic conditions, allergies, and current medications. Accept short answers.",
+      "opening": "Hi Sam, I'm Nurse Kim. Let's review your medical history. Do you have any chronic conditions or allergies?",
+      "target_terms": ["interpreter", "preferred_language", "medical_history", "chronic_condition", "allergies", "current_medications"],
+      "useful_phrases": [
+        "Sorry, I don't understand.",
+        "Can I have an interpreter, please?",
+        "Please speak slowly.",
+        "Is it free?",
+        "I am allergic to penicillin."
+      ],
+      "dialogue": [
+        {"who": "staff", "text": "Hi Sam, I'm Nurse Kim. Let's review your medical history. Do you have any chronic conditions or allergies?"},
+        {"who": "you", "text": "Sorry, I don't understand. Can I have an interpreter, please?"},
+        {"who": "staff", "text": "Of course. What is your preferred language?"},
+        {"who": "you", "text": "{language}, please. Is it free?"},
+        {"who": "staff", "text": "Yes, it is free. I will call a phone interpreter now."},
+        {"who": "you", "text": "Thank you."},
+        {"who": "staff", "text": "Okay, the interpreter is here. Do you have any allergies?"},
+        {"who": "you", "text": "Yes. I am allergic to penicillin."},
+        {"who": "staff", "text": "Thank you. Do you have any chronic conditions?"},
+        {"who": "you", "text": "Yes. I have high blood pressure."},
+        {"who": "staff", "text": "Are you taking any medicine for it?"},
+        {"who": "you", "text": "Yes. I brought the bottle. Here it is."},
+        {"who": "staff", "text": "Great, that helps a lot."}
+      ],
+      "questions": [
+        {"type": "either_or", "q": "Does Sam ask for an interpreter or a doctor?", "options": ["an interpreter", "a doctor"], "answer": "an interpreter"},
+        {"type": "yes_no", "q": "Does Sam pay for the interpreter?", "answer": false},
+        {"type": "yes_no", "q": "Is Sam allergic to penicillin?", "answer": true},
+        {"type": "wh", "q": "How does the interpreter help?", "options": ["on the phone", "by email", "with a letter"], "answer": "on the phone"},
+        {"type": "wh", "q": "What chronic condition does Sam have?", "options": ["high blood pressure", "a cold", "a broken arm"], "answer": "high blood pressure"}
+      ]
     },
     {
       "id": "pharmacy",
-      "role": "a pharmacist at the pharmacy counter",
-      "situation": "The learner is picking up a prescription. Ask for their name and date of birth. Ask about allergies. Explain the dosage in a simple way, mention one common side effect, say it is a generic drug, and tell them the copay and how many refills they have.",
-      "opening": "Hi there. Are you picking up a prescription today?",
-      "target_terms": ["prescription", "date_of_birth", "allergies", "dosage", "side_effect", "generic_drug", "copay", "refill"],
+      "icon": "pill",
+      "casas": ["3.3.1", "3.3.2", "3.3.4"],
+      "el_civics": "30 Using Pharmacies/Medication",
       "title": {
-        "en": "Picking up medicine at the pharmacy",
+        "en": "Pick up medicine at the pharmacy",
         "es": "Recoger medicina en la farmacia",
         "zh-Hans": "在药房取药",
-        "vi": "Lấy thuốc ở nhà thuốc"
+        "vi": "Lấy thuốc ở nhà thuốc",
+        "ta": "பார்மசியில மருந்து வாங்குவது"
       },
-      "icon": "pill"
+      "goal": {
+        "en": "Pick up your prescription and ask how to take it.",
+        "es": "Recoge tu receta y pregunta cómo tomarla.",
+        "zh-Hans": "取处方药，并问清楚怎么吃。",
+        "vi": "Lấy thuốc theo toa và hỏi cách uống.",
+        "ta": "உங்க prescription மருந்தை வாங்கி, எப்படி சாப்பிடணும்னு கேளுங்க."
+      },
+      "staff_label": "Pharmacist",
+      "role": "a pharmacist at the pharmacy counter",
+      "situation": "The learner is picking up a prescription. Ask for their name and date of birth. Ask about allergies to medicine. Say the medicine is a generic drug and the copay is $10. If they ask, explain the dosage (one pill two times a day, with food), one side effect (feeling sleepy), and that they have two refills. Only use the facts in this situation. Do not give any other medical advice.",
+      "opening": "Hi there. Are you picking up a prescription today?",
+      "target_terms": ["prescription", "date_of_birth", "allergies", "generic_drug", "copay", "dosage", "side_effect", "refill"],
+      "useful_phrases": [
+        "I'm picking up a prescription.",
+        "How do I take it?",
+        "Are there side effects?",
+        "Can I get a refill?",
+        "Can you write that down, please?"
+      ],
+      "dialogue": [
+        {"who": "staff", "text": "Hi there. Are you picking up a prescription today?"},
+        {"who": "you", "text": "Yes. My name is Sam Lee."},
+        {"who": "staff", "text": "What is your date of birth?"},
+        {"who": "you", "text": "March 15, 1990."},
+        {"who": "staff", "text": "Thank you. Do you have any allergies to medicine?"},
+        {"who": "you", "text": "Yes. I am allergic to penicillin."},
+        {"who": "staff", "text": "Okay. This medicine is not penicillin. It is a generic drug, so your copay is only $10."},
+        {"who": "you", "text": "How do I take it?"},
+        {"who": "staff", "text": "The dosage is one pill two times a day, with food."},
+        {"who": "you", "text": "Are there side effects?"},
+        {"who": "staff", "text": "Some people feel sleepy. Do not drive if you feel sleepy."},
+        {"who": "you", "text": "Okay. Can I get a refill?"},
+        {"who": "staff", "text": "Yes, you have two refills. Call us when you need more."},
+        {"who": "you", "text": "Thank you!"}
+      ],
+      "questions": [
+        {"type": "either_or", "q": "Is the copay $10 or $50?", "options": ["$10", "$50"], "answer": "$10"},
+        {"type": "yes_no", "q": "Is the medicine a generic drug?", "answer": true},
+        {"type": "yes_no", "q": "Does Sam take one pill a day?", "answer": false},
+        {"type": "wh", "q": "What is a side effect of this medicine?", "options": ["feeling sleepy", "a headache", "a fever"], "answer": "feeling sleepy"},
+        {"type": "wh", "q": "How many refills does Sam have?", "options": ["two", "one", "five"], "answer": "two"}
+      ]
+    },
+    {
+      "id": "insurance_call",
+      "icon": "card",
+      "casas": ["3.1.6", "3.2.3", "3.1.4"],
+      "el_civics": "29 Health Insurance Coverage/Issues",
+      "title": {
+        "en": "Call your insurance",
+        "es": "Llamar a tu seguro médico",
+        "zh-Hans": "打电话给保险公司",
+        "vi": "Gọi cho công ty bảo hiểm",
+        "ta": "இன்ஷூரன்ஸ் கம்பெனிக்கு போன் செய்வது"
+      },
+      "goal": {
+        "en": "Find out if a doctor is in-network, if you need a referral, and how much you pay.",
+        "es": "Averigua si un médico está en la red, si necesitas un referido y cuánto pagas.",
+        "zh-Hans": "问清楚医生是否在网络内、是否需要转诊，以及你要付多少钱。",
+        "vi": "Hỏi xem bác sĩ có trong mạng lưới không, có cần giấy giới thiệu không, và bạn phải trả bao nhiêu.",
+        "ta": "டாக்டர் in-network-ஆ, referral வேணுமா, நீங்க எவ்வளவு கட்டணும்னு கேட்டு தெரிஞ்சுக்கோங்க."
+      },
+      "staff_label": "Member services",
+      "role": "a patient, friendly member services agent at Golden Valley Health Plan",
+      "situation": "The learner is calling member services. Ask for their member ID and date of birth. They want to see a skin specialist, Dr. Patel. Say Dr. Patel is in-network, but they need a referral from their primary care provider first. The specialist copay is $50. The skin test needs prior authorization, and the doctor's office will ask for it. The deductible is $1,000 a year and they have paid $200 so far. If they ask what a word means, explain it in one short, simple sentence.",
+      "opening": "Golden Valley Health Plan, member services. How can I help you?",
+      "target_terms": ["member_services", "member_id", "in_network", "specialist", "referral", "primary_care_provider", "copay", "prior_authorization", "deductible"],
+      "useful_phrases": [
+        "I have a question about my plan.",
+        "Is Dr. Patel in-network?",
+        "Do I need a referral?",
+        "How much is my copay?",
+        "What is my deductible?"
+      ],
+      "dialogue": [
+        {"who": "staff", "text": "Golden Valley Health Plan, member services. How can I help you?"},
+        {"who": "you", "text": "Hi. I have a question about my plan."},
+        {"who": "staff", "text": "Sure. What is your member ID?"},
+        {"who": "you", "text": "It is G-V-H, 4-8-2, 1-1-3-7."},
+        {"who": "staff", "text": "Thank you. And your date of birth?"},
+        {"who": "you", "text": "March 15, 1990."},
+        {"who": "staff", "text": "Thanks, Sam. What is your question?"},
+        {"who": "you", "text": "I want to see a skin specialist, Dr. Patel. Is Dr. Patel in-network?"},
+        {"who": "staff", "text": "Yes, Dr. Patel is in-network. But first you need a referral from your primary care provider."},
+        {"who": "you", "text": "Okay. How much is my copay for a specialist?"},
+        {"who": "staff", "text": "It is $50. Also, the skin test needs prior authorization."},
+        {"who": "you", "text": "Sorry, what is prior authorization?"},
+        {"who": "staff", "text": "It means we must say yes before you get the test. Your doctor's office will ask us."},
+        {"who": "you", "text": "Okay. One more question. What is my deductible?"},
+        {"who": "staff", "text": "Your deductible is $1,000 a year. You have paid $200 so far."},
+        {"who": "you", "text": "Thank you for your help!"}
+      ],
+      "questions": [
+        {"type": "either_or", "q": "Is Dr. Patel in-network or out-of-network?", "options": ["in-network", "out-of-network"], "answer": "in-network"},
+        {"type": "yes_no", "q": "Does Sam need a referral first?", "answer": true},
+        {"type": "yes_no", "q": "Is the specialist copay $25?", "answer": false},
+        {"type": "wh", "q": "How much is the deductible?", "options": ["$1,000 a year", "$200 a year", "$50 a year"], "answer": "$1,000 a year"},
+        {"type": "wh", "q": "Who asks the insurance for prior authorization?", "options": ["the doctor's office", "Sam", "the pharmacy"], "answer": "the doctor's office"}
+      ]
+    },
+    {
+      "id": "billing",
+      "icon": "bill",
+      "casas": ["3.2.4", "3.2.3"],
+      "el_civics": "29 Health Insurance Coverage/Issues",
+      "title": {
+        "en": "Ask about a bill",
+        "es": "Preguntar por una factura",
+        "zh-Hans": "询问账单",
+        "vi": "Hỏi về hóa đơn",
+        "ta": "பில் பற்றி கேட்பது"
+      },
+      "goal": {
+        "en": "Understand why you owe money and ask for a payment plan.",
+        "es": "Entiende por qué debes dinero y pide un plan de pagos.",
+        "zh-Hans": "弄清楚为什么要付钱，并申请分期付款。",
+        "vi": "Hiểu vì sao bạn còn nợ tiền và xin trả góp.",
+        "ta": "ஏன் பணம் கட்டணும்னு புரிஞ்சுக்கோங்க, payment plan கேளுங்க."
+      },
+      "staff_label": "Billing office",
+      "role": "a calm, helpful worker at the Valley Health Clinic billing office",
+      "situation": "The learner got a bill and is calling with a question. Ask for their name and date of birth. The clinic sent a claim to their insurance. The insurance paid $320. The balance due is $180, because they have not met their deductible yet. If they ask, offer a payment plan of $30 a month for six months, and say you will mail the form. If they ask what a word means, explain it in one short, simple sentence.",
+      "opening": "Valley Health Clinic billing office. This is Maria. How can I help you?",
+      "target_terms": ["balance_due", "claim", "explanation_of_benefits", "deductible", "payment_plan"],
+      "useful_phrases": [
+        "I have a question about my bill.",
+        "My insurance paid some of it.",
+        "Why do I owe money?",
+        "Can I have a payment plan?",
+        "Can you mail it to me, please?"
+      ],
+      "dialogue": [
+        {"who": "staff", "text": "Valley Health Clinic billing office. This is Maria. How can I help you?"},
+        {"who": "you", "text": "Hi. I have a question about my bill."},
+        {"who": "staff", "text": "Sure. Can I have your name and date of birth?"},
+        {"who": "you", "text": "Sam Lee. March 15, 1990."},
+        {"who": "staff", "text": "Thank you, Sam. I see a balance due of $180."},
+        {"who": "you", "text": "But my insurance paid. I got an Explanation of Benefits."},
+        {"who": "staff", "text": "Yes. We sent a claim to your insurance, and they paid $320."},
+        {"who": "you", "text": "Why do I owe $180?"},
+        {"who": "staff", "text": "You have not met your deductible yet, so the $180 is your part."},
+        {"who": "you", "text": "Oh, I see. Can I pay a little each month?"},
+        {"who": "staff", "text": "Yes. We have payment plans. You can pay $30 a month for six months."},
+        {"who": "you", "text": "That is good. I want a payment plan, please."},
+        {"who": "staff", "text": "No problem. I will mail you the payment plan form today."},
+        {"who": "you", "text": "Thank you so much!"}
+      ],
+      "questions": [
+        {"type": "either_or", "q": "Is the balance due $180 or $320?", "options": ["$180", "$320"], "answer": "$180"},
+        {"type": "yes_no", "q": "Did the insurance pay some of the bill?", "answer": true},
+        {"type": "yes_no", "q": "Does Sam have to pay all $180 today?", "answer": false},
+        {"type": "wh", "q": "How much will Sam pay each month?", "options": ["$30", "$180", "$320"], "answer": "$30"},
+        {"type": "wh", "q": "Why does Sam still owe money?", "options": ["Sam has not met the deductible", "The doctor is out-of-network", "Sam has no insurance"], "answer": "Sam has not met the deductible"}
+      ]
     }
   ]
 }

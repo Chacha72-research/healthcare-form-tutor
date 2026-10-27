@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
@@ -14,20 +14,24 @@ from .config import DATA_DIR
 class Term:
     id: str
     term: str
+    say: str
     aliases: tuple[str, ...]
     category: str
+    casas: tuple[str, ...]
     definition: str
     example: str
+    check: dict
     vetted: bool = False
-    translations: dict[str, str] = field(default_factory=dict)
 
     def public(self) -> dict:
         return {
             "id": self.id,
             "term": self.term,
+            "say": self.say,
             "category": self.category,
             "definition": self.definition,
             "example": self.example,
+            "check": self.check,
         }
 
 
@@ -48,6 +52,7 @@ class Content:
     languages: list[Language]
     english_ui: dict[str, str]
     scenarios: list[dict]
+    pretend_patient: dict
 
     def __post_init__(self) -> None:
         self.terms_by_id = {t.id: t for t in self.terms}
@@ -72,12 +77,14 @@ def load_content(data_dir: Path = DATA_DIR) -> Content:
         Term(
             id=t["id"],
             term=t["term"],
+            say=t.get("say", t["term"]),
             aliases=tuple(t.get("aliases", [])),
             category=t["category"],
+            casas=tuple(t.get("casas", [])),
             definition=t["definition"],
             example=t["example"],
+            check=t["check"],
             vetted=bool(t.get("vetted", False)),
-            translations=dict(t.get("translations", {})),
         )
         for t in glossary["terms"]
     ]
@@ -98,6 +105,7 @@ def load_content(data_dir: Path = DATA_DIR) -> Content:
         languages=languages,
         english_ui=langs["english_ui"],
         scenarios=scenarios["scenarios"],
+        pretend_patient=scenarios["pretend_patient"],
     )
 
 

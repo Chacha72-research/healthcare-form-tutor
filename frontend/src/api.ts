@@ -1,31 +1,40 @@
-import type { AppConfig, ExplainResponse, Quiz } from "./types";
+import type { AppConfig, FormReading, Lesson, Quiz, ScenarioDetail } from "./types";
 
+/** `code` matches a UI string key where possible, like "ai_busy" or "picture_needs_ai". */
 export class ApiError extends Error {
-  constructor(public status: number, message: string) {
-    super(message);
+  constructor(
+    public status: number,
+    public code: string,
+  ) {
+    super(code);
   }
 }
 
 async function json<T>(resp: Response): Promise<T> {
   if (!resp.ok) {
-    let detail = resp.statusText;
+    let code = "error_generic";
     try {
-      detail = (await resp.json()).detail ?? detail;
+      const detail = (await resp.json()).detail;
+      if (detail && typeof detail === "object" && "code" in detail) code = String(detail.code);
     } catch {
       /* body was not JSON */
     }
-    throw new ApiError(resp.status, String(detail));
+    throw new ApiError(resp.status, code);
   }
   return resp.json() as Promise<T>;
 }
 
 export const getConfig = () => fetch("/api/config").then((r) => json<AppConfig>(r));
 
-export function explainForm(photo: Blob, language: string): Promise<ExplainResponse> {
+export function readForm(file: Blob, name: string): Promise<FormReading> {
   const body = new FormData();
-  body.append("file", photo, "form.jpg");
-  body.append("language", language);
-  return fetch("/api/explain", { method: "POST", body }).then((r) => json<ExplainResponse>(r));
+  body.append("file", file, name);
+  return fetch("/api/forms/read", { method: "POST", body }).then((r) => json<FormReading>(r));
+}
+
+export function getLesson(termIds: string[], language: string): Promise<Lesson> {
+  const params = new URLSearchParams({ terms: termIds.join(","), language });
+  return fetch(`/api/lesson?${params}`).then((r) => json<Lesson>(r));
 }
 
 export function getQuiz(termIds: string[], seed: string | null): Promise<Quiz> {
@@ -33,6 +42,11 @@ export function getQuiz(termIds: string[], seed: string | null): Promise<Quiz> {
   if (termIds.length) params.set("terms", termIds.join(","));
   if (seed) params.set("seed", seed);
   return fetch(`/api/quiz?${params}`).then((r) => json<Quiz>(r));
+}
+
+export function getScenario(id: string, language: string): Promise<ScenarioDetail> {
+  const params = new URLSearchParams({ language });
+  return fetch(`/api/scenarios/${encodeURIComponent(id)}?${params}`).then((r) => json<ScenarioDetail>(r));
 }
 
 export function saveQuizResult(result: {
