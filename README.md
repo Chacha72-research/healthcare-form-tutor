@@ -61,13 +61,13 @@ One thing to know: on Gemini's free tier, Google may use what you send to improv
 
 You need Python 3.10+ and Node 20+.
 
-**1. Add your key.**
+**1. Add your key.** From the main project folder, run:
 
 ```bash
-cp .env.example .env
+python3 backend/scripts/set_key.py
 ```
 
-Open `.env` and paste your key after `GEMINI_API_KEY=`. Git ignores `.env`, so the key never goes to GitHub.
+Paste your key at the prompt (it stays hidden) and press Enter. This creates `.env` with your key in it. Git ignores `.env`, so the key never goes to GitHub. You can also do it by hand: copy `.env.example` to `.env` and paste the key after `GEMINI_API_KEY=`.
 
 **2. Start the Python server.**
 
