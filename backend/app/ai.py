@@ -17,6 +17,7 @@ from __future__ import annotations
 import base64
 import json
 import logging
+import time
 from dataclasses import dataclass
 from typing import Protocol, Sequence
 
@@ -61,6 +62,32 @@ def _wrap(exc: Exception) -> AIError:
     return AIError("The AI service did not answer.")
 
 
+class Cooldown:
+    """After a rate-limit error, stop calling that model for a minute instead of hammering it.
+
+    Free-tier quotas are small, and every rejected call still counts against
+    the project, so once Gemini says "slow down" the app answers "busy"
+    right away and the lesson carries on in English until the minute is up.
+    """
+
+    def __init__(self, seconds: float = 60):
+        self.seconds = seconds
+        self._until: dict[str, float] = {}
+
+    def check(self, model: str) -> None:
+        if time.monotonic() < self._until.get(model, 0):
+            raise AIBusy("The AI service is cooling down after a rate limit.")
+
+    def trip(self, model: str) -> None:
+        self._until[model] = time.monotonic() + self.seconds
+
+    def reset(self) -> None:
+        self._until.clear()
+
+
+COOLDOWN = Cooldown()
+
+
 def _b64(data: bytes) -> str:
     return base64.standard_b64encode(data).decode("ascii")
 
@@ -84,6 +111,7 @@ class GeminiAI:
             kind = "document" if f.mime_type == "application/pdf" else "image"
             parts.append({"type": kind, "data": _b64(f.data), "mime_type": f.mime_type})
         parts.append({"type": "text", "text": prompt})
+        COOLDOWN.check(self.model)
         try:
             interaction = await self.client.aio.interactions.create(
                 model=self.model,
@@ -94,7 +122,10 @@ class GeminiAI:
             )
         except Exception as exc:
             log.warning("Gemini request failed: %s", exc)
-            raise _wrap(exc) from exc
+            err = _wrap(exc)
+            if isinstance(err, AIBusy):
+                COOLDOWN.trip(self.model)
+            raise err from exc
         try:
             return json.loads(interaction.output_text or "")
         except (TypeError, json.JSONDecodeError) as exc:

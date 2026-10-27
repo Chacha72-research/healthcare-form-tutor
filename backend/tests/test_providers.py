@@ -80,3 +80,18 @@ def test_voice_wraps_pcm_and_caches(tmp_path):
     inter.kwargs = None
     again = asyncio.run(voice.speak("வணக்கம்", "tutor", "tutor"))
     assert again == audio and inter.kwargs is None  # served from the cache
+
+
+def test_rate_limit_starts_a_cooldown():
+    from app.ai import COOLDOWN
+
+    COOLDOWN.reset()
+    inter = FakeInteractions(error=RuntimeError("429 too_many_requests"))
+    ai = GeminiAI("k", "cool-model", client=gemini_client(inter))
+    with pytest.raises(AIBusy):
+        asyncio.run(ai.generate_json(system="s", prompt="p", schema={}))
+    inter.kwargs = None
+    with pytest.raises(AIBusy):
+        asyncio.run(ai.generate_json(system="s", prompt="p", schema={}))
+    assert inter.kwargs is None  # second call never reached Gemini
+    COOLDOWN.reset()

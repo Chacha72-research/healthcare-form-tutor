@@ -15,7 +15,7 @@ import logging
 import wave
 from pathlib import Path
 
-from .ai import AIError, _wrap
+from .ai import COOLDOWN, AIBusy, AIError, _wrap
 
 log = logging.getLogger(__name__)
 
@@ -74,6 +74,7 @@ class GeminiVoice:
         return audio
 
     async def _synthesize(self, text: str, voice_name: str, style_text: str) -> bytes:
+        COOLDOWN.check(self.model)
         try:
             interaction = await self.client.aio.interactions.create(
                 model=self.model,
@@ -95,7 +96,10 @@ class GeminiVoice:
             )
         except Exception as exc:
             log.warning("Gemini TTS failed: %s", exc)
-            raise _wrap(exc) from exc
+            err = _wrap(exc)
+            if isinstance(err, AIBusy):
+                COOLDOWN.trip(self.model)
+            raise err from exc
 
         audio = getattr(interaction, "output_audio", None)
         data = getattr(audio, "data", None)

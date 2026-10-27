@@ -128,10 +128,12 @@ def test_lesson_still_works_in_english_without_ai(tmp_path):
 
 
 def test_lesson_reports_busy_ai_but_still_answers(tmp_path):
-    client = make_client(tmp_path, ai=FakeAI(busy=True))
+    ai = FakeAI(busy=True)
+    client = make_client(tmp_path, ai=ai)
     body = client.get("/api/lesson", params={"terms": "copay", "language": "es"}).json()
     assert body["ai_error"] == "ai_busy"
     assert body["words"][0]["term"] == "Copay"
+    assert len(ai.calls) == 1  # stops after the first "busy" instead of spending more quota
 
 
 def test_scenario_has_dialogue_questions_and_translations(tmp_path):

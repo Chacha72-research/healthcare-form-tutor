@@ -207,7 +207,10 @@ class LessonService:
         for t in terms:
             eo, yn = t.check["either_or"], t.check["yes_no"]
             lines += [eo["q"], *eo["options"], yn["q"]]
-        translations, err2 = await self._safely(self.translate(lines, language), {})
+        if err1 == "ai_busy":
+            translations, err2 = {}, None  # don't spend more of the quota in this request
+        else:
+            translations, err2 = await self._safely(self.translate(lines, language), {})
 
         words = []
         for t in terms:
