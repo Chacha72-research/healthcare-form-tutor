@@ -59,7 +59,7 @@ One thing to know: on Gemini's free tier, Google may use what you send to improv
 
 ## Run it locally
 
-You need Python 3.10+ and Node 20+.
+You need **Python 3.10 or newer** (3.13 recommended) and Node 20+. Macs come with Python 3.9, which is too old: install Python 3.13 from [python.org](https://www.python.org/downloads/) and check with `python3.13 --version`.
 
 **1. Add your key.** From the main project folder, run:
 
@@ -73,7 +73,7 @@ Paste your key at the prompt (it stays hidden) and press Enter. This creates `.e
 
 ```bash
 cd backend
-python -m venv .venv
+python3.13 -m venv .venv         # Windows: py -3.13 -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
