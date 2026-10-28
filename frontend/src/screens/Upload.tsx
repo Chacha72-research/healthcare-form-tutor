@@ -31,7 +31,7 @@ export function Upload({ go }: { go: (s: Screen) => void }) {
         setError("no_terms");
         return;
       }
-      go({ name: "lesson", reading: data, index: 0 });
+      go({ name: "form", reading: data });
     } catch (err) {
       const code = err instanceof ApiError ? err.code : "error_generic";
       setError(KNOWN_ERRORS.has(code) ? code : code === "unsupported" ? "unreadable" : "error_generic");

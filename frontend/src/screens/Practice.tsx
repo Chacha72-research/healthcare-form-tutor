@@ -3,7 +3,7 @@ import { Icon } from "../components/Icon";
 import { TopBar } from "../components/TopBar";
 import { Bi, useLang } from "../i18n";
 
-/** The six practice situations, in patient-journey order from easier to harder. */
+/** The six speaking situations, in patient-journey order from easier to harder. */
 export function Practice({ go, suggested = [] }: { go: (s: Screen) => void; suggested?: string[] }) {
   const { config, pick, t } = useLang();
   const want = new Set(suggested);
@@ -15,13 +15,15 @@ export function Practice({ go, suggested = [] }: { go: (s: Screen) => void; sugg
       <TopBar go={go} />
       <main className="page practice">
         <h1 className="screen-title">
-          <Bi k="choose_situation" />
+          <Bi k="home_practice" />
         </h1>
-        <p className="hint-plain">{t("practice_intro")}</p>
+        <p className="hint-plain">
+          {t("speak_intro")} {t("practice_intro")}
+        </p>
         <ol className="journey">
           {config.scenarios.map((s, i) => (
             <li key={s.id} className={i === best && overlap[i] > 0 ? "is-suggested" : ""}>
-              <button type="button" className="journey-step" onClick={() => go({ name: "scenario", id: s.id })}>
+              <button type="button" className="journey-step" onClick={() => go({ name: "speak", id: s.id })}>
                 <span className="journey-num" aria-hidden="true">
                   {i + 1}
                 </span>

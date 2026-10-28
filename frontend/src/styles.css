@@ -1757,3 +1757,790 @@ mark {
     transform: scaleY(1);
   }
 }
+
+/* ======================================================================
+   Understand a form: the learner's form with tappable words, and a card
+   that explains the word they tapped. On phones the card slides up from
+   the bottom; on wide screens it sits beside the form.
+   ====================================================================== */
+
+.formview {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 78rem;
+  margin: 0 auto;
+}
+
+.formview-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: 20px 16px 140px;
+}
+
+.formview.has-card .formview-main {
+  padding-bottom: 66dvh;
+}
+
+.formview-head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.found-tricky {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.02rem;
+}
+
+.swatch {
+  flex: none;
+  width: 34px;
+  height: 18px;
+  border-radius: 3px 8px 4px 9px;
+  background: var(--marker);
+  transform: rotate(-3deg) skewX(-8deg);
+}
+
+.opened {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.opened-bar {
+  height: 8px;
+  border-radius: 99px;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+}
+
+.opened-bar span {
+  display: block;
+  height: 100%;
+  background: var(--scrubs);
+  transition: width 0.35s ease;
+}
+
+.tricky-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tricky-chips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+  padding: 4px 12px;
+  border: 1.5px solid #e2c200;
+  border-radius: 999px;
+  background: var(--marker);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.tricky-chips button.is-seen {
+  background: var(--sheet);
+  border-color: var(--rule);
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.tricky-chips button.is-selected {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 2px var(--ink);
+  color: var(--ink);
+}
+
+/* Phones: one row of chips that scrolls sideways, so the form stays near the top. */
+.tricky-chips-main {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  margin: 0 -16px;
+  padding: 2px 16px 6px;
+  scrollbar-width: none;
+}
+
+.tricky-chips-main li {
+  flex: none;
+}
+
+.formview-head .found {
+  font-size: 1.02rem;
+  gap: 12px;
+}
+
+.formview-head .found-num {
+  min-width: 56px;
+  height: 56px;
+  font-size: 1.7rem;
+  border-radius: 14px;
+}
+
+.termcard-empty .tricky-chips {
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.notice-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.btn-link {
+  flex: none;
+  min-height: 44px;
+  padding: 4px 8px;
+  border: 0;
+  background: transparent;
+  color: var(--scrubs-dark);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.form-hint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.form-hint .icon {
+  flex: none;
+}
+
+.formsheet-full {
+  margin-top: 0;
+  max-height: none;
+  padding: 18px 18px 22px;
+  font-size: 1rem;
+  line-height: 2.1;
+  box-shadow: 0 1px 0 var(--rule), 0 10px 24px -18px rgba(22, 35, 42, 0.35);
+  background-image: repeating-linear-gradient(transparent 0 calc(2.1em - 1px), #e9efed calc(2.1em - 1px) 2.1em);
+}
+
+.formsheet-full p {
+  margin: 0;
+}
+
+.mk-tricky,
+.mk-plain {
+  padding: 2px 4px;
+  margin: 0 -1px;
+  border-radius: 3px;
+  line-height: 1.3;
+  vertical-align: baseline;
+  cursor: pointer;
+}
+
+.mk-tricky {
+  --mk-color: var(--marker);
+  background-color: transparent;
+  background-image: linear-gradient(var(--mk-color), var(--mk-color));
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  font-weight: 700;
+  animation: swipe 0.45s ease-out both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+.mk-plain {
+  text-decoration: underline dotted var(--scrubs);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.mk-plain:hover,
+.mk-plain.is-seen {
+  background: var(--scrubs-tint);
+}
+
+.mk-tricky.is-seen {
+  --mk-color: var(--marker-soft);
+}
+
+.mk.is-selected {
+  box-shadow: 0 0 0 2.5px var(--ink);
+  font-weight: 800;
+}
+
+/* The card */
+.termpanel {
+  position: fixed;
+  z-index: 8;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 64dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--sheet);
+  border-top: 2px solid var(--ink);
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 -12px 30px -12px rgba(22, 35, 42, 0.35);
+  transform: translateY(105%);
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.termpanel.is-open {
+  transform: translateY(0);
+}
+
+.termcard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 18px max(20px, env(safe-area-inset-bottom));
+  animation: rise 0.22s ease-out both;
+}
+
+.termcard-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.termcard-word {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.termcard-word h2 {
+  font-size: 1rem;
+}
+
+.badge-tricky {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--marker);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.termcard-say {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.termcard-close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink-soft);
+}
+
+.termcard-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1.5px dashed var(--rule);
+}
+
+.termcard-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--scrubs-dark);
+}
+
+.termcard-label .bi-en {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.termcard-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.termcard-l1 {
+  flex: 1;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.termcard-en {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.termcard-write {
+  margin: 0 -8px;
+  padding: 14px 8px 12px;
+  border-top: 0;
+  border-radius: 12px;
+  background: var(--scrubs-tint);
+}
+
+.termcard-write .termcard-en {
+  color: var(--scrubs-dark);
+}
+
+.termcard-check .replies {
+  justify-content: stretch;
+}
+
+.reply.is-right {
+  background: var(--ok-tint);
+  border-color: var(--ok);
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.reply.is-wrong {
+  background: var(--bad-tint);
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+.reply.is-faded {
+  opacity: 0.45;
+}
+
+.check-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.check-result.is-right {
+  color: var(--ok);
+}
+
+.check-result.is-wrong {
+  color: var(--bad);
+}
+
+.termcard-next {
+  margin-top: 4px;
+}
+
+.termcard-empty {
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.termcard-empty .bi {
+  align-items: center;
+  text-align: center;
+}
+
+.termcard-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 24px;
+  background: var(--marker);
+  color: var(--ink);
+  transform: rotate(-4deg);
+}
+
+.shimmer {
+  min-height: 1.5em;
+  border-radius: 6px;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  background: linear-gradient(90deg, var(--paper) 25%, var(--scrubs-tint) 50%, var(--paper) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+  padding: 2px 8px;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (min-width: 960px) {
+  .formview {
+    grid-template-columns: minmax(0, 1fr) 27rem;
+    gap: 28px;
+    padding: 0 24px;
+  }
+
+  .formview-main,
+  .formview.has-card .formview-main {
+    padding: 24px 0 80px;
+  }
+
+  .termpanel {
+    position: sticky;
+    top: 76px;
+    align-self: start;
+    max-height: calc(100dvh - 92px);
+    margin-top: 24px;
+    border: 2px solid var(--ink);
+    border-radius: 18px;
+    transform: none;
+    transition: none;
+    box-shadow: 6px 6px 0 var(--marker);
+  }
+
+  .termcard-close {
+    display: none;
+  }
+
+  .tricky-chips-main,
+  .form-hint {
+    display: none;
+  }
+}
+
+/* ======================================================================
+   Practice speaking: a script the learner says out loud.
+   ====================================================================== */
+
+.card-details {
+  border: 1.5px solid var(--rule);
+  border-radius: 12px;
+  background: var(--sheet);
+}
+
+.card-details summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 8px 14px;
+  font-weight: 600;
+  color: var(--scrubs-dark);
+  cursor: pointer;
+}
+
+.card-details[open] summary {
+  border-bottom: 1.5px solid var(--rule);
+}
+
+.card-details .ins {
+  padding: 12px;
+}
+
+.speak-start {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.speak-intro {
+  font-size: 1.1rem;
+}
+
+.speak-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.script {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sline {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: rise 0.25s ease-out both;
+}
+
+.sline-who {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.sline-you {
+  align-items: flex-end;
+}
+
+.sline-bubble {
+  position: relative;
+  max-width: 88%;
+  padding: 12px 48px 12px 16px;
+  border-radius: 18px;
+  background: var(--sheet);
+  border: 1.5px solid var(--rule);
+  font-size: 1.05rem;
+}
+
+.sline-staff .sline-bubble {
+  border-start-start-radius: 4px;
+}
+
+.sline-you .sline-bubble {
+  padding: 10px 44px 10px 16px;
+  border-start-end-radius: 4px;
+  background: var(--paper);
+  color: var(--ink-soft);
+}
+
+.sline-you .sline-bubble.is-right {
+  background: var(--ok-tint);
+  border-color: #9fd0ac;
+  color: var(--ink);
+}
+
+.sline-l1 {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.sline-replay {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--scrubs);
+}
+
+.sline-badge {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ok);
+}
+
+.sline-now {
+  align-items: stretch;
+}
+
+.yourturn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  background: var(--sheet);
+  box-shadow: 5px 5px 0 var(--marker);
+}
+
+.yourturn.is-right {
+  box-shadow: 5px 5px 0 #9fd0ac;
+}
+
+.yourturn-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--scrubs-dark);
+}
+
+.yourturn-line {
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.yourturn-l1 {
+  color: var(--ink-soft);
+}
+
+.yourturn-l1-big {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.w-heard {
+  color: var(--ok);
+}
+
+.w-missed {
+  color: var(--bad);
+  text-decoration: underline wavy var(--bad);
+  text-underline-offset: 5px;
+}
+
+.yourturn-live {
+  min-height: 1.5em;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--paper);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.yourturn-result {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.yourturn-verdict {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.yourturn.is-right .yourturn-verdict {
+  color: var(--ok);
+}
+
+.yourturn.is-wrong .yourturn-verdict {
+  color: var(--bad);
+}
+
+.yourturn-heard {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.yourturn-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.yourturn-controls > .btn {
+  width: 100%;
+}
+
+.yourturn-small {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.yourturn-small .reply {
+  min-height: 48px;
+  font-size: 0.95rem;
+}
+
+.mic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border: 0;
+  background: transparent;
+  color: var(--scrubs-dark);
+}
+
+.mic .bi {
+  align-items: center;
+  text-align: center;
+}
+
+.mic-circle {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--scrubs);
+  color: #fff;
+  box-shadow: 0 6px 0 var(--scrubs-dark);
+  transition: transform 0.1s;
+}
+
+.mic:active .mic-circle {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 var(--scrubs-dark);
+}
+
+.mic.is-on .mic-circle {
+  background: var(--bad);
+  box-shadow: 0 0 0 0 rgba(179, 38, 30, 0.45);
+  animation: pulse 1.2s ease-out infinite;
+}
+
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 22px rgba(179, 38, 30, 0);
+  }
+}
+
+.speak-done {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding-top: 8px;
+  animation: rise 0.3s ease-out both;
+}
+
+.speak-done .score {
+  justify-content: center;
+}
+
+.speak-done-line {
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.speak-done-line .bi {
+  align-items: center;
+  text-align: center;
+}
+
+.talk {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-tricky,
+  .termcard,
+  .sline,
+  .speak-done,
+  .mic.is-on .mic-circle,
+  .shimmer {
+    animation: none;
+  }
+  .termpanel {
+    transition: none;
+  }
+}

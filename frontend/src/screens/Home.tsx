@@ -15,18 +15,18 @@ export function Home({ go }: { go: (s: Screen) => void }) {
           <Bi k="home_upload" />
         </button>
 
-        <button type="button" className="tile tile-strong" onClick={() => go({ name: "practice" })}>
+        <button type="button" className="tile tile-strong" onClick={() => go({ name: "quiz", termIds: [] })}>
           <span className="tile-icon">
-            <Icon name="chat" size={38} />
-          </span>
-          <Bi k="home_practice" />
-        </button>
-
-        <button type="button" className="tile" onClick={() => go({ name: "quiz", termIds: [] })}>
-          <span className="tile-icon">
-            <Icon name="check" size={34} />
+            <Icon name="check" size={38} />
           </span>
           <Bi k="home_quiz" />
+        </button>
+
+        <button type="button" className="tile tile-strong" onClick={() => go({ name: "practice" })}>
+          <span className="tile-icon">
+            <Icon name="mic" size={38} />
+          </span>
+          <Bi k="home_practice" />
         </button>
       </main>
     </>

@@ -49,7 +49,7 @@ export interface FormMark {
 export interface FormReading {
   source: "text" | "ai";
   lines: { text: string; marks: FormMark[] }[];
-  terms: { id: string; term: string; form_text: string }[];
+  terms: { id: string; term: string; form_text: string; confusing: boolean }[];
   unlisted: string[];
 }
 
@@ -58,26 +58,30 @@ export interface CheckQuestions {
   yes_no: { q: string; answer: boolean };
 }
 
-export interface LessonWord {
+/** A glossary word in plain English, written and checked by a teacher. */
+export interface GlossaryTerm {
   id: string;
   term: string;
   say: string;
   category: string;
+  confusing: boolean;
   definition: string;
   example: string;
+  tip: string;
   check: CheckQuestions;
+}
+
+export interface ExplainedTerm extends GlossaryTerm {
   l1: {
     meaning: string | null;
     example_meaning: string | null;
-    either_or_q: string | null;
-    either_or_options: (string | null)[];
-    yes_no_q: string | null;
+    tip: string | null;
     approved: boolean;
   };
 }
 
-export interface Lesson {
-  words: LessonWord[];
+export interface Explained {
+  terms: ExplainedTerm[];
   ai_error: string | null;
   ai_available: boolean;
 }

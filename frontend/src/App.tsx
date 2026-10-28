@@ -6,21 +6,20 @@ import type { AppConfig, FormReading, TeacherParams } from "./types";
 import { LanguagePicker } from "./screens/LanguagePicker";
 import { Home } from "./screens/Home";
 import { Upload } from "./screens/Upload";
-import { LessonScreen } from "./screens/Lesson";
+import { FormScreen } from "./screens/Form";
 import { QuizScreen } from "./screens/Quiz";
 import { Practice } from "./screens/Practice";
-import { ScenarioScreen } from "./screens/Scenario";
+import { SpeakScreen } from "./screens/Speak";
 
-export const WORDS_PER_LESSON = 6;
-
+// Three things to do: understand a form, quiz the tricky words, practice speaking.
 export type Screen =
   | { name: "language" }
   | { name: "home" }
   | { name: "upload" }
-  | { name: "lesson"; reading: FormReading; index: number }
-  | { name: "quiz"; termIds: string[]; reading?: FormReading; index?: number }
+  | { name: "form"; reading: FormReading }
+  | { name: "quiz"; termIds: string[]; reading?: FormReading }
   | { name: "practice"; suggested?: string[] }
-  | { name: "scenario"; id: string };
+  | { name: "speak"; id: string };
 
 const LANG_KEY = "form-helper-language";
 
@@ -108,20 +107,10 @@ export default function App() {
     <LangProvider value={makeLangValue(config, language)}>
       {screen.name === "home" && <Home go={go} />}
       {screen.name === "upload" && <Upload go={go} />}
-      {screen.name === "lesson" && (
-        <LessonScreen key={`${screen.index}`} reading={screen.reading} index={screen.index} go={go} />
-      )}
-      {screen.name === "quiz" && (
-        <QuizScreen
-          termIds={screen.termIds}
-          teacher={teacher}
-          go={go}
-          reading={screen.reading}
-          index={screen.index}
-        />
-      )}
+      {screen.name === "form" && <FormScreen reading={screen.reading} go={go} />}
+      {screen.name === "quiz" && <QuizScreen termIds={screen.termIds} teacher={teacher} go={go} reading={screen.reading} />}
       {screen.name === "practice" && <Practice go={go} suggested={screen.suggested} />}
-      {screen.name === "scenario" && <ScenarioScreen key={screen.id} id={screen.id} go={go} />}
+      {screen.name === "speak" && <SpeakScreen key={screen.id} id={screen.id} go={go} />}
     </LangProvider>
   );
 }

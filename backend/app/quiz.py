@@ -66,7 +66,8 @@ def build_quiz(
         # Short word lists get a shorter quiz; every word is still seen in several ways.
         n = max(1, min(n, max(4, 2 * len(chosen))))
     else:
-        pool = list(content.terms)
+        # No words given: practice the tricky ones, the words learners mix up most.
+        pool = [t for t in content.terms if t.confusing] or list(content.terms)
         rng.shuffle(pool)
         chosen = pool[: max(1, min(n, len(pool)))]
     rng.shuffle(chosen)

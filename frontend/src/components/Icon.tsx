@@ -35,6 +35,14 @@ const paths: Record<string, JSX.Element> = {
   ),
   home: <path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" />,
   back: <path d="M14.5 6 8.5 12l6 6" />,
+  forward: <path d="M9.5 6l6 6-6 6" />,
+  close: <path d="M6.5 6.5l11 11M17.5 6.5l-11 11" />,
+  pencil: (
+    <>
+      <path d="M4.5 19.5h4l10-10-4-4-10 10z" />
+      <path d="m13 7 4 4" />
+    </>
+  ),
   desk: (
     <>
       <rect x="5.5" y="5" width="13" height="16" rx="2" />

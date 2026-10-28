@@ -35,9 +35,7 @@ export function ListenButton({ parts, label, size = "md", tag }: Props) {
     >
       <Icon name="speaker" size={iconSize} />
       {tag && (
-        <span lang="en" aria-hidden="true">
-          {tag}
-        </span>
+        <span aria-hidden="true">{tag}</span>
       )}
     </button>
   );

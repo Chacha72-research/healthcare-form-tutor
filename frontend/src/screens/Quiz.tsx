@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Screen } from "../App";
-import { WORDS_PER_LESSON } from "../App";
 import { getQuiz, saveQuizResult } from "../api";
 import { Icon } from "../components/Icon";
 import { LoadFailed, Loading } from "../components/Loading";
-import { ListenButton } from "../components/ListenButton";
 import { TopBar } from "../components/TopBar";
 import { Bi, useLang } from "../i18n";
 import { recordQuiz } from "../storage";
@@ -14,9 +12,8 @@ interface Props {
   termIds: string[];
   teacher: TeacherParams;
   go: (s: Screen) => void;
-  /** Set when the quiz follows a lesson, so "next words" can continue the form */
+  /** Set when the quiz started from a form, so the learner can go back to it */
   reading?: FormReading;
-  index?: number;
 }
 
 type Answer = { term_id: string; type: string; correct: boolean };
@@ -28,7 +25,7 @@ const ASK: Record<string, string> = {
   fill: "ask_fill",
 };
 
-export function QuizScreen({ termIds, teacher, go, reading, index }: Props) {
+export function QuizScreen({ termIds, teacher, go, reading }: Props) {
   const { language, t } = useLang();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [failed, setFailed] = useState(false);
@@ -95,7 +92,6 @@ export function QuizScreen({ termIds, teacher, go, reading, index }: Props) {
     const score = answers.filter((a) => a.correct).length;
     const missed = [...new Set(answers.filter((a) => !a.correct).map((a) => a.term_id))];
     const labels = Object.fromEntries(quiz.questions.map((x) => [x.term_id, x.term]));
-    const hasNext = reading && index !== undefined && (index + 1) * WORDS_PER_LESSON < reading.terms.length;
     return (
       <>
         <TopBar go={go} />
@@ -132,13 +128,13 @@ export function QuizScreen({ termIds, teacher, go, reading, index }: Props) {
               className="btn btn-primary btn-big"
               onClick={() => go({ name: "practice", suggested: [...new Set(answers.map((a) => a.term_id))] })}
             >
-              <Icon name="chat" />
-              <Bi k="practice_next" />
+              <Icon name="mic" />
+              <Bi k="home_practice" />
             </button>
-            {hasNext && (
-              <button type="button" className="btn btn-secondary" onClick={() => go({ name: "lesson", reading: reading!, index: index! + 1 })}>
+            {reading && (
+              <button type="button" className="btn btn-secondary" onClick={() => go({ name: "form", reading })}>
                 <Icon name="form" />
-                <Bi k="next_lesson" />
+                <Bi k="back_to_form" />
               </button>
             )}
             <button type="button" className="btn btn-secondary" onClick={() => setRound((r) => r + 1)}>
@@ -153,11 +149,10 @@ export function QuizScreen({ termIds, teacher, go, reading, index }: Props) {
 
   const correct = picked !== null && picked === q.answer_id;
   const answerLabel = q.options.find((o) => o.id === q.answer_id)?.label ?? "";
-  const promptSpeech = q.type === "yes_no" ? `${q.word}. ${q.prompt}` : q.prompt.replace(/_{3,}/g, "blank");
 
   return (
     <>
-      <TopBar go={go} voiceToggle />
+      <TopBar go={go} />
       <main className="page quiz">
         <p className="progress">
           <span>{t("question_of", { n: step + 1, total: quiz.total })}</span>
@@ -181,11 +176,6 @@ export function QuizScreen({ termIds, teacher, go, reading, index }: Props) {
             )}
             <p>{q.prompt}</p>
           </div>
-          <ListenButton
-            parts={[{ text: promptSpeech, lang: "en", voice: "tutor", style: "model" }]}
-            label={t("listen")}
-            size="lg"
-          />
         </div>
 
         <ul className={`choices${q.options.length === 2 ? " choices-2" : ""}`} role="radiogroup" aria-label={t(ASK[q.type])}>
@@ -227,10 +217,6 @@ export function QuizScreen({ termIds, teacher, go, reading, index }: Props) {
               <p>
                 <strong>{q.term}:</strong> {q.definition}
               </p>
-              <ListenButton
-                parts={[{ text: `${q.term}. ${q.definition}`, lang: "en", voice: "tutor", style: "model" }]}
-                label={t("listen")}
-              />
             </div>
             <button type="button" className="btn btn-primary btn-big" onClick={next}>
               <Bi k={isLast ? "your_score" : "next"} />

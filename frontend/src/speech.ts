@@ -1,6 +1,7 @@
-// Plays lesson audio. Uses Gemini's voices through the server when the free
-// key is set (natural Tamil, Vietnamese, and so on), and falls back to the
-// device's built-in voices otherwise.
+// Plays audio. Only the learner's language ("l1") goes to Gemini's voice
+// through the server (natural Tamil, Vietnamese, and so on). English always
+// uses the browser's own voice: it is instant, free, and never rate-limited.
+// If the server voice is off or slow, l1 falls back to the browser too.
 //
 // Voice must never slow the app down, so:
 //   - at most 3 voice requests run at once (browsers only allow ~6 requests
@@ -140,12 +141,22 @@ function fetchAudio(part: SpeechPart): Promise<string | null> {
 
 /** Start loading audio for the next few lines, so there's no pause between them. */
 export function prefetch(parts: SpeechPart[]) {
-  if (!voiceOn || !serverAvailable()) return;
-  for (const p of parts.filter((x) => x.text.trim()).slice(0, MAX_IN_FLIGHT)) void fetchAudio(p);
+  if (!serverAvailable()) return;
+  const l1 = parts.filter((x) => x.lang === "l1" && x.text.trim());
+  for (const p of l1.slice(0, MAX_IN_FLIGHT)) void fetchAudio(p);
 }
+
+// Clear, natural English voices, best first. Chrome's "Google US English" is the usual winner.
+const GOOD_ENGLISH = ["Google US English", "Samantha", "Microsoft Aria", "Microsoft Jenny", "Ava", "Allison", "Alex"];
 
 function pickVoice(lang: string): SpeechSynthesisVoice | undefined {
   const voices = window.speechSynthesis.getVoices();
+  if (lang.startsWith("en")) {
+    for (const name of GOOD_ENGLISH) {
+      const v = voices.find((x) => x.name.startsWith(name) && x.lang.startsWith("en"));
+      if (v) return v;
+    }
+  }
   const exact = voices.find((v) => v.lang.toLowerCase() === lang.toLowerCase());
   if (exact) return exact;
   const prefix = lang.split("-")[0].toLowerCase();
@@ -207,7 +218,7 @@ export async function speakParts(parts: SpeechPart[], force = false): Promise<vo
   for (const part of parts) {
     if (gen !== generation) return;
     if (!part.text.trim()) continue;
-    const url = serverAvailable() ? await fetchAudio(part) : null;
+    const url = part.lang === "l1" && serverAvailable() ? await fetchAudio(part) : null;
     if (gen !== generation) return;
     if (url) await playUrl(url, gen);
     else await browserSpeak(part, gen);
@@ -215,6 +226,10 @@ export async function speakParts(parts: SpeechPart[], force = false): Promise<vo
 }
 
 export const speak = (part: SpeechPart) => speakParts([part], true);
+
+/** Say English text with the browser's voice. "slow" is for repeating after it. */
+export const sayEnglish = (text: string, slow = false, force = true) =>
+  speakParts([{ text, lang: "en", style: slow ? "model" : "tutor" }], force);
 
 // Some browsers load their voice list late; asking once warms it up.
 if ("speechSynthesis" in window) window.speechSynthesis.getVoices();

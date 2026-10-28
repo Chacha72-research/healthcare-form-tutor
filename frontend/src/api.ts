@@ -1,4 +1,4 @@
-import type { AppConfig, FormReading, Lesson, Quiz, ScenarioDetail } from "./types";
+import type { AppConfig, Explained, FormReading, GlossaryTerm, Quiz, ScenarioDetail } from "./types";
 
 /** `code` matches a UI string key where possible, like "ai_busy" or "picture_needs_ai". */
 export class ApiError extends Error {
@@ -32,9 +32,21 @@ export function readForm(file: Blob, name: string): Promise<FormReading> {
   return fetch("/api/forms/read", { method: "POST", body }).then((r) => json<FormReading>(r));
 }
 
-export function getLesson(termIds: string[], language: string): Promise<Lesson> {
+let glossary: Promise<GlossaryTerm[]> | null = null;
+
+/** Every word in plain English. Small, needs no AI, and loaded once. */
+export function getGlossary(): Promise<GlossaryTerm[]> {
+  glossary ??= fetch("/api/glossary")
+    .then((r) => json<{ terms: GlossaryTerm[] }>(r))
+    .then((d) => d.terms);
+  glossary.catch(() => (glossary = null));
+  return glossary;
+}
+
+/** The learner-language meaning, example, and "what to write" for some words. */
+export function getExplain(termIds: string[], language: string): Promise<Explained> {
   const params = new URLSearchParams({ terms: termIds.join(","), language });
-  return fetch(`/api/lesson?${params}`).then((r) => json<Lesson>(r));
+  return fetch(`/api/explain?${params}`).then((r) => json<Explained>(r));
 }
 
 export function getQuiz(termIds: string[], seed: string | null): Promise<Quiz> {
