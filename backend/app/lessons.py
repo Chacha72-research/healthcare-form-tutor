@@ -39,6 +39,7 @@ TERM_SYSTEM = """You help adult beginners (English level 1 to 2) understand word
 For each glossary term:
 - meaning: one or two short sentences in everyday spoken {lang} that explain the English definition. Sound like a friendly person talking, not a dictionary. Say only what the definition says. Do not add facts, numbers, prices, rules, or medical advice. Keep the English term itself in English letters (for example: copay) so the learner connects the sound to the written word.
 - example_meaning: a natural {lang} translation of the English example sentence. Keep the English term in English letters.
+- tip: a natural {lang} translation of the English tip, which tells the learner what to write on the form or what to do. Keep it just as short. Keep English words that appear on forms (like N/A, Member ID) in English letters.
 {style}"""
 
 TERM_SCHEMA = {
@@ -52,8 +53,9 @@ TERM_SCHEMA = {
                     "term_id": {"type": "string"},
                     "meaning": {"type": "string"},
                     "example_meaning": {"type": "string"},
+                    "tip": {"type": "string"},
                 },
-                "required": ["term_id", "meaning", "example_meaning"],
+                "required": ["term_id", "meaning", "example_meaning", "tip"],
             },
         }
     },
@@ -130,24 +132,35 @@ class LessonService:
 
     async def term_texts(self, term_ids: list[str], language: Language) -> dict[str, dict]:
         data = self.store.load(language.code)
-        missing = [tid for tid in term_ids if tid not in data["terms"]]
+
+        def needs(tid: str) -> bool:
+            # Older saved entries have no tip yet; fill those in too.
+            return tid not in data["terms"] or "tip" not in data["terms"][tid]
+
+        missing = [tid for tid in term_ids if needs(tid)]
         if missing and self.ai is not None:
             async with self.store.lock:
-                missing = [tid for tid in missing if tid not in data["terms"]]
-                for i in range(0, len(missing), TERM_BATCH):
-                    await self._generate_terms(missing[i : i + TERM_BATCH], language, data)
+                missing = [tid for tid in missing if needs(tid)]
+                batches = [missing[i : i + TERM_BATCH] for i in range(0, len(missing), TERM_BATCH)]
+                # Run the batches side by side so a whole form is ready in seconds.
+                results = await asyncio.gather(
+                    *(self._generate_terms(b, language, data) for b in batches), return_exceptions=True
+                )
                 if missing:
                     self.store.save(language.code)
+                errors = [r for r in results if isinstance(r, Exception)]
+                if errors and len(errors) == len(results):
+                    raise errors[0]
         return {tid: data["terms"][tid] for tid in term_ids if tid in data["terms"]}
 
     async def _generate_terms(self, term_ids: list[str], language: Language, data: dict) -> None:
         listing = "\n".join(
-            f"{t.id} | {t.term} | definition: {t.definition} | example: {t.example}"
+            f"{t.id} | {t.term} | definition: {t.definition} | example: {t.example} | tip: {t.tip}"
             for t in (self.content.terms_by_id[tid] for tid in term_ids)
         )
         result = await self.ai.generate_json(
             system=TERM_SYSTEM.format(lang=language.english_name, style=STYLE.get(language.code, "")),
-            prompt=f"Write the meaning and example_meaning for each term.\n\nid | term | definition | example\n{listing}",
+            prompt=f"Write the meaning, example_meaning, and tip for each term.\n\nid | term | definition | example | tip\n{listing}",
             schema=TERM_SCHEMA,
         )
         for item in result.get("items") or []:
@@ -157,6 +170,7 @@ class LessonService:
                 data["terms"][tid] = {
                     "meaning": meaning,
                     "example_meaning": str(item.get("example_meaning", "")).strip(),
+                    "tip": str(item.get("tip", "")).strip(),
                     "approved": False,
                 }
 
@@ -197,6 +211,27 @@ class LessonService:
             return fallback, exc.code
 
     # ---------- What the API returns ----------
+
+    async def explain(self, term_ids: list[str], language: Language) -> dict:
+        """Everything the form screen shows for each word: English from the glossary,
+        plus the meaning, example, and what-to-write tip in the learner's language."""
+        terms = [self.content.terms_by_id[t] for t in dict.fromkeys(term_ids) if t in self.content.terms_by_id]
+        texts, err = await self._safely(self.term_texts([t.id for t in terms], language), {})
+        out = []
+        for t in terms:
+            g = texts.get(t.id) or {}
+            out.append(
+                {
+                    **t.public(),
+                    "l1": {
+                        "meaning": g.get("meaning"),
+                        "example_meaning": g.get("example_meaning"),
+                        "tip": g.get("tip"),
+                        "approved": bool(g.get("approved")),
+                    },
+                }
+            )
+        return {"terms": out, "ai_error": err, "ai_available": self.ai is not None}
 
     async def lesson(self, term_ids: list[str], language: Language) -> dict:
         terms = [self.content.terms_by_id[t] for t in dict.fromkeys(term_ids) if t in self.content.terms_by_id]

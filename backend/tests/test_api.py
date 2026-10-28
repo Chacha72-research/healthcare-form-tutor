@@ -198,3 +198,36 @@ def test_conversation_instruction_builds(scenario_id):
     text = build_instruction(content.scenarios_by_id[scenario_id], content.language("ta"), content)
     assert "Tamil" in text and "Sam Lee" in text and "recast" in text
     assert content.scenarios_by_id[scenario_id]["opening"] in text
+
+
+def test_explain_gives_meaning_tip_and_flags(tmp_path):
+    ai = FakeAI()
+    client = make_client(tmp_path, ai=ai)
+    body = client.get("/api/explain", params={"terms": "copay,date_of_birth", "language": "ta"}).json()
+    copay, dob = body["terms"]
+    assert copay["confusing"] is True and dob["confusing"] is False
+    assert copay["tip"].startswith("Nothing to fill in")
+    assert copay["l1"] == {"meaning": "MEANING copay", "example_meaning": "EXAMPLE copay", "tip": "TIP copay", "approved": False}
+    assert body["ai_error"] is None
+    # Both words fit in one batch, so one AI call; asking again uses the saved copy.
+    assert len(ai.calls) == 1
+    client.get("/api/explain", params={"terms": "copay", "language": "ta"})
+    assert len(ai.calls) == 1
+
+
+def test_explain_refreshes_old_entries_without_a_tip(tmp_path):
+    gen = tmp_path / "generated"
+    gen.mkdir()
+    (gen / "ta.json").write_text(json.dumps({"terms": {"copay": {"meaning": "old", "example_meaning": "old", "approved": False}}, "lines": {}}))
+    ai = FakeAI()
+    client = make_client(tmp_path, ai=ai)
+    body = client.get("/api/explain", params={"terms": "copay", "language": "ta"}).json()
+    assert body["terms"][0]["l1"]["tip"] == "TIP copay"
+
+
+def test_form_reading_marks_confusing_words(tmp_path):
+    client = make_client(tmp_path)
+    resp = upload(client, SAMPLE_PDF.read_bytes(), "form.pdf", "application/pdf")
+    terms = {t["id"]: t["confusing"] for t in resp.json()["terms"]}
+    assert terms["copay"] is True and terms["date_of_birth"] is False
+    assert sum(terms.values()) >= 12

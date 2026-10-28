@@ -167,7 +167,14 @@ def analyze(lines: list[str], matcher: TermMatcher, content: Content, source: st
                 if mk.term_id not in seen:
                     seen.add(mk.term_id)
                     term = content.terms_by_id[mk.term_id]
-                    terms.append({"id": term.id, "term": term.term, "form_text": text[mk.start : mk.end]})
+                    terms.append(
+                        {
+                            "id": term.id,
+                            "term": term.term,
+                            "form_text": text[mk.start : mk.end],
+                            "confusing": term.confusing,
+                        }
+                    )
         for label in _label_candidates(text):
             if not matcher.find(label) and label not in unlisted and len(unlisted) < 6:
                 unlisted.append(label)

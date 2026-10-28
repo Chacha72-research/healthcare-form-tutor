@@ -108,3 +108,11 @@ def test_no_em_dashes_anywhere_learners_see():
     for s in content.scenarios:
         for line in s["dialogue"]:
             assert EM_DASH not in line["text"]
+
+
+def test_every_term_has_a_short_tip_and_a_confusing_flag():
+    for t in content.terms:
+        assert t.tip and t.tip.endswith((".", "?")), t.id
+        assert len(t.tip.split()) <= 25, f"{t.id} tip is too long"
+        assert EM_DASH not in t.tip
+    assert 25 <= sum(t.confusing for t in content.terms) <= 50

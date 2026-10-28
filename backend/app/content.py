@@ -21,6 +21,8 @@ class Term:
     definition: str
     example: str
     check: dict
+    tip: str = ""
+    confusing: bool = False
     vetted: bool = False
 
     def public(self) -> dict:
@@ -29,8 +31,10 @@ class Term:
             "term": self.term,
             "say": self.say,
             "category": self.category,
+            "confusing": self.confusing,
             "definition": self.definition,
             "example": self.example,
+            "tip": self.tip,
             "check": self.check,
         }
 
@@ -84,6 +88,8 @@ def load_content(data_dir: Path = DATA_DIR) -> Content:
             definition=t["definition"],
             example=t["example"],
             check=t["check"],
+            tip=t.get("tip", ""),
+            confusing=bool(t.get("confusing", False)),
             vetted=bool(t.get("vetted", False)),
         )
         for t in glossary["terms"]

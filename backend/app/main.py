@@ -142,6 +142,15 @@ def create_app(
             raise _error(_ai_status(exc), exc.code) from exc
         return reading.to_dict()
 
+    @app.get("/api/explain")
+    async def explain(
+        terms: str = Query(min_length=1, max_length=4000),
+        language: str = Query(min_length=2, max_length=16),
+    ):
+        lang = language_or_400(language)
+        term_ids = [t.strip() for t in terms.split(",") if t.strip()][:60]
+        return await lessons.explain(term_ids, lang)
+
     @app.get("/api/lesson")
     async def lesson(
         terms: str = Query(min_length=1, max_length=2000),

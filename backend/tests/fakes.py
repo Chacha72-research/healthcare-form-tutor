@@ -26,7 +26,12 @@ class FakeAI:
         item_props = props["items"]["items"]["properties"]
         if "term_id" in item_props:
             ids = [r[0] for r in rows if r[0] != "id"]
-            return {"items": [{"term_id": i, "meaning": f"MEANING {i}", "example_meaning": f"EXAMPLE {i}"} for i in ids]}
+            return {
+                "items": [
+                    {"term_id": i, "meaning": f"MEANING {i}", "example_meaning": f"EXAMPLE {i}", "tip": f"TIP {i}"}
+                    for i in ids
+                ]
+            }
         items = []
         for idx, text in rows:
             if idx.isdigit():
