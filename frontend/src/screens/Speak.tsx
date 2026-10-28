@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Screen } from "../App";
 import { getScenario } from "../api";
 import { canListen, listenOnce, type Listening } from "../audio/listen";
+import { Clip } from "../components/Clip";
 import { FreeTalk } from "../components/FreeTalk";
 import { Icon } from "../components/Icon";
 import { InsuranceCard } from "../components/InsuranceCard";
@@ -17,6 +18,7 @@ import { TopBar } from "../components/TopBar";
 import { Bi, BiText, useLang } from "../i18n";
 import { checkLine, type Check } from "../match";
 import { sayEnglish, speakParts, stopSpeaking, unlockAudio } from "../speech";
+import { markDone } from "../storage";
 import type { ScenarioDetail } from "../types";
 
 interface Result {
@@ -24,7 +26,7 @@ interface Result {
   skipped?: boolean;
 }
 
-export function SpeakScreen({ id, go }: { id: string; go: (s: Screen) => void }) {
+export function SpeakScreen({ id, nodeId, go }: { id: string; nodeId?: string; go: (s: Screen) => void }) {
   const { config, language, pick, t } = useLang();
   const [data, setData] = useState<ScenarioDetail | null>(null);
   const [failed, setFailed] = useState(false);
@@ -80,7 +82,9 @@ export function SpeakScreen({ id, go }: { id: string; go: (s: Screen) => void })
 
   function finishLine(i: number, result: Result) {
     setResults((r) => ({ ...r, [i]: result }));
-    setTurn(nextYou(i + 1));
+    const next = nextYou(i + 1);
+    setTurn(next);
+    if (next >= dialogue.length && nodeId) markDone(nodeId);
   }
 
   if (failed || !data) {
@@ -106,10 +110,6 @@ export function SpeakScreen({ id, go }: { id: string; go: (s: Screen) => void })
     <>
       <TopBar go={go} voiceToggle />
       <main className="page speak">
-        <button type="button" className="back-link" onClick={() => go({ name: "practice" })}>
-          <Icon name="back" size={20} />
-          <span>{t("choose_situation")}</span>
-        </button>
         <h1 className="screen-title">
           <BiText native={pick(data.title)} english={data.title.en} />
         </h1>
@@ -141,17 +141,8 @@ export function SpeakScreen({ id, go }: { id: string; go: (s: Screen) => void })
 
             {!started ? (
               <div className="speak-start">
-                <p className="speak-intro">
-                  <Bi k="speak_intro" />
-                </p>
-                <ul className="word-chips" aria-label={t("tricky")}>
-                  {data.terms.map((x) => (
-                    <li key={x.id} lang="en" title={x.definition}>
-                      {x.term}
-                    </li>
-                  ))}
-                </ul>
-                <button type="button" className="btn btn-primary btn-big" onClick={start}>
+                <Clip k="speak_intro" />
+                <button type="button" className="btn btn-go btn-big" onClick={start}>
                   <Icon name="mic" />
                   <Bi k="start" />
                 </button>
@@ -262,10 +253,12 @@ export function SpeakScreen({ id, go }: { id: string; go: (s: Screen) => void })
                       <button
                         type="button"
                         className="btn btn-secondary"
-                        onClick={() => go(nextScenario ? { name: "speak", id: nextScenario.id } : { name: "practice" })}
+                        onClick={() =>
+                          go(nextScenario ? { name: "speak", id: nextScenario.id, nodeId: `talk:${nextScenario.id}` } : { name: "home" })
+                        }
                       >
                         <Icon name="forward" />
-                        <Bi k={nextScenario ? "next_situation" : "choose_situation"} />
+                        <Bi k={nextScenario ? "next_situation" : "continue"} />
                       </button>
                     </div>
                   </section>

@@ -1,25 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
-import { getConfig } from "./api";
+import { getConfig, getPapers } from "./api";
 import { LangProvider, makeLangValue } from "./i18n";
 import { setLearnerBrowserLang, setServerVoice, stopSpeaking } from "./speech";
-import type { AppConfig, FormReading, TeacherParams } from "./types";
+import type { AppConfig, ConceptSummary, Paper, TeacherParams } from "./types";
 import { LanguagePicker } from "./screens/LanguagePicker";
-import { Home } from "./screens/Home";
-import { Upload } from "./screens/Upload";
-import { FormScreen } from "./screens/Form";
+import { PathScreen } from "./screens/Path";
+import { ExploreScreen } from "./screens/Explore";
+import { LessonScreen } from "./screens/Lesson";
 import { QuizScreen } from "./screens/Quiz";
-import { Practice } from "./screens/Practice";
 import { SpeakScreen } from "./screens/Speak";
+import { StoryScreen } from "./screens/Story";
 
-// Three things to do: understand a form, quiz the tricky words, practice speaking.
+// "home" is the learning path. Everything starts and ends there.
 export type Screen =
   | { name: "language" }
   | { name: "home" }
-  | { name: "upload" }
-  | { name: "form"; reading: FormReading }
-  | { name: "quiz"; termIds: string[]; reading?: FormReading }
-  | { name: "practice"; suggested?: string[] }
-  | { name: "speak"; id: string };
+  | { name: "explore"; paper: string; nodeId: string }
+  | { name: "story"; id: string; paper: string; nodeId: string }
+  | { name: "lesson"; paper: string; words: string[]; nodeId: string }
+  | { name: "quiz"; termIds: string[]; nodeId?: string; big?: boolean }
+  | { name: "speak"; id: string; nodeId?: string };
 
 const LANG_KEY = "form-helper-language";
 
@@ -44,15 +44,19 @@ function savedLanguage(): string | null {
 
 export default function App() {
   const [config, setConfig] = useState<AppConfig | null>(null);
+  const [papers, setPapers] = useState<Paper[] | null>(null);
+  const [concepts, setConcepts] = useState<ConceptSummary[]>([]);
   const [loadError, setLoadError] = useState(false);
   const [langCode, setLangCode] = useState<string | null>(savedLanguage);
   const [screen, setScreen] = useState<Screen>({ name: "home" });
   const teacher = useMemo(readTeacherParams, []);
 
   useEffect(() => {
-    getConfig()
-      .then((c) => {
+    Promise.all([getConfig(), getPapers()])
+      .then(([c, p]) => {
         setConfig(c);
+        setPapers(p.forms);
+        setConcepts(p.concepts);
         setServerVoice(c.features.voice);
       })
       .catch(() => setLoadError(true));
@@ -97,20 +101,28 @@ export default function App() {
       </main>
     );
   }
-  if (!config) return <main className="page" aria-busy="true" />;
+  if (!config || !papers) return <main className="page" aria-busy="true" />;
 
   if (!language || screen.name === "language") {
     return <LanguagePicker config={config} current={langCode} onChoose={chooseLanguage} />;
   }
 
+  const paper = (id: string) => papers.find((p) => p.id === id)!;
+
   return (
     <LangProvider value={makeLangValue(config, language)}>
-      {screen.name === "home" && <Home go={go} />}
-      {screen.name === "upload" && <Upload go={go} />}
-      {screen.name === "form" && <FormScreen reading={screen.reading} go={go} />}
-      {screen.name === "quiz" && <QuizScreen termIds={screen.termIds} teacher={teacher} go={go} reading={screen.reading} />}
-      {screen.name === "practice" && <Practice go={go} suggested={screen.suggested} />}
-      {screen.name === "speak" && <SpeakScreen key={screen.id} id={screen.id} go={go} />}
+      {screen.name === "home" && <PathScreen papers={papers} concepts={concepts} go={go} />}
+      {screen.name === "story" && <StoryScreen key={screen.id} id={screen.id} nodeId={screen.nodeId} go={go} />}
+      {screen.name === "explore" && (
+        <ExploreScreen key={screen.paper} paper={paper(screen.paper)} nodeId={screen.nodeId} go={go} />
+      )}
+      {screen.name === "lesson" && (
+        <LessonScreen key={screen.nodeId} paper={paper(screen.paper)} words={screen.words} nodeId={screen.nodeId} go={go} />
+      )}
+      {screen.name === "quiz" && (
+        <QuizScreen key={screen.nodeId} termIds={screen.termIds} teacher={teacher} go={go} nodeId={screen.nodeId} big={screen.big} />
+      )}
+      {screen.name === "speak" && <SpeakScreen key={screen.id} id={screen.id} nodeId={screen.nodeId} go={go} />}
     </LangProvider>
   );
 }

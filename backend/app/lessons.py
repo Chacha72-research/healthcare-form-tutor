@@ -257,6 +257,7 @@ class LessonService:
                     "l1": {
                         "meaning": generated["meaning"] if generated else None,
                         "example_meaning": generated["example_meaning"] if generated else None,
+                        "tip": generated.get("tip") if generated else None,
                         "either_or_q": translations.get(eo["q"]),
                         "either_or_options": [translations.get(o) for o in eo["options"]],
                         "yes_no_q": translations.get(yn["q"]),

@@ -50,3 +50,10 @@ def test_make_all_skips_saved_clips():
     assert (made, failed, round(seconds)) == (2, 0, 2)
     made, _, _ = asyncio.run(warm.make_all(voice, clips, "test"))
     assert made == 0 and voice.calls == 2
+
+
+def test_clip_lines_are_all_real_ui_strings():
+    ui = {**content.english_ui, **content.language("ta").ui}
+    clips = warm.clip_line_clips(ui)
+    assert len(clips) == len(warm.CLIP_LINES)
+    assert all(voice == "tutor" and text for text, voice, _ in clips)

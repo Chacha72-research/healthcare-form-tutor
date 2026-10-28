@@ -153,7 +153,9 @@ def _label_candidates(line: str) -> list[str]:
     return out
 
 
-def analyze(lines: list[str], matcher: TermMatcher, content: Content, source: str) -> FormReading:
+def analyze(
+    lines: list[str], matcher: TermMatcher, content: Content, source: str, *, keep_all_lines: bool = False
+) -> FormReading:
     shown: list[FormLine] = []
     terms: list[dict] = []
     seen: set[str] = set()
@@ -161,7 +163,7 @@ def analyze(lines: list[str], matcher: TermMatcher, content: Content, source: st
 
     for text in lines:
         marks = matcher.find(text)
-        if marks:
+        if marks or keep_all_lines:
             shown.append(FormLine(text=text, marks=marks))
             for mk in marks:
                 if mk.term_id not in seen:

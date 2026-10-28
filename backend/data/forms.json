@@ -1,0 +1,96 @@
+{
+  "about": "Practice papers learners click through. They follow the layout and wording of real forms (a clinic intake form, a health plan ID card, an Explanation of Benefits, a clinic statement, and the federal Summary of Benefits and Coverage template). All names and numbers are pretend.",
+  "forms": [
+    {
+      "id": "new_patient",
+      "kind": "pdf",
+      "file": "sample-form.pdf",
+      "icon": "form",
+      "title": {"en": "New patient form", "ta": "புது நோயாளி ஃபார்ம்", "es": "Formulario de paciente nuevo", "zh-Hans": "新病人表格", "vi": "Đơn bệnh nhân mới"},
+      "about": {"en": "You fill this out at your first visit to a new clinic.", "ta": "புது கிளினிக்குக்கு முதல் தடவை போகும்போது இதை நிரப்புவீங்க.", "es": "Lo llenas en tu primera visita a una clínica nueva.", "zh-Hans": "第一次去新诊所时要填这张表。", "vi": "Bạn điền đơn này trong lần đầu đến phòng khám mới."}
+    },
+    {
+      "id": "card",
+      "kind": "card",
+      "icon": "card",
+      "title": {"en": "Insurance card", "ta": "இன்சூரன்ஸ் கார்டு", "es": "Tarjeta de seguro", "zh-Hans": "保险卡", "vi": "Thẻ bảo hiểm"},
+      "about": {"en": "Show this card at the clinic and the pharmacy.", "ta": "இந்தக் கார்டை கிளினிக்லயும் மருந்துக் கடையிலயும் காட்டுவீங்க.", "es": "Muestras esta tarjeta en la clínica y en la farmacia.", "zh-Hans": "在诊所和药房要出示这张卡。", "vi": "Bạn đưa thẻ này ở phòng khám và nhà thuốc."},
+      "terms": ["policyholder", "member_id", "group_number", "date_of_birth", "primary_care_provider", "copay", "specialist", "urgent_care", "emergency_room", "generic_drug", "deductible", "member_services"]
+    },
+    {
+      "id": "eob",
+      "kind": "text",
+      "icon": "bill",
+      "title": {"en": "Explanation of Benefits", "ta": "இன்சூரன்ஸ் விளக்கக் கடிதம் (EOB)", "es": "Explicación de beneficios", "zh-Hans": "福利说明 (EOB)", "vi": "Giải thích quyền lợi (EOB)"},
+      "about": {"en": "Your insurance sends this after a visit. It is not a bill.", "ta": "டாக்டரைப் பார்த்த பிறகு இன்சூரன்ஸ் இதை அனுப்பும். இது பில் இல்ல.", "es": "Tu seguro te lo manda después de una visita. No es una factura.", "zh-Hans": "看病以后保险公司会寄给你。这不是账单。", "vi": "Bảo hiểm gửi giấy này sau buổi khám. Đây không phải hóa đơn."},
+      "lines": [
+        "Golden Valley Health Plan",
+        "Explanation of Benefits",
+        "THIS IS NOT A BILL",
+        "Member: Sam Lee     Member ID: GVH 482 1137     Group #: 7720",
+        "Patient: Sam Lee     Relationship to patient: Self",
+        "Claim number: 2026-0412-883",
+        "Date of service: 10/02/2026",
+        "Provider: Dr. Ana Lopez (in-network)",
+        "Service: Office visit",
+        "Amount billed: $180.00",
+        "Allowed amount: $120.00",
+        "Deductible: $0.00",
+        "Copay: $25.00",
+        "Coinsurance: $0.00",
+        "Plan paid: $95.00",
+        "Amount you owe: $25.00",
+        "Your deductible so far: $400.00 of $1,000.00",
+        "Your out-of-pocket maximum so far: $650.00 of $5,000.00",
+        "If we said no to paying for a service, you can file an appeal within 180 days.",
+        "Questions? Call Member Services at 1-800-555-0142."
+      ]
+    },
+    {
+      "id": "bill",
+      "kind": "text",
+      "icon": "bill",
+      "title": {"en": "Medical bill", "ta": "மருத்துவ பில்", "es": "Factura médica", "zh-Hans": "医疗账单", "vi": "Hóa đơn y tế"},
+      "about": {"en": "The clinic sends this. It shows what you still need to pay.", "ta": "கிளினிக் இதை அனுப்பும். நீங்க இன்னும் எவ்வளவு கட்டணும்னு காட்டும்.", "es": "La clínica te lo manda. Muestra lo que todavía debes pagar.", "zh-Hans": "诊所寄来的。上面写着你还要付多少钱。", "vi": "Phòng khám gửi giấy này. Nó cho biết bạn còn phải trả bao nhiêu."},
+      "lines": [
+        "Sunrise Family Clinic",
+        "Patient Statement",
+        "Statement date: 11/01/2026     Account number: 55120",
+        "Patient: Sam Lee     Date of birth: 03/15/1990",
+        "Guarantor: Sam Lee",
+        "Date of service: 10/02/2026     Office visit     Charges: $180.00",
+        "Insurance paid: $95.00",
+        "Adjustment: $60.00",
+        "Balance due: $25.00",
+        "Please pay by: 12/01/2026",
+        "Your insurance has paid its part. This balance is your copay.",
+        "Self-pay patients: ask us about a payment plan.",
+        "To pay, call Billing at 1-800-555-0199 or log in to the patient portal."
+      ]
+    },
+    {
+      "id": "sbc",
+      "kind": "text",
+      "icon": "form",
+      "title": {"en": "Summary of Benefits", "ta": "பலன்களின் சுருக்கம்", "es": "Resumen de beneficios", "zh-Hans": "保险福利摘要", "vi": "Tóm tắt quyền lợi"},
+      "about": {"en": "Your plan gives you this. It shows what your insurance covers and what you pay.", "ta": "உங்க இன்சூரன்ஸ் இதைக் கொடுக்கும். எதுக்கு இன்சூரன்ஸ் கட்டும், நீங்க எவ்வளவு கட்டணும்னு காட்டும்.", "es": "Tu plan te lo da. Muestra qué cubre tu seguro y cuánto pagas tú.", "zh-Hans": "保险公司给你的。上面写着保险包括什么，你要付多少。", "vi": "Chương trình bảo hiểm đưa giấy này. Nó cho biết bảo hiểm trả gì và bạn trả bao nhiêu."},
+      "lines": [
+        "Summary of Benefits and Coverage: What this plan covers and what you pay",
+        "Golden Valley Health Plan     Coverage period: 01/01/2026 to 12/31/2026     Plan type: PPO",
+        "What is the overall deductible? $1,000 per person.",
+        "Are there services covered before you meet your deductible? Yes. Preventive care is covered first.",
+        "What is the out-of-pocket limit for this plan? $5,000 per person.",
+        "Will you pay less if you use a network provider? Yes. You pay more out-of-network.",
+        "Do you need a referral to see a specialist? No.",
+        "Primary care visit to treat an injury or illness: $25 copay per visit",
+        "Specialist visit: $50 copay per visit",
+        "Preventive care, screening, immunization: No charge",
+        "Diagnostic test (x-ray, blood work): 20% coinsurance",
+        "Generic drugs: $10 copay",
+        "Emergency room care: $250 copay",
+        "Urgent care: $75 copay",
+        "Some services need prior authorization before you get them."
+      ]
+    }
+  ]
+}

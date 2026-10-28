@@ -2,37 +2,29 @@
 
 A learner sits in a clinic waiting room with a clipboard. The form asks for her *copay*, her *member ID*, her *emergency contact*. She speaks some English, but the words on the page are a wall, so she waits for a family member or a staff member to read it for her. Then, at the front desk, someone asks, "Is this doctor in-network?" and the wall goes up again.
 
-This app is built for both moments. It does three things:
-
-1. **Understand a form.** Upload a real healthcare form. Every health word on it is marked, and the tricky ones (the words learners mix up, like *copay*, *deductible*, and *policyholder*) are bright yellow. Tap any word, in any order, to see what it means in your language, what to write in that spot, and an example.
-2. **Quiz the tricky words.** Short questions, easiest first.
-3. **Practice speaking.** Say your lines out loud in real situations: checking in, making an appointment, asking for an interpreter, picking up medicine, calling insurance, asking about a bill. The app listens and shows which words came through.
-
-It was made with a local adult school in Fremont, CA, for beginner adult English learners. It runs on **one free API key**.
+This app is built for both moments. It is made for adults who are just starting English, including people who have rarely used a computer, so it works like a beginner's language-learning app: one page, one big button at a time, and a friendly guide.
 
 ## How it works
 
-**1. Upload a form.** Any PDF, picture, or text file of a healthcare form, or the built-in sample. Digital PDFs are read right on the server with no AI and no cost. The app finds every word on the form that is in its 73-word healthcare glossary. 40 of those words are flagged as tricky.
+Learners pick their language and land on **one learning path**: a winding line of big round buttons. Every button can be tapped, and the next one to try bounces. **Clip**, a paperclip, gives every instruction in the learner's language with simple English underneath, and a speaker button reads it aloud.
 
-**2. Tap a word.** The form appears with its words marked. Tap one and a card opens (beside the form on a laptop, from the bottom on a phone) with:
+The path goes through five real kinds of paper, in the order a patient meets them:
 
-- the word, its stressed syllable, and an English **Listen** button
-- **What it means**, in the learner's language, with a **Listen** button that plays a natural voice
-- **What to write here**, the practical part: "Nothing to fill in, this is what you pay at each visit" for *copay*, or "Write the name of the person the insurance is under" for *policyholder*
-- an example sentence, in English and the learner's language
-- one quick either/or check question
-- **Next tricky word**, and a bar that tracks how many tricky words you've opened
+1. **New patient form**
+2. **Insurance card**
+3. **Explanation of Benefits** ("THIS IS NOT A BILL")
+4. **Medical bill**
+5. **Summary of Benefits and Coverage**, the standard form every US health plan must give
 
-Nothing plays by itself. Voice only starts when the learner taps Listen.
+They follow the layout and wording of the real forms, with pretend names and numbers (Sam Lee, Golden Valley Health Plan). Each paper has three kinds of buttons:
 
-**3. Quiz.** Eight questions on the words you opened (or the tricky ones), easiest first: either/or, yes/no, which word matches, fill in the blank.
+- **Look at it.** The paper with its health words marked. Tricky words are bright yellow. Tap any word, in any order, and a card shows the English word split into sounds (co · PAY) with Listen and Slow buttons, what it means, what to write in that spot, and an example. English comes first and every sentence can be tapped to hear it. The learner's language sits underneath as the helper.
+- **How it works.** A short story of 4 cards, like "You pay a premium every month" or "The EOB is not a bill." Each card has one short English sentence (about 4th grade level) that is read aloud, and a fuller adult explanation in the learner's language. Two easy questions follow. Topics: your rights at the clinic, how insurance works, who pays what, what to do with a bill, and where to go for care.
+- **Word lessons** of about 3 words, one small task per screen: meet the word, say it into the mic, find it on the paper, pick the word you hear, answer an either/or question, fill in a sentence, and match a "what to write" tip. A wrong answer comes back once at the end. Nothing is lost, and the lesson ends with confetti.
 
-**4. Practice speaking.** Six situations follow a patient's journey, from easier to harder. Each is a short script:
+After the papers come **Talk at the clinic** (six speaking scripts: you say your lines into the mic, the app checks which words came through, then you can try again with your lines hidden, or try free talk with a live AI voice) and **Quiz** (one per paper, plus one with all the words).
 
-- The staff member's lines appear and are read aloud in English.
-- On your turn, your line is shown with your language underneath. Tap the mic and say it. The app listens (Chrome's speech recognition) and colors each word: green if it came through, underlined red if not. "Hear it" plays the line slowly. "Skip" moves on.
-- Finish, and try again with **Hide my lines**: you see only your language and say it in English.
-- **Free talk with AI** (optional) is an unscripted role-play with a live AI voice (Gemini Live) playing the receptionist, nurse, pharmacist, insurance agent, or billing clerk. You read from a pretend insurance card.
+**Voice.** English uses the browser's own voice, so it's instant and free. Only the learner's language uses Gemini's voice, and only when the learner taps a speaker. Speech recognition is Chrome's.
 
 Languages: **Tamil, Spanish, Simplified Chinese, and Vietnamese**. Adding another is one block in `backend/data/languages.json`.
 
@@ -103,18 +95,18 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173 in **Chrome**. Pick **தமிழ்**, tap the first button, then **Use a sample form**. Speaking practice asks for the microphone the first time.
+Open http://localhost:5173 in **Chrome** and pick **தமிழ்**. The path opens right away. Speaking practice asks for the microphone the first time.
 
 ### Preparing a demo
 
 Run this once before a demo, from `backend/` with `.venv` active:
 
 ```bash
-python scripts/warm_demo.py              # Tamil: every word on the sample form and all six scripts
+python scripts/warm_demo.py              # Tamil: every paper, story, and script
 python scripts/warm_demo.py --lang es    # the same, in Spanish
 ```
 
-It writes every explanation and translation ahead of time, records the "Listen" clips for each word, and tells you what it cost. After that, the demo and any test runs load instantly and for free. Only free talk uses the API during the demo. Keep the same models and voices in `.env` afterward, because the saved clips are tied to them.
+It writes every explanation, story, and translation ahead of time, records the "Listen" clips (word meanings, tips, story cards, and Clip's instructions), and tells you what it cost. After that, the demo and any test runs load instantly and for free. Only free talk uses the API during the demo. Keep the same models and voices in `.env` afterward, because the saved clips are tied to them.
 
 ### On phones in class
 
@@ -152,7 +144,7 @@ python scripts/review_content.py import --lang ta --csv review_ta.csv
 
 ## Privacy
 
-- Uploaded forms are held in memory for one request and never saved. Digital PDFs never leave the server.
+- The practice papers use pretend names and numbers. The upload API (for teachers) holds a file in memory for one request and never saves it.
 - For pictures, the AI is told to copy only printed labels, never anything someone wrote on the form. Requests are sent with `store=False`.
 - Quiz results store a short learner code, never a name.
 - In practice situations, learners use a pretend patient and a pretend insurance card. The AI partner never asks for real information.
@@ -164,20 +156,25 @@ python scripts/review_content.py import --lang ta --csv review_ta.csv
 backend/
   app/
     main.py          API routes
-    forms.py         reads uploads; finds glossary words (no AI for digital PDFs)
+    forms.py         reads forms; finds glossary words (no AI for digital PDFs)
+    samples.py       loads the practice papers
+    concepts.py      the "how it works" stories
     lessons.py       learner-language explanations and scripts, saved for review
     speech.py        learner-language voice with Gemini TTS, cached on disk
     quiz.py          quiz in questioning-hierarchy order
     conversation.py  free-talk relay to Gemini Live
     ai.py            Gemini (default, free) or Claude (optional)
   data/
-    glossary.json    73 words: definitions, what to write, pronunciation, checks, tricky flags
+    glossary.json    77 words: definitions, what to write, pronunciation, checks, tricky flags
     scenarios.json   6 speaking situations with scripts
+    forms.json       the 5 practice papers
+    concepts.json    5 "how it works" stories
     languages.json   app text and tutor lines in each language
   scripts/           demo warm-up, key setup, comprehension report, translation review, sample form
   tests/             pytest suite; AI is faked, so it runs offline
 frontend/
-  src/screens/       Upload, Form (tap a word), Quiz, Practice, Speak
+  src/screens/       Path (the one learning page), Explore, Story, Lesson, Quiz, Speak
+  src/path.ts        builds the path from the papers, stories, and scripts
   src/speech.ts      voice: browser for English, Gemini for the learner's language
   src/audio/listen.ts  speech recognition for speaking practice
   src/match.ts       forgiving check of a spoken line against the script

@@ -55,3 +55,25 @@ export function reviewWord(exclude: string[]): string | null {
   const learned = data.learned.filter((id) => !skip.has(id));
   return learned.length ? learned[Math.floor(Math.random() * learned.length)] : null;
 }
+
+// Which circles on the learning path are finished, on this device only.
+const DONE_KEY = "form-helper-done";
+
+export function getDone(): string[] {
+  try {
+    const raw = localStorage.getItem(DONE_KEY);
+    return raw ? (JSON.parse(raw) as string[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function markDone(id: string) {
+  try {
+    const done = new Set(getDone());
+    done.add(id);
+    localStorage.setItem(DONE_KEY, JSON.stringify([...done].slice(-200)));
+  } catch {
+    /* private mode: progress lasts for this visit only */
+  }
+}

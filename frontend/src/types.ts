@@ -53,6 +53,31 @@ export interface FormReading {
   unlisted: string[];
 }
 
+/** A built-in practice paper: a form, the insurance card, an EOB, a bill, or a benefits summary. */
+export interface Paper {
+  id: string;
+  kind: "pdf" | "text" | "card";
+  icon: string;
+  title: Record<string, string>;
+  about: Record<string, string>;
+  reading?: FormReading;
+  terms?: { id: string; term: string; confusing: boolean }[];
+}
+
+/** A short "how it works" story on the path. */
+export interface ConceptSummary {
+  id: string;
+  paper: string;
+  icon: string;
+  title: Record<string, string>;
+}
+
+export interface ConceptStory extends ConceptSummary {
+  cards: { icon: string; say: string; explain: string; say_l1: string | null; explain_l1: string | null }[];
+  checks: { q: string; options: string[]; answer: string; q_l1: string | null; options_l1: (string | null)[] }[];
+  ai_error: string | null;
+}
+
 export interface CheckQuestions {
   either_or: { q: string; options: string[]; answer: string };
   yes_no: { q: string; answer: boolean };
@@ -82,6 +107,25 @@ export interface ExplainedTerm extends GlossaryTerm {
 
 export interface Explained {
   terms: ExplainedTerm[];
+  ai_error: string | null;
+  ai_available: boolean;
+}
+
+/** A word with its learner-language text and translated check questions, for lessons. */
+export interface LessonWord extends GlossaryTerm {
+  l1: {
+    meaning: string | null;
+    example_meaning: string | null;
+    tip: string | null;
+    either_or_q: string | null;
+    either_or_options: (string | null)[];
+    yes_no_q: string | null;
+    approved: boolean;
+  };
+}
+
+export interface Lesson {
+  words: LessonWord[];
   ai_error: string | null;
   ai_available: boolean;
 }

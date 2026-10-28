@@ -16,6 +16,8 @@ from .forms import FormError, TermMatcher, read_form
 from .lessons import GeneratedStore, LessonService
 from .quiz import build_quiz
 from .results import QuizResult, save_result
+from .concepts import concept_lesson, summaries
+from .samples import load_samples
 from .speech import GeminiVoice
 
 logging.basicConfig(level=logging.INFO)
@@ -63,6 +65,7 @@ def create_app(
 
     matcher = TermMatcher(content.terms)
     lessons = LessonService(content, GeneratedStore(settings.generated_dir), ai)
+    samples = load_samples(content, matcher)
 
     app = FastAPI(title="Healthcare Form Literacy Tutor")
     app.add_middleware(
@@ -116,6 +119,17 @@ def create_app(
                 "live": settings.live_enabled,
             },
         }
+
+    @app.get("/api/forms")
+    def forms():
+        return {"forms": samples, "concepts": summaries()}
+
+    @app.get("/api/concepts/{concept_id}")
+    async def concept(concept_id: str, language: str = Query(min_length=2, max_length=16)):
+        data = await concept_lesson(lessons, concept_id, language_or_400(language))
+        if data is None:
+            raise _error(404, "unknown_concept")
+        return data
 
     @app.get("/api/glossary")
     def glossary():

@@ -1,4 +1,15 @@
-import type { AppConfig, Explained, FormReading, GlossaryTerm, Quiz, ScenarioDetail } from "./types";
+import type {
+  AppConfig,
+  ConceptStory,
+  ConceptSummary,
+  Explained,
+  FormReading,
+  GlossaryTerm,
+  Lesson,
+  Paper,
+  Quiz,
+  ScenarioDetail,
+} from "./types";
 
 /** `code` matches a UI string key where possible, like "ai_busy" or "picture_needs_ai". */
 export class ApiError extends Error {
@@ -26,6 +37,14 @@ async function json<T>(resp: Response): Promise<T> {
 
 export const getConfig = () => fetch("/api/config").then((r) => json<AppConfig>(r));
 
+/** The built-in practice papers (already read, no AI needed) and the "how it works" stories. */
+export const getPapers = () => fetch("/api/forms").then((r) => json<{ forms: Paper[]; concepts: ConceptSummary[] }>(r));
+
+export function getConcept(id: string, language: string): Promise<ConceptStory> {
+  const params = new URLSearchParams({ language });
+  return fetch(`/api/concepts/${encodeURIComponent(id)}?${params}`).then((r) => json<ConceptStory>(r));
+}
+
 export function readForm(file: Blob, name: string): Promise<FormReading> {
   const body = new FormData();
   body.append("file", file, name);
@@ -49,8 +68,14 @@ export function getExplain(termIds: string[], language: string): Promise<Explain
   return fetch(`/api/explain?${params}`).then((r) => json<Explained>(r));
 }
 
-export function getQuiz(termIds: string[], seed: string | null): Promise<Quiz> {
-  const params = new URLSearchParams({ n: "8" });
+/** Words for one lesson, with translated check questions. */
+export function getLesson(termIds: string[], language: string): Promise<Lesson> {
+  const params = new URLSearchParams({ terms: termIds.join(","), language });
+  return fetch(`/api/lesson?${params}`).then((r) => json<Lesson>(r));
+}
+
+export function getQuiz(termIds: string[], seed: string | null, n = 8): Promise<Quiz> {
+  const params = new URLSearchParams({ n: String(n) });
   if (termIds.length) params.set("terms", termIds.join(","));
   if (seed) params.set("seed", seed);
   return fetch(`/api/quiz?${params}`).then((r) => json<Quiz>(r));

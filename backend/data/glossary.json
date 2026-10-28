@@ -139,7 +139,8 @@
       "aliases": [
         "out-of-pocket max",
         "out of pocket maximum",
-        "OOP max"
+        "OOP max",
+        "out-of-pocket limit"
       ],
       "category": "costs",
       "confusing": true,
@@ -876,7 +877,8 @@
         "primary care physician",
         "primary care doctor",
         "family doctor",
-        "primary doctor"
+        "primary doctor",
+        "primary care"
       ],
       "category": "visits",
       "confusing": true,
@@ -1345,7 +1347,8 @@
         "lab work",
         "labs",
         "blood test",
-        "laboratory test"
+        "laboratory test",
+        "blood work"
       ],
       "category": "visits",
       "confusing": false,
@@ -2422,6 +2425,137 @@
         },
         "yes_no": {
           "q": "Does it say who decides for you?",
+          "answer": true
+        }
+      },
+      "vetted": false
+    },
+    {
+      "id": "allowed_amount",
+      "term": "Allowed amount",
+      "say": "al-LOWED a-MOUNT",
+      "aliases": [
+        "allowed charge",
+        "approved amount",
+        "eligible expense"
+      ],
+      "category": "costs",
+      "confusing": true,
+      "casas": [
+        "3.2.3"
+      ],
+      "definition": "The most your insurance agrees to pay for a service, which can be less than what the doctor charged.",
+      "example": "The doctor charged $180, but the allowed amount was $120.",
+      "tip": "Nothing to fill in. Your costs are figured from this number, not from the first price the doctor charged.",
+      "check": {
+        "either_or": {
+          "q": "Is it the price the plan agrees to, or the price on the doctor's first bill?",
+          "options": [
+            "the price the plan agrees to",
+            "the price on the doctor's first bill"
+          ],
+          "answer": "the price the plan agrees to"
+        },
+        "yes_no": {
+          "q": "Can it be lower than what the doctor charged?",
+          "answer": true
+        }
+      },
+      "vetted": false
+    },
+    {
+      "id": "date_of_service",
+      "term": "Date of service",
+      "say": "DATE of SER-vice",
+      "aliases": [
+        "service date",
+        "dates of service"
+      ],
+      "category": "costs",
+      "confusing": false,
+      "casas": [
+        "3.2.3"
+      ],
+      "definition": "The day you saw the doctor or got care.",
+      "example": "The date of service on the bill is October 2, the day of my checkup.",
+      "tip": "Check that this matches the day you really went. If it does not, call and ask.",
+      "check": {
+        "either_or": {
+          "q": "Is it the day you got care, or the day the bill was mailed?",
+          "options": [
+            "the day you got care",
+            "the day the bill was mailed"
+          ],
+          "answer": "the day you got care"
+        },
+        "yes_no": {
+          "q": "Is it the day you visited the doctor?",
+          "answer": true
+        }
+      },
+      "vetted": false
+    },
+    {
+      "id": "appeal",
+      "term": "Appeal",
+      "say": "ap-PEAL",
+      "aliases": [
+        "file an appeal",
+        "appeals"
+      ],
+      "category": "insurance",
+      "confusing": true,
+      "casas": [
+        "3.2.3"
+      ],
+      "definition": "Asking your insurance to look again at a decision when they say no to paying.",
+      "example": "The plan would not pay, so I filed an appeal.",
+      "tip": "Nothing to fill in now. If insurance says no, you can ask them to check again. Watch the deadline.",
+      "check": {
+        "either_or": {
+          "q": "Do you do it when insurance says no, or when you pay your copay?",
+          "options": [
+            "when insurance says no",
+            "when you pay your copay"
+          ],
+          "answer": "when insurance says no"
+        },
+        "yes_no": {
+          "q": "Are you asking the plan to look at its decision again?",
+          "answer": true
+        }
+      },
+      "vetted": false
+    },
+    {
+      "id": "preventive_care",
+      "term": "Preventive care",
+      "say": "pre-VEN-tive CARE",
+      "aliases": [
+        "preventive services",
+        "preventive visit",
+        "screening"
+      ],
+      "category": "visits",
+      "confusing": true,
+      "casas": [
+        "3.1.3",
+        "3.2.3"
+      ],
+      "definition": "Care that keeps you healthy before you get sick, like checkups, shots, and health tests.",
+      "example": "My yearly checkup is preventive care, so I paid nothing.",
+      "tip": "Nothing to fill in. Many plans cover these visits for free, even before you meet your deductible.",
+      "check": {
+        "either_or": {
+          "q": "Is it care to stay healthy, or care after you get hurt?",
+          "options": [
+            "care to stay healthy",
+            "care after you get hurt"
+          ],
+          "answer": "care to stay healthy"
+        },
+        "yes_no": {
+          "q": "Is a yearly checkup an example?",
           "answer": true
         }
       },
