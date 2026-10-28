@@ -7,7 +7,7 @@
       "icon": "star",
       "title": {
         "en": "The big picture",
-        "ta": "முழு படம்: இன்சூரன்ஸ் எப்படி நடக்குது",
+        "ta": "முழு picture",
         "es": "El panorama completo",
         "zh-Hans": "整体流程",
         "vi": "Bức tranh toàn cảnh"
@@ -67,7 +67,7 @@
       "icon": "chat",
       "title": {
         "en": "Your rights at the clinic",
-        "ta": "கிளினிக்ல உங்க உரிமைகள்",
+        "ta": "Clinic-ல உங்க rights",
         "es": "Tus derechos en la clínica",
         "zh-Hans": "你在诊所的权利",
         "vi": "Quyền của bạn ở phòng khám"
@@ -119,7 +119,7 @@
       "icon": "card",
       "title": {
         "en": "How health insurance works",
-        "ta": "ஹெல்த் இன்சூரன்ஸ் எப்படி வேலை செய்யுது",
+        "ta": "Health insurance எப்படி work ஆகுது",
         "es": "Cómo funciona el seguro médico",
         "zh-Hans": "医疗保险是怎么运作的",
         "vi": "Bảo hiểm y tế hoạt động thế nào"
@@ -171,7 +171,7 @@
       "icon": "bill",
       "title": {
         "en": "Who pays what",
-        "ta": "யார் எவ்வளவு கட்டணும்",
+        "ta": "யார் எவ்ளோ கட்டணும்",
         "es": "Quién paga qué",
         "zh-Hans": "谁付多少钱",
         "vi": "Ai trả bao nhiêu"
@@ -223,7 +223,7 @@
       "icon": "phone",
       "title": {
         "en": "What to do with a medical bill",
-        "ta": "மருத்துவ பில் வந்தா என்ன பண்ணணும்",
+        "ta": "Medical bill வந்தா என்ன பண்ணணும்",
         "es": "Qué hacer con una factura médica",
         "zh-Hans": "收到医疗账单怎么办",
         "vi": "Làm gì khi nhận hóa đơn y tế"
@@ -275,7 +275,7 @@
       "icon": "cross",
       "title": {
         "en": "Where to go for care",
-        "ta": "சிகிச்சைக்கு எங்க போகணும்",
+        "ta": "எங்க போகணும்",
         "es": "Adónde ir para recibir atención",
         "zh-Hans": "看病该去哪里",
         "vi": "Nên đi khám ở đâu"

@@ -26,8 +26,12 @@ LINE_BATCH = 40
 
 STYLE = {
     "ta": (
-        "Write in everyday spoken Tamil (பேச்சுத் தமிழ்) with respectful forms like நீங்க and "
-        "சொல்லுங்க, not formal written Tamil. Common loanwords like டாக்டர், இன்ஷூரன்ஸ், ஃபார்ம் are fine."
+        "Write very casual, everyday spoken Tamil, the way a Tamil family in the U.S. talks at home "
+        "(பேச்சுத் தமிழ், like இருக்கு, போகணும், சொல்லுங்க, பண்ணுங்க), with the polite நீங்க. Never formal or "
+        "written Tamil (no இருக்கிறது, செய்யவும், தங்களது). Mix in English words the way people really talk: "
+        "write everyday English words in English letters instead of a Tamil word, for example doctor, clinic, "
+        "insurance, card, form, bill, appointment, pharmacy, interpreter, plan, payment, check, number, free. "
+        "Use as few Tamil words as you can. Short sentences only."
     ),
     "es": "Use Latin American Spanish and the friendly 'tú' form.",
     "zh-Hans": "Use Simplified Chinese characters and plain spoken Mandarin.",
@@ -37,9 +41,9 @@ STYLE = {
 TERM_SYSTEM = """You help adult beginners (English level 1 to 2) understand words on U.S. healthcare forms. Their first language is {lang}. You write what a warm, casual tutor would say out loud in {lang}.
 
 For each glossary term:
-- meaning: one or two short sentences in everyday spoken {lang} that explain the English definition. Sound like a friendly person talking, not a dictionary. Say only what the definition says. Do not add facts, numbers, prices, rules, or medical advice. Keep the English term itself in English letters (for example: copay) so the learner connects the sound to the written word.
+- meaning: one short sentence (at most about 12 words) in everyday spoken {lang} that explains the English definition. Sound like a friendly person talking, not a dictionary. Say only what the definition says. Do not add facts, numbers, prices, rules, or medical advice. Keep the English term itself in English letters (for example: copay) so the learner connects the sound to the written word.
 - example_meaning: a natural {lang} translation of the English example sentence. Keep the English term in English letters.
-- tip: a natural {lang} translation of the English tip, which tells the learner what to write on the form or what to do. Keep it just as short. Keep English words that appear on forms (like N/A, Member ID) in English letters.
+- tip: a short, natural {lang} version of the English tip, which tells the learner what to write on the form or what to do. Shorter than the English if you can. Keep English words that appear on forms (like N/A, Member ID) in English letters.
 {style}"""
 
 TERM_SCHEMA = {
@@ -62,7 +66,7 @@ TERM_SCHEMA = {
     "required": ["items"],
 }
 
-TRANSLATE_SYSTEM = """You translate short English lines into {lang} for adult beginners who are learning English for healthcare situations. Keep every translation plain, natural, and faithful to the English. Keep names, numbers, money amounts, dates, and times exactly the same. When a line contains a healthcare word (like copay, deductible, in-network, referral, prescription), keep that word in English letters inside the translation so the learner can match it to the English.
+TRANSLATE_SYSTEM = """You translate short English lines into {lang} for adult beginners who are learning English for healthcare situations. Keep every translation plain, natural, and faithful to the meaning. Keep it short: use fewer words than the English when you can, and keep only the main point of longer lines. Keep names, numbers, money amounts, dates, and times exactly the same. When a line contains a healthcare word (like copay, deductible, in-network, referral, prescription), keep that word in English letters inside the translation so the learner can match it to the English.
 {style}"""
 
 TRANSLATE_SCHEMA = {
@@ -79,6 +83,11 @@ TRANSLATE_SCHEMA = {
     },
     "required": ["items"],
 }
+
+
+# Bump a language's number when its writing style changes, so its saved text is
+# written again in the new style (teacher-approved text is always kept).
+STYLE_VERSION = {"ta": 2}
 
 
 class GeneratedStore:
@@ -99,8 +108,12 @@ class GeneratedStore:
             if p.exists():
                 with p.open(encoding="utf-8") as f:
                     loaded = json.load(f)
-                data["terms"].update(loaded.get("terms", {}))
-                data["lines"].update(loaded.get("lines", {}))
+                current = loaded.get("style", 1) == STYLE_VERSION.get(lang, 1)
+                for part in ("terms", "lines"):
+                    for key, entry in loaded.get(part, {}).items():
+                        if current or entry.get("approved"):
+                            data[part][key] = entry
+            data["style"] = STYLE_VERSION.get(lang, 1)
             self._cache[lang] = data
         return self._cache[lang]
 

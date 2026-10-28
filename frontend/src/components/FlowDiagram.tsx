@@ -91,7 +91,7 @@ export function FlowDiagram({ steps, current, showAll = false }: { steps: FlowSt
           <span className="flow-name" lang="en">
             {en(`bp_${a}`)}
           </span>
-          <span className="flow-l1">{t(`bp_${a}`)}</span>
+          {t(`bp_${a}`) !== en(`bp_${a}`) && <span className="flow-l1">{t(`bp_${a}`)}</span>}
         </div>
       ))}
     </div>

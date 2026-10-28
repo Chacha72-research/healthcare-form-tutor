@@ -231,3 +231,25 @@ def test_form_reading_marks_confusing_words(tmp_path):
     terms = {t["id"]: t["confusing"] for t in resp.json()["terms"]}
     assert terms["copay"] is True and terms["date_of_birth"] is False
     assert sum(terms.values()) >= 12
+
+
+def test_style_change_rewrites_old_text_but_keeps_approved(tmp_path):
+    import json as _json
+
+    from app.lessons import GeneratedStore
+
+    (tmp_path / "ta.json").write_text(
+        _json.dumps(
+            {
+                "terms": {
+                    "copay": {"meaning": "old", "example_meaning": "old", "tip": "old", "approved": False},
+                    "deductible": {"meaning": "kept", "example_meaning": "kept", "tip": "kept", "approved": True},
+                },
+                "lines": {"Hello": {"text": "old", "approved": False}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    data = GeneratedStore(tmp_path).load("ta")
+    assert "copay" not in data["terms"] and "Hello" not in data["lines"]
+    assert data["terms"]["deductible"]["meaning"] == "kept"

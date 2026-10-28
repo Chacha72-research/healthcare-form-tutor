@@ -7,14 +7,14 @@
       "icon": "card",
       "title": {
         "en": "Insurance card",
-        "ta": "இன்சூரன்ஸ் கார்டு",
+        "ta": "Insurance card",
         "es": "Tarjeta de seguro",
         "zh-Hans": "保险卡",
         "vi": "Thẻ bảo hiểm"
       },
       "about": {
         "en": "Show this card at the clinic and the pharmacy.",
-        "ta": "இந்தக் கார்டை கிளினிக்லயும் மருந்துக் கடையிலயும் காட்டுவீங்க.",
+        "ta": "Clinic-லயும் pharmacy-லயும் இந்த card-ஐ காட்டுவீங்க.",
         "es": "Muestras esta tarjeta en la clínica y en la farmacia.",
         "zh-Hans": "在诊所和药房要出示这张卡。",
         "vi": "Bạn đưa thẻ này ở phòng khám và nhà thuốc."
@@ -41,14 +41,14 @@
       "icon": "form",
       "title": {
         "en": "New patient form",
-        "ta": "புது நோயாளி ஃபார்ம்",
+        "ta": "New patient form",
         "es": "Formulario de paciente nuevo",
         "zh-Hans": "新病人表格",
         "vi": "Đơn bệnh nhân mới"
       },
       "about": {
         "en": "You fill this out at your first visit to a new clinic.",
-        "ta": "புது கிளினிக்குக்கு முதல் தடவை போகும்போது இதை நிரப்புவீங்க.",
+        "ta": "புது clinic-க்கு first time போனா இதை fill பண்ணுவீங்க.",
         "es": "Lo llenas en tu primera visita a una clínica nueva.",
         "zh-Hans": "第一次去新诊所时要填这张表。",
         "vi": "Bạn điền đơn này trong lần đầu đến phòng khám mới."
@@ -60,14 +60,14 @@
       "icon": "bill",
       "title": {
         "en": "Explanation of Benefits",
-        "ta": "இன்சூரன்ஸ் விளக்கக் கடிதம் (EOB)",
+        "ta": "EOB letter",
         "es": "Explicación de beneficios",
         "zh-Hans": "福利说明 (EOB)",
         "vi": "Giải thích quyền lợi (EOB)"
       },
       "about": {
         "en": "Your insurance sends this after a visit. It is not a bill.",
-        "ta": "டாக்டரைப் பார்த்த பிறகு இன்சூரன்ஸ் இதை அனுப்பும். இது பில் இல்ல.",
+        "ta": "Doctor-ஐ பார்த்த பிறகு insurance இதை அனுப்பும். இது bill இல்ல.",
         "es": "Tu seguro te lo manda después de una visita. No es una factura.",
         "zh-Hans": "看病以后保险公司会寄给你。这不是账单。",
         "vi": "Bảo hiểm gửi giấy này sau buổi khám. Đây không phải hóa đơn."
@@ -101,14 +101,14 @@
       "icon": "bill",
       "title": {
         "en": "Medical bill",
-        "ta": "மருத்துவ பில்",
+        "ta": "Medical bill",
         "es": "Factura médica",
         "zh-Hans": "医疗账单",
         "vi": "Hóa đơn y tế"
       },
       "about": {
         "en": "The clinic sends this. It shows what you still need to pay.",
-        "ta": "கிளினிக் இதை அனுப்பும். நீங்க இன்னும் எவ்வளவு கட்டணும்னு காட்டும்.",
+        "ta": "Clinic அனுப்பும். இன்னும் எவ்ளோ கட்டணும்னு காட்டும்.",
         "es": "La clínica te lo manda. Muestra lo que todavía debes pagar.",
         "zh-Hans": "诊所寄来的。上面写着你还要付多少钱。",
         "vi": "Phòng khám gửi giấy này. Nó cho biết bạn còn phải trả bao nhiêu."
@@ -135,14 +135,14 @@
       "icon": "form",
       "title": {
         "en": "Summary of Benefits",
-        "ta": "பலன்களின் சுருக்கம்",
+        "ta": "Benefits summary",
         "es": "Resumen de beneficios",
         "zh-Hans": "保险福利摘要",
         "vi": "Tóm tắt quyền lợi"
       },
       "about": {
         "en": "Your plan gives you this. It shows what your insurance covers and what you pay.",
-        "ta": "உங்க இன்சூரன்ஸ் இதைக் கொடுக்கும். எதுக்கு இன்சூரன்ஸ் கட்டும், நீங்க எவ்வளவு கட்டணும்னு காட்டும்.",
+        "ta": "உங்க plan எதுக்கு pay பண்ணும், நீங்க எவ்ளோன்னு காட்டும்.",
         "es": "Tu plan te lo da. Muestra qué cubre tu seguro y cuánto pagas tú.",
         "zh-Hans": "保险公司给你的。上面写着保险包括什么，你要付多少。",
         "vi": "Chương trình bảo hiểm đưa giấy này. Nó cho biết bảo hiểm trả gì và bạn trả bao nhiêu."
