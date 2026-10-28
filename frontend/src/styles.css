@@ -3456,3 +3456,26 @@ mark {
   padding: 0;
   background: none;
 }
+
+.clip,
+.clip-bubble {
+  min-width: 0;
+}
+
+.clip {
+  width: 100%;
+}
+
+/* Before a talk starts, Clip and the Start button come right under the title. */
+.speak > .screen-title {
+  order: -2;
+}
+
+.speak > .speak-start {
+  order: -1;
+}
+
+.clip-native,
+.clip-en {
+  overflow-wrap: anywhere;
+}
