@@ -155,7 +155,16 @@
     "tap_to_hear": "Tap to hear it",
     "clip_story": "Listen and read. Take your time.",
     "story_done": "Great! Now you know how it works.",
-    "how_it_works": "How it works"
+    "how_it_works": "How it works",
+    "bp_you": "You",
+    "bp_clinic": "Clinic",
+    "bp_insurance": "Insurance",
+    "big_picture": "The big picture",
+    "bp_step": "Step {n} of {total}",
+    "bp_done": "Now you know the big picture!",
+    "start_learning": "Start learning",
+    "clip_bigpicture": "This is how health insurance works. Watch the arrows.",
+    "step_tag": "Step {n}"
   },
   "languages": [
     {
@@ -319,7 +328,16 @@
         "tap_to_hear": "தொட்டா கேட்கும்",
         "clip_story": "கேளுங்க, படிங்க. மெதுவா பாருங்க.",
         "story_done": "சூப்பர்! இப்போ இது எப்படி வேலை செய்யுதுன்னு உங்களுக்குத் தெரியும்.",
-        "how_it_works": "இது எப்படி வேலை செய்யுது"
+        "how_it_works": "இது எப்படி வேலை செய்யுது",
+        "bp_you": "நீங்க",
+        "bp_clinic": "கிளினிக்",
+        "bp_insurance": "இன்சூரன்ஸ்",
+        "big_picture": "முழு படம்",
+        "bp_step": "{total}-ல படி {n}",
+        "bp_done": "இப்போ உங்களுக்கு முழு படமும் தெரியும்!",
+        "start_learning": "கத்துக்க ஆரம்பிங்க",
+        "clip_bigpicture": "ஹெல்த் இன்சூரன்ஸ் இப்படித்தான் வேலை செய்யுது. அம்புக்குறிகளைப் பாருங்க.",
+        "step_tag": "படி {n}"
       }
     },
     {
@@ -483,7 +501,16 @@
         "tap_to_hear": "Toca para escuchar",
         "clip_story": "Escucha y lee. Tómate tu tiempo.",
         "story_done": "¡Muy bien! Ahora sabes cómo funciona.",
-        "how_it_works": "Cómo funciona"
+        "how_it_works": "Cómo funciona",
+        "bp_you": "Tú",
+        "bp_clinic": "Clínica",
+        "bp_insurance": "Seguro",
+        "big_picture": "El panorama completo",
+        "bp_step": "Paso {n} de {total}",
+        "bp_done": "¡Ahora conoces el panorama completo!",
+        "start_learning": "Empezar a aprender",
+        "clip_bigpicture": "Así funciona el seguro médico. Mira las flechas.",
+        "step_tag": "Paso {n}"
       }
     },
     {
@@ -648,7 +675,16 @@
         "tap_to_hear": "点一下就能听",
         "clip_story": "听一听，读一读。慢慢来。",
         "story_done": "太棒了！现在你知道它是怎么回事了。",
-        "how_it_works": "是怎么回事"
+        "how_it_works": "是怎么回事",
+        "bp_you": "你",
+        "bp_clinic": "诊所",
+        "bp_insurance": "保险公司",
+        "big_picture": "整体流程",
+        "bp_step": "第 {n} 步，共 {total} 步",
+        "bp_done": "现在你知道整个流程了！",
+        "start_learning": "开始学习",
+        "clip_bigpicture": "医疗保险就是这样运作的。看箭头。",
+        "step_tag": "第 {n} 步"
       }
     },
     {
@@ -812,7 +848,16 @@
         "tap_to_hear": "Chạm để nghe",
         "clip_story": "Nghe và đọc. Cứ từ từ.",
         "story_done": "Giỏi lắm! Giờ bạn đã biết nó hoạt động thế nào.",
-        "how_it_works": "Cách hoạt động"
+        "how_it_works": "Cách hoạt động",
+        "bp_you": "Bạn",
+        "bp_clinic": "Phòng khám",
+        "bp_insurance": "Bảo hiểm",
+        "big_picture": "Bức tranh toàn cảnh",
+        "bp_step": "Bước {n}/{total}",
+        "bp_done": "Giờ bạn đã biết toàn cảnh!",
+        "start_learning": "Bắt đầu học",
+        "clip_bigpicture": "Bảo hiểm y tế hoạt động như thế này. Hãy xem các mũi tên.",
+        "step_tag": "Bước {n}"
       }
     }
   ]

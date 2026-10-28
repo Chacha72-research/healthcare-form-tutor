@@ -8,7 +8,9 @@ import { LiveConversation, type LiveStatus } from "../audio/live";
 import { Bi, useLang } from "../i18n";
 import { stopSpeaking } from "../speech";
 import type { ScenarioDetail } from "../types";
+import { Clip } from "./Clip";
 import { Icon } from "./Icon";
+import { VoiceOrb } from "./VoiceOrb";
 
 interface Caption {
   role: "learner" | "partner";
@@ -57,28 +59,20 @@ export function FreeTalk({ data }: { data: ScenarioDetail }) {
 
   return (
     <section className="talk">
-      <div className="bubble bubble-tutor">
-        <p className="bubble-line">
-          <Bi k="talk_hint" vars={{ role: data.staff_label }} />
-        </p>
-      </div>
+      <Clip k="talk_hint" vars={{ role: data.staff_label }} size={58} />
       <p className="hint-plain">{t("headphones_tip")}</p>
-      {active && (
-        <p className={`live-status live-${status}`} role="status">
-          {status === "connecting" ? (
-            <span className="live-dot" aria-hidden="true" />
-          ) : (
-            <span className="live-bars" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-            </span>
-          )}
-          {t(statusKey)}
-        </p>
-      )}
+      <div className={`talk-orb talk-${status}`}>
+        <VoiceOrb listening={status === "listening"} speaking={status === "speaking"} micOn={active} size={150}>
+          <span className="talk-orb-core" aria-hidden="true">
+            <Icon name={status === "speaking" ? "speaker" : status === "connecting" ? "replay" : "mic"} size={52} />
+          </span>
+        </VoiceOrb>
+        {active && (
+          <p className={`live-status live-${status}`} role="status">
+            {t(statusKey)}
+          </p>
+        )}
+      </div>
       {error && (
         <p className="notice notice-bad" role="alert">
           {error === "mic_denied" ? t("mic_denied") : error === "not_configured" ? t("talk_unavailable") : t("error_generic")}

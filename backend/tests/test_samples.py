@@ -14,7 +14,7 @@ content = load_content()
 
 def test_every_paper_loads_and_has_tricky_words():
     papers = load_samples(content, TermMatcher(content.terms))
-    assert [p["id"] for p in papers] == ["new_patient", "card", "eob", "bill", "sbc"]
+    assert [p["id"] for p in papers] == ["card", "new_patient", "eob", "bill", "sbc"]
     codes = {lang.code for lang in content.languages} | {"en"}
     for p in papers:
         assert codes <= set(p["title"]) and codes <= set(p["about"]), p["id"]
@@ -38,4 +38,4 @@ def test_forms_endpoint(tmp_path):
     client = TestClient(create_app(settings=settings, content=content, ai=FakeAI(), voice=None))
     data = client.get("/api/forms").json()
     assert len(data["forms"]) == 5
-    assert data["forms"][2]["reading"]["lines"][0]["text"]
+    assert data["forms"][2]["reading"]["lines"][0]["text"] == "Golden Valley Health Plan"

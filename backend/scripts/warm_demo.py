@@ -44,7 +44,7 @@ Clip = tuple[str, str, str]
 # Clip's instructions, which have a "Listen" button. Keep in sync with the app.
 CLIP_LINES = [
     "clip_hello", "clip_pick_form", "clip_tap_word", "clip_tap_card", "clip_meet", "clip_say", "clip_listen",
-    "clip_find", "clip_find_card", "clip_check", "clip_tip", "clip_fill", "clip_quiz", "clip_talk", "clip_story",
+    "clip_find", "clip_find_card", "clip_check", "clip_tip", "clip_fill", "clip_quiz", "clip_talk", "clip_story", "clip_bigpicture",
 ]
 
 

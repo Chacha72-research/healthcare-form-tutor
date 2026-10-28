@@ -6,12 +6,14 @@ This app is built for both moments. It is made for adults who are just starting 
 
 ## How it works
 
-Learners pick their language and land on **one learning path**: a winding line of big round buttons. Every button can be tapped, and the next one to try bounces. **Clip**, a paperclip, gives every instruction in the learner's language with simple English underneath, and a speaker button reads it aloud.
+Right after picking a language, learners see **the big picture**: how one doctor visit moves between **You**, the **Clinic**, and **Insurance**, one step at a time. An arrow lights up for each step, and a little paper (like $, CLAIM, EOB, or BILL) travels along it. Each step has one easy English sentence, read aloud, and the full explanation in the learner's language. It ends with the whole flowchart, and it stays at the top of the path to revisit.
 
-The path goes through five real kinds of paper, in the order a patient meets them:
+Then they land on **one learning path**: a winding line of big round buttons. Every button can be tapped, and the next one to try bounces. **Clip**, a paperclip, gives every instruction in the learner's language with simple English underneath, and a speaker button reads it aloud.
 
-1. **New patient form**
-2. **Insurance card**
+The path goes through five real kinds of paper, in the order a patient meets them, and each one is tagged with its step in the big picture:
+
+1. **Insurance card**
+2. **New patient form**
 3. **Explanation of Benefits** ("THIS IS NOT A BILL")
 4. **Medical bill**
 5. **Summary of Benefits and Coverage**, the standard form every US health plan must give
@@ -23,6 +25,8 @@ They follow the layout and wording of the real forms, with pretend names and num
 - **Word lessons** of about 3 words, one small task per screen: meet the word, say it into the mic, find it on the paper, pick the word you hear, answer an either/or question, fill in a sentence, and match a "what to write" tip. A wrong answer comes back once at the end. Nothing is lost, and the lesson ends with confetti.
 
 After the papers come **Talk at the clinic** (six speaking scripts: you say your lines into the mic, the app checks which words came through, then you can try again with your lines hidden, or try free talk with a live AI voice) and **Quiz** (one per paper, plus one with all the words).
+
+**The voice orb.** Whenever the app is listening, a soft orb glows and grows with the learner's voice, so a nervous speaker can see that the app hears them. In free talk it turns purple and pulses while the AI is talking.
 
 **Voice.** English uses the browser's own voice, so it's instant and free. Only the learner's language uses Gemini's voice, and only when the learner taps a speaker. Speech recognition is Chrome's.
 

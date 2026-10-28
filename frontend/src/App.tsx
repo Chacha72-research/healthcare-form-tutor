@@ -10,11 +10,13 @@ import { LessonScreen } from "./screens/Lesson";
 import { QuizScreen } from "./screens/Quiz";
 import { SpeakScreen } from "./screens/Speak";
 import { StoryScreen } from "./screens/Story";
+import { BigPictureScreen, seenBigPicture } from "./screens/BigPicture";
 
 // "home" is the learning path. Everything starts and ends there.
 export type Screen =
   | { name: "language" }
   | { name: "home" }
+  | { name: "bigpicture" }
   | { name: "explore"; paper: string; nodeId: string }
   | { name: "story"; id: string; paper: string; nodeId: string }
   | { name: "lesson"; paper: string; words: string[]; nodeId: string }
@@ -48,7 +50,8 @@ export default function App() {
   const [concepts, setConcepts] = useState<ConceptSummary[]>([]);
   const [loadError, setLoadError] = useState(false);
   const [langCode, setLangCode] = useState<string | null>(savedLanguage);
-  const [screen, setScreen] = useState<Screen>({ name: "home" });
+  // First visit: show the big picture before the path.
+  const [screen, setScreen] = useState<Screen>(() => (seenBigPicture() ? { name: "home" } : { name: "bigpicture" }));
   const teacher = useMemo(readTeacherParams, []);
 
   useEffect(() => {
@@ -91,7 +94,7 @@ export default function App() {
       /* private browsing: keep it for this visit */
     }
     setLangCode(code);
-    go(screen.name === "language" ? { name: "home" } : screen);
+    go(screen.name === "language" ? (seenBigPicture() ? { name: "home" } : { name: "bigpicture" }) : screen);
   }
 
   if (loadError) {
@@ -112,6 +115,7 @@ export default function App() {
   return (
     <LangProvider value={makeLangValue(config, language)}>
       {screen.name === "home" && <PathScreen papers={papers} concepts={concepts} go={go} />}
+      {screen.name === "bigpicture" && <BigPictureScreen go={go} />}
       {screen.name === "story" && <StoryScreen key={screen.id} id={screen.id} nodeId={screen.nodeId} go={go} />}
       {screen.name === "explore" && (
         <ExploreScreen key={screen.paper} paper={paper(screen.paper)} nodeId={screen.nodeId} go={go} />

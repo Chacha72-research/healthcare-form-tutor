@@ -64,6 +64,8 @@ export interface Paper {
   terms?: { id: string; term: string; confusing: boolean }[];
 }
 
+export type Actor = "you" | "clinic" | "insurance";
+
 /** A short "how it works" story on the path. */
 export interface ConceptSummary {
   id: string;
@@ -73,7 +75,18 @@ export interface ConceptSummary {
 }
 
 export interface ConceptStory extends ConceptSummary {
-  cards: { icon: string; say: string; explain: string; say_l1: string | null; explain_l1: string | null }[];
+  cards: {
+    icon: string;
+    say: string;
+    explain: string;
+    say_l1: string | null;
+    explain_l1: string | null;
+    /** Only in the big picture: who sends what to whom */
+    from?: Actor;
+    to?: Actor;
+    token?: string;
+    paper?: string;
+  }[];
   checks: { q: string; options: string[]; answer: string; q_l1: string | null; options_l1: (string | null)[] }[];
   ai_error: string | null;
 }

@@ -15,6 +15,7 @@ import { Icon } from "../components/Icon";
 import { InsuranceCard } from "../components/InsuranceCard";
 import { LoadFailed, Loading } from "../components/Loading";
 import { TopBar } from "../components/TopBar";
+import { VoiceOrb } from "../components/VoiceOrb";
 import { Bi, BiText, useLang } from "../i18n";
 import { checkLine, type Check } from "../match";
 import { sayEnglish, speakParts, stopSpeaking, unlockAudio } from "../speech";
@@ -392,9 +393,11 @@ function YourTurn({ text, l1, hidden, showL1, listenable, onDone }: TurnProps) {
             className={`mic${phase === "listening" ? " is-on" : ""}`}
             onClick={check?.passed ? () => finish({ passed: true }) : listen}
           >
-            <span className="mic-circle" aria-hidden="true">
-              <Icon name={check?.passed ? "forward" : phase === "listening" ? "stop" : "mic"} size={34} />
-            </span>
+            <VoiceOrb listening={phase === "listening"} size={84}>
+              <span className="mic-circle" aria-hidden="true">
+                <Icon name={check?.passed ? "forward" : phase === "listening" ? "stop" : "mic"} size={34} />
+              </span>
+            </VoiceOrb>
             <Bi
               k={
                 check?.passed ? "next" : phase === "listening" ? "tap_to_stop" : check ? "try_again" : "tap_to_speak"

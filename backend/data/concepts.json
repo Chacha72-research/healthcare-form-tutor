@@ -2,83 +2,323 @@
   "about": "Short 'how it works' stories placed on the learning path. 'say' is one short, simple English sentence (about 4th grade). 'explain' is the fuller adult explanation, shown in the learner's language. Facts are general, not advice about any one plan.",
   "concepts": [
     {
+      "id": "big_picture",
+      "paper": "intro",
+      "icon": "star",
+      "title": {
+        "en": "The big picture",
+        "ta": "முழு படம்: இன்சூரன்ஸ் எப்படி நடக்குது",
+        "es": "El panorama completo",
+        "zh-Hans": "整体流程",
+        "vi": "Bức tranh toàn cảnh"
+      },
+      "cards": [
+        {
+          "icon": "card",
+          "from": "you",
+          "to": "insurance",
+          "token": "$",
+          "paper": "card",
+          "say": "You pay your insurance every month.",
+          "explain": "First, you have a health insurance plan. You or your job pay the plan every month. This is called a premium. Your insurance card shows you are a member."
+        },
+        {
+          "icon": "desk",
+          "from": "you",
+          "to": "clinic",
+          "token": "CARD",
+          "paper": "new_patient",
+          "say": "You visit the clinic and show your card.",
+          "explain": "When you go to the doctor, you fill out forms and show your insurance card at the front desk. You may pay a small copay."
+        },
+        {
+          "icon": "form",
+          "from": "clinic",
+          "to": "insurance",
+          "token": "CLAIM",
+          "paper": "eob",
+          "say": "The clinic sends the bill to your insurance.",
+          "explain": "After your visit, the clinic sends the bill to your insurance company. This is called a claim. You do not need to do anything yet."
+        },
+        {
+          "icon": "bill",
+          "from": "insurance",
+          "to": "you",
+          "token": "EOB",
+          "paper": "eob",
+          "say": "Insurance pays its part and sends you an EOB.",
+          "explain": "Your insurance pays its share to the clinic. Then it mails you an Explanation of Benefits, or EOB. It shows what was paid. It is not a bill."
+        },
+        {
+          "icon": "bill",
+          "from": "clinic",
+          "to": "you",
+          "token": "BILL",
+          "paper": "bill",
+          "say": "The clinic sends you a bill for the rest.",
+          "explain": "Last, the clinic may mail you a bill for what is left, like part of your deductible. Check that it matches your EOB. If it is too much at once, ask for a payment plan."
+        }
+      ],
+      "checks": []
+    },
+    {
       "id": "your_rights",
       "paper": "new_patient",
       "icon": "chat",
-      "title": {"en": "Your rights at the clinic", "ta": "கிளினிக்ல உங்க உரிமைகள்", "es": "Tus derechos en la clínica", "zh-Hans": "你在诊所的权利", "vi": "Quyền của bạn ở phòng khám"},
+      "title": {
+        "en": "Your rights at the clinic",
+        "ta": "கிளினிக்ல உங்க உரிமைகள்",
+        "es": "Tus derechos en la clínica",
+        "zh-Hans": "你在诊所的权利",
+        "vi": "Quyền của bạn ở phòng khám"
+      },
       "cards": [
-        {"icon": "chat", "say": "You can ask for a free interpreter.", "explain": "Most clinics and hospitals that get government money, like Medicare or Medi-Cal, must give you an interpreter for free. You do not have to bring family to translate."},
-        {"icon": "form", "say": "You can ask what a word means.", "explain": "If you do not understand a word on a form, ask the front desk. It is okay to say, \"Can you explain this?\""},
-        {"icon": "pencil", "say": "Read before you sign.", "explain": "Your signature means you agree. You can take time to read, or ask for the form in your language, before you sign."},
-        {"icon": "check", "say": "Write N/A if a box is not for you.", "explain": "Some boxes do not apply to you, like secondary insurance if you have only one plan. Write N/A so the clinic knows you did not skip it."}
+        {
+          "icon": "chat",
+          "say": "You can ask for a free interpreter.",
+          "explain": "Most clinics and hospitals that get government money, like Medicare or Medi-Cal, must give you an interpreter for free. You do not have to bring family to translate."
+        },
+        {
+          "icon": "form",
+          "say": "You can ask what a word means.",
+          "explain": "If you do not understand a word on a form, ask the front desk. It is okay to say, \"Can you explain this?\""
+        },
+        {
+          "icon": "pencil",
+          "say": "Read before you sign.",
+          "explain": "Your signature means you agree. You can take time to read, or ask for the form in your language, before you sign."
+        },
+        {
+          "icon": "check",
+          "say": "Write N/A if a box is not for you.",
+          "explain": "Some boxes do not apply to you, like secondary insurance if you have only one plan. Write N/A so the clinic knows you did not skip it."
+        }
       ],
       "checks": [
-        {"q": "Is the interpreter free, or do you pay?", "options": ["free", "you pay"], "answer": "free"},
-        {"q": "Do you read a form before you sign, or sign fast?", "options": ["read before you sign", "sign fast"], "answer": "read before you sign"}
+        {
+          "q": "Is the interpreter free, or do you pay?",
+          "options": [
+            "free",
+            "you pay"
+          ],
+          "answer": "free"
+        },
+        {
+          "q": "Do you read a form before you sign, or sign fast?",
+          "options": [
+            "read before you sign",
+            "sign fast"
+          ],
+          "answer": "read before you sign"
+        }
       ]
     },
     {
       "id": "how_insurance_works",
       "paper": "card",
       "icon": "card",
-      "title": {"en": "How health insurance works", "ta": "ஹெல்த் இன்சூரன்ஸ் எப்படி வேலை செய்யுது", "es": "Cómo funciona el seguro médico", "zh-Hans": "医疗保险是怎么运作的", "vi": "Bảo hiểm y tế hoạt động thế nào"},
+      "title": {
+        "en": "How health insurance works",
+        "ta": "ஹெல்த் இன்சூரன்ஸ் எப்படி வேலை செய்யுது",
+        "es": "Cómo funciona el seguro médico",
+        "zh-Hans": "医疗保险是怎么运作的",
+        "vi": "Bảo hiểm y tế hoạt động thế nào"
+      },
       "cards": [
-        {"icon": "card", "say": "Insurance helps you pay for the doctor.", "explain": "Health insurance is a plan that helps pay for your health care. In return, the plan pays part of your doctor visits, hospital stays, and medicine."},
-        {"icon": "bill", "say": "You pay a premium every month.", "explain": "The premium is what the plan costs, like a monthly fee. You pay it every month, even if you do not see a doctor. Sometimes your job takes it out of your paycheck."},
-        {"icon": "desk", "say": "At the doctor, you pay a small part.", "explain": "When you get care, you usually pay part of the cost, like a copay. Your plan pays the rest straight to the doctor."},
-        {"icon": "card", "say": "Bring your card to every visit.", "explain": "Your insurance card has the numbers the clinic needs to send the bill to your plan. Show it at the front desk and at the pharmacy."}
+        {
+          "icon": "card",
+          "say": "Insurance helps you pay for the doctor.",
+          "explain": "Health insurance is a plan that helps pay for your health care. In return, the plan pays part of your doctor visits, hospital stays, and medicine."
+        },
+        {
+          "icon": "bill",
+          "say": "You pay a premium every month.",
+          "explain": "The premium is what the plan costs, like a monthly fee. You pay it every month, even if you do not see a doctor. Sometimes your job takes it out of your paycheck."
+        },
+        {
+          "icon": "desk",
+          "say": "At the doctor, you pay a small part.",
+          "explain": "When you get care, you usually pay part of the cost, like a copay. Your plan pays the rest straight to the doctor."
+        },
+        {
+          "icon": "card",
+          "say": "Bring your card to every visit.",
+          "explain": "Your insurance card has the numbers the clinic needs to send the bill to your plan. Show it at the front desk and at the pharmacy."
+        }
       ],
       "checks": [
-        {"q": "Do you pay the premium every month, or only when you see a doctor?", "options": ["every month", "only when you see a doctor"], "answer": "every month"},
-        {"q": "At the doctor, does the plan pay part, or nothing?", "options": ["part", "nothing"], "answer": "part"}
+        {
+          "q": "Do you pay the premium every month, or only when you see a doctor?",
+          "options": [
+            "every month",
+            "only when you see a doctor"
+          ],
+          "answer": "every month"
+        },
+        {
+          "q": "At the doctor, does the plan pay part, or nothing?",
+          "options": [
+            "part",
+            "nothing"
+          ],
+          "answer": "part"
+        }
       ]
     },
     {
       "id": "who_pays_what",
       "paper": "eob",
       "icon": "bill",
-      "title": {"en": "Who pays what", "ta": "யார் எவ்வளவு கட்டணும்", "es": "Quién paga qué", "zh-Hans": "谁付多少钱", "vi": "Ai trả bao nhiêu"},
+      "title": {
+        "en": "Who pays what",
+        "ta": "யார் எவ்வளவு கட்டணும்",
+        "es": "Quién paga qué",
+        "zh-Hans": "谁付多少钱",
+        "vi": "Ai trả bao nhiêu"
+      },
       "cards": [
-        {"icon": "bill", "say": "First, you pay up to your deductible.", "explain": "The deductible is the amount you pay each year before your plan starts paying for many services. Sam's deductible is $1,000. Some care, like checkups, is free even before that."},
-        {"icon": "card", "say": "Then you and the plan share the cost.", "explain": "After you reach the deductible, you pay a copay (a set amount, like $25) or coinsurance (a percent, like 20%). The plan pays the rest."},
-        {"icon": "star", "say": "There is a top limit each year.", "explain": "The out-of-pocket maximum is the most you pay in one year for covered care. After you reach it, the plan pays all of your covered care for the rest of the year."},
-        {"icon": "form", "say": "The EOB is not a bill.", "explain": "After a visit, your plan mails an Explanation of Benefits. It shows what the doctor charged, what the plan paid, and what you may owe. Wait for the bill from the clinic before you pay."}
+        {
+          "icon": "bill",
+          "say": "First, you pay up to your deductible.",
+          "explain": "The deductible is the amount you pay each year before your plan starts paying for many services. Sam's deductible is $1,000. Some care, like checkups, is free even before that."
+        },
+        {
+          "icon": "card",
+          "say": "Then you and the plan share the cost.",
+          "explain": "After you reach the deductible, you pay a copay (a set amount, like $25) or coinsurance (a percent, like 20%). The plan pays the rest."
+        },
+        {
+          "icon": "star",
+          "say": "There is a top limit each year.",
+          "explain": "The out-of-pocket maximum is the most you pay in one year for covered care. After you reach it, the plan pays all of your covered care for the rest of the year."
+        },
+        {
+          "icon": "form",
+          "say": "The EOB is not a bill.",
+          "explain": "After a visit, your plan mails an Explanation of Benefits. It shows what the doctor charged, what the plan paid, and what you may owe. Wait for the bill from the clinic before you pay."
+        }
       ],
       "checks": [
-        {"q": "Do you pay the deductible before the plan pays, or after?", "options": ["before", "after"], "answer": "before"},
-        {"q": "Is the EOB a bill, or a letter that explains costs?", "options": ["a letter that explains costs", "a bill"], "answer": "a letter that explains costs"}
+        {
+          "q": "Do you pay the deductible before the plan pays, or after?",
+          "options": [
+            "before",
+            "after"
+          ],
+          "answer": "before"
+        },
+        {
+          "q": "Is the EOB a bill, or a letter that explains costs?",
+          "options": [
+            "a letter that explains costs",
+            "a bill"
+          ],
+          "answer": "a letter that explains costs"
+        }
       ]
     },
     {
       "id": "paying_bills",
       "paper": "bill",
       "icon": "phone",
-      "title": {"en": "What to do with a medical bill", "ta": "மருத்துவ பில் வந்தா என்ன பண்ணணும்", "es": "Qué hacer con una factura médica", "zh-Hans": "收到医疗账单怎么办", "vi": "Làm gì khi nhận hóa đơn y tế"},
+      "title": {
+        "en": "What to do with a medical bill",
+        "ta": "மருத்துவ பில் வந்தா என்ன பண்ணணும்",
+        "es": "Qué hacer con una factura médica",
+        "zh-Hans": "收到医疗账单怎么办",
+        "vi": "Làm gì khi nhận hóa đơn y tế"
+      },
       "cards": [
-        {"icon": "form", "say": "Check the bill with your EOB.", "explain": "Look at the date of service and the amount you owe. They should match your Explanation of Benefits. If they do not match, call the clinic's billing office."},
-        {"icon": "phone", "say": "If something looks wrong, call and ask.", "explain": "Mistakes happen. You can ask for an itemized bill, which lists every charge. It is your right to ask about any charge."},
-        {"icon": "bill", "say": "Can't pay it all? Ask for a payment plan.", "explain": "Many clinics let you pay a little each month. Some also have financial help if your income is low. Ask before the due date."},
-        {"icon": "check", "say": "Do not ignore a bill.", "explain": "If you do not pay or call, the bill can be sent to collections, which can hurt your credit. One phone call to make a plan protects you."}
+        {
+          "icon": "form",
+          "say": "Check the bill with your EOB.",
+          "explain": "Look at the date of service and the amount you owe. They should match your Explanation of Benefits. If they do not match, call the clinic's billing office."
+        },
+        {
+          "icon": "phone",
+          "say": "If something looks wrong, call and ask.",
+          "explain": "Mistakes happen. You can ask for an itemized bill, which lists every charge. It is your right to ask about any charge."
+        },
+        {
+          "icon": "bill",
+          "say": "Can't pay it all? Ask for a payment plan.",
+          "explain": "Many clinics let you pay a little each month. Some also have financial help if your income is low. Ask before the due date."
+        },
+        {
+          "icon": "check",
+          "say": "Do not ignore a bill.",
+          "explain": "If you do not pay or call, the bill can be sent to collections, which can hurt your credit. One phone call to make a plan protects you."
+        }
       ],
       "checks": [
-        {"q": "If you can't pay it all, do you ask for a payment plan or ignore the bill?", "options": ["ask for a payment plan", "ignore the bill"], "answer": "ask for a payment plan"},
-        {"q": "Should the bill match your EOB, or can it be any amount?", "options": ["match your EOB", "any amount"], "answer": "match your EOB"}
+        {
+          "q": "If you can't pay it all, do you ask for a payment plan or ignore the bill?",
+          "options": [
+            "ask for a payment plan",
+            "ignore the bill"
+          ],
+          "answer": "ask for a payment plan"
+        },
+        {
+          "q": "Should the bill match your EOB, or can it be any amount?",
+          "options": [
+            "match your EOB",
+            "any amount"
+          ],
+          "answer": "match your EOB"
+        }
       ]
     },
     {
       "id": "where_to_go",
       "paper": "sbc",
       "icon": "cross",
-      "title": {"en": "Where to go for care", "ta": "சிகிச்சைக்கு எங்க போகணும்", "es": "Adónde ir para recibir atención", "zh-Hans": "看病该去哪里", "vi": "Nên đi khám ở đâu"},
+      "title": {
+        "en": "Where to go for care",
+        "ta": "சிகிச்சைக்கு எங்க போகணும்",
+        "es": "Adónde ir para recibir atención",
+        "zh-Hans": "看病该去哪里",
+        "vi": "Nên đi khám ở đâu"
+      },
       "cards": [
-        {"icon": "desk", "say": "For checkups and small problems, see your PCP.", "explain": "Your primary care provider is your main doctor. Call them first for checkups, colds, and refills. It usually costs the least."},
-        {"icon": "phone", "say": "If it can't wait, go to urgent care.", "explain": "Urgent care is for problems that need help today but are not life-threatening, like a bad cut or a high fever. Sam pays $75 there."},
-        {"icon": "cross", "say": "For an emergency, go to the ER or call 911.", "explain": "The emergency room is for serious problems like chest pain, trouble breathing, or a bad injury. It costs the most (Sam pays $250), but your health comes first."},
-        {"icon": "card", "say": "Stay in your network to pay less.", "explain": "Doctors in your plan's network have a deal with your plan, so you pay less. Before a visit, ask: \"Do you take my insurance?\""}
+        {
+          "icon": "desk",
+          "say": "For checkups and small problems, see your PCP.",
+          "explain": "Your primary care provider is your main doctor. Call them first for checkups, colds, and refills. It usually costs the least."
+        },
+        {
+          "icon": "phone",
+          "say": "If it can't wait, go to urgent care.",
+          "explain": "Urgent care is for problems that need help today but are not life-threatening, like a bad cut or a high fever. Sam pays $75 there."
+        },
+        {
+          "icon": "cross",
+          "say": "For an emergency, go to the ER or call 911.",
+          "explain": "The emergency room is for serious problems like chest pain, trouble breathing, or a bad injury. It costs the most (Sam pays $250), but your health comes first."
+        },
+        {
+          "icon": "card",
+          "say": "Stay in your network to pay less.",
+          "explain": "Doctors in your plan's network have a deal with your plan, so you pay less. Before a visit, ask: \"Do you take my insurance?\""
+        }
       ],
       "checks": [
-        {"q": "For a cold, do you go to your PCP or the ER?", "options": ["your PCP", "the ER"], "answer": "your PCP"},
-        {"q": "For chest pain, do you go to the ER or wait for a checkup?", "options": ["the ER", "wait for a checkup"], "answer": "the ER"}
+        {
+          "q": "For a cold, do you go to your PCP or the ER?",
+          "options": [
+            "your PCP",
+            "the ER"
+          ],
+          "answer": "your PCP"
+        },
+        {
+          "q": "For chest pain, do you go to the ER or wait for a checkup?",
+          "options": [
+            "the ER",
+            "wait for a checkup"
+          ],
+          "answer": "the ER"
+        }
       ]
     }
   ]

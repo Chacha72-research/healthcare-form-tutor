@@ -13,6 +13,9 @@ import { unlockAudio } from "../speech";
 import { getDone } from "../storage";
 import type { ConceptSummary, Paper } from "../types";
 
+// Which step of the big picture each paper belongs to.
+const STEP_OF: Record<string, string> = { card: "1", new_patient: "2", eob: "3 + 4", bill: "5" };
+
 // Sideways steps for the winding path, in node widths.
 const WIGGLE = [0, 0.9, 1.3, 0.9, 0, -0.9, -1.3, -0.9];
 
@@ -60,6 +63,25 @@ export function PathScreen({ papers, concepts, go }: { papers: Paper[]; concepts
       <TopBar go={go} showHome={false} />
       <main className="path-page">
         <Clip k="clip_hello" size={80} />
+        <button type="button" className="bigpic-card" onClick={() => go({ name: "bigpicture" })}>
+          <span className="bigpic-card-flow" aria-hidden="true">
+            <span className="bp-dot">
+              <Icon name="home" size={22} />
+            </span>
+            <span className="bp-line" />
+            <span className="bp-dot">
+              <Icon name="desk" size={22} />
+            </span>
+            <span className="bp-line" />
+            <span className="bp-dot">
+              <Icon name="card" size={22} />
+            </span>
+          </span>
+          <span className="bigpic-card-text">
+            <BiText native={t("big_picture")} english={en("big_picture")} />
+          </span>
+          {done.has("big_picture") ? <Icon name="check" size={28} /> : <Icon name="forward" size={28} />}
+        </button>
         {units.map((u) => (
           <section key={u.id} className={`unit unit-${u.color}`}>
             <header className="unit-banner">
@@ -73,6 +95,7 @@ export function PathScreen({ papers, concepts, go }: { papers: Paper[]; concepts
                   <BiText native={t(u.titleKey!)} english={en(u.titleKey!)} />
                 )}
                 {u.paper && <span className="unit-about">{pick(u.paper.about)}</span>}
+                {u.paper && STEP_OF[u.paper.id] && <span className="unit-step">{t("step_tag", { n: STEP_OF[u.paper.id] })}</span>}
               </span>
             </header>
             <ol className="path">

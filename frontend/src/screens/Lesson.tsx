@@ -13,6 +13,7 @@ import { Icon } from "../components/Icon";
 import { InsuranceCard } from "../components/InsuranceCard";
 import { ListenButton } from "../components/ListenButton";
 import { LoadFailed, Loading } from "../components/Loading";
+import { VoiceOrb } from "../components/VoiceOrb";
 import { SayLine, WordHero } from "../components/WordHero";
 import { Bi, useLang } from "../i18n";
 import { checkLine } from "../match";
@@ -336,9 +337,11 @@ function Say({ w, onPass }: { w: LessonWord; onPass: () => void }) {
       <WordHero term={w.term} say={w.say} />
       {listenable ? (
         <button type="button" className={`mic mic-big${phase === "listening" ? " is-on" : ""}`} onClick={mic} disabled={passed}>
-          <span className="mic-circle" aria-hidden="true">
-            <Icon name={phase === "listening" ? "stop" : "mic"} size={44} />
-          </span>
+          <VoiceOrb listening={phase === "listening"} size={112}>
+            <span className="mic-circle" aria-hidden="true">
+              <Icon name={phase === "listening" ? "stop" : "mic"} size={44} />
+            </span>
+          </VoiceOrb>
           <Bi k={phase === "listening" ? "tap_to_stop" : phase === "heard" && !passed ? "try_again" : "tap_to_speak"} />
         </button>
       ) : (
