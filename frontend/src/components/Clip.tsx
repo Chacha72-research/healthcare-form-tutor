@@ -3,8 +3,7 @@
 // hear it in your language; tap the English to hear the English.
 
 import { useLang } from "../i18n";
-import { sayEnglish, speak, unlockAudio } from "../speech";
-import { Icon } from "./Icon";
+import { sayEnglish } from "../speech";
 
 export function ClipFace({ size = 64, mood = "happy" }: { size?: number; mood?: "happy" | "cheer" }) {
   return (
@@ -56,17 +55,6 @@ export function Clip({ k, vars, mood = "happy", size = 72 }: Props) {
             {native}
           </p>
         )}
-        <button
-          type="button"
-          className="clip-say"
-          aria-label={t("listen")}
-          onClick={() => {
-            unlockAudio();
-            void speak({ text: native, lang: "l1", voice: "tutor", style: "tutor" });
-          }}
-        >
-          <Icon name="speaker" size={22} />
-        </button>
       </div>
     </div>
   );

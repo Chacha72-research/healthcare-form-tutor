@@ -12,7 +12,7 @@ import { TopBar } from "../components/TopBar";
 import { WordCard, type L1 } from "../components/WordCard";
 import { Bi, BiText, useLang } from "../i18n";
 import { paperTerms } from "../path";
-import { prefetch, stopSpeaking } from "../speech";
+import { stopSpeaking } from "../speech";
 import { markDone } from "../storage";
 import type { FormReading, GlossaryTerm, Paper } from "../types";
 
@@ -82,8 +82,6 @@ export function ExploreScreen({
     setSelected(id);
     setSeen((s) => (s.includes(id) ? s : [...s, id]));
     markDone(nodeId);
-    const meaning = l1[id]?.meaning;
-    if (meaning) prefetch([{ text: meaning, lang: "l1", voice: "tutor", style: "tutor" }]);
   }
 
   function nextId(): string {

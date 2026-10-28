@@ -16,6 +16,9 @@ export interface SpeechPart {
   voice?: "tutor" | "staff" | "learner";
   /** "model" = slow, clear English for repeating */
   style?: "tutor" | "model";
+  /** Use Gemini's voice for this line. Off by default: Gemini voice has tight
+   *  limits, so only a handful of lines (lesson 1's story) ask for it. */
+  server?: boolean;
 }
 
 const FETCH_TIMEOUT_MS = 12000;
@@ -142,7 +145,7 @@ function fetchAudio(part: SpeechPart): Promise<string | null> {
 /** Start loading audio for the next few lines, so there's no pause between them. */
 export function prefetch(parts: SpeechPart[]) {
   if (!serverAvailable()) return;
-  const l1 = parts.filter((x) => x.lang === "l1" && x.text.trim());
+  const l1 = parts.filter((x) => x.lang === "l1" && x.server && x.text.trim());
   for (const p of l1.slice(0, MAX_IN_FLIGHT)) void fetchAudio(p);
 }
 
@@ -218,7 +221,7 @@ export async function speakParts(parts: SpeechPart[], force = false): Promise<vo
   for (const part of parts) {
     if (gen !== generation) return;
     if (!part.text.trim()) continue;
-    const url = part.lang === "l1" && serverAvailable() ? await fetchAudio(part) : null;
+    const url = part.lang === "l1" && part.server && serverAvailable() ? await fetchAudio(part) : null;
     if (gen !== generation) return;
     if (url) await playUrl(url, gen);
     else await browserSpeak(part, gen);

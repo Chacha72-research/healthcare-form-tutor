@@ -2,20 +2,15 @@
 
 Run it from the backend folder (with .venv active):
 
-    python scripts/warm_demo.py              # Tamil, using the sample form
+    python scripts/warm_demo.py              # Tamil
     python scripts/warm_demo.py --lang es    # another language
 
-It writes the learner-language text for every word on the sample form and the
-pretend insurance card (what it means, an example, what to write, and the
-check questions), records the "Listen" audio for each of those and for Clip's
-instructions, and translates all six speaking-practice conversations.
-Everything is saved, so the demo and every test run after it load instantly
-and cost nothing. At the end it prints roughly what this run cost.
-
-English audio in the app uses Chrome's built-in voice, so it needs no warm-up.
-The clips below must match what the app plays: word meanings and tips
-(frontend/src/components/WordCard.tsx and screens/Lesson.tsx) and Clip's lines
-(frontend/src/components/Clip.tsx).
+It writes the learner-language text for every word on the practice papers and
+in the lessons, the "how it works" stories, the check questions, and all six
+conversations. It also records Gemini voice for lesson 1's four story cards,
+the only place the app uses Gemini voice (its limits are about 10 clips a
+minute and 100 a day). Everything is saved, so the demo loads instantly and
+costs nothing after this. English audio uses Chrome's built-in voice.
 """
 
 from __future__ import annotations
@@ -40,6 +35,9 @@ from app.speech import GeminiVoice, audio_cost, wav_seconds  # noqa: E402
 
 # (text, voice role, style) for one clip
 Clip = tuple[str, str, str]
+
+# The one story that plays Gemini voice (lesson 1). Keep in sync with frontend/src/screens/Unit.tsx.
+VOICE_STORY = "how_insurance_works"
 
 # The key words of the 5 lessons. Keep in sync with LESSONS in frontend/src/path.ts.
 LESSON_WORDS = [
@@ -131,11 +129,14 @@ async def main() -> None:
     for c in load_concepts():
         story = await concept_lesson(lessons, c["id"], lang)
         print(f"  Story '{c['title']['en']}':", "busy, run again later" if story["ai_error"] else "ready")
-        story_clips += [(card["explain_l1"], "tutor", "tutor") for card in story["cards"] if card["explain_l1"]]
+        if c["id"] == VOICE_STORY:
+            story_clips += [(card["explain_l1"], "tutor", "tutor") for card in story["cards"] if card["explain_l1"]]
 
     made, failed, seconds = 0, 0, 0.0
     if not args.no_voice:
-        clips = form_clips(data["terms"]) + clip_line_clips({**content.english_ui, **lang.ui}) + story_clips
+        # Gemini voice allows only ~10 clips a minute and ~100 a day, so the app
+        # uses it for just lesson 1's story cards (4 clips). Everything else is text.
+        clips = story_clips
         made, failed, seconds = await make_all(voice, clips, "Voice clips")
 
     for sc in content.scenarios:

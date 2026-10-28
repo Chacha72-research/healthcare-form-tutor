@@ -1,19 +1,27 @@
 // The learner's language, folded away behind a small button so the screen
-// stays simple and English-first. Tapping it shows the text and reads it aloud.
+// stays simple and English-first. With voice on (only lesson 1, to stay inside
+// Gemini's voice limits), opening it also reads it aloud.
 
 import { useState } from "react";
 import { useLang } from "../i18n";
 import { speak, stopSpeaking, unlockAudio } from "../speech";
 import { Icon } from "./Icon";
 
-export function L1Reveal({ text, startOpen = false }: { text: string | null | undefined; startOpen?: boolean }) {
+interface Props {
+  text: string | null | undefined;
+  startOpen?: boolean;
+  /** Read it aloud with Gemini's voice */
+  voice?: boolean;
+}
+
+export function L1Reveal({ text, startOpen = false, voice = false }: Props) {
   const { language } = useLang();
   const [open, setOpen] = useState(startOpen);
   if (!text) return null;
 
   const play = () => {
     unlockAudio();
-    void speak({ text, lang: "l1", voice: "tutor", style: "tutor" });
+    void speak({ text, lang: "l1", voice: "tutor", style: "tutor", server: true });
   };
 
   return (
@@ -24,7 +32,7 @@ export function L1Reveal({ text, startOpen = false }: { text: string | null | un
         aria-expanded={open}
         onClick={() => {
           if (open) stopSpeaking();
-          else play();
+          else if (voice) play();
           setOpen(!open);
         }}
       >
@@ -34,9 +42,11 @@ export function L1Reveal({ text, startOpen = false }: { text: string | null | un
       {open && (
         <div className="l1r-body">
           <p lang={language.code}>{text}</p>
-          <button type="button" className="l1r-say" onClick={play} aria-label="Listen">
-            <Icon name="speaker" size={18} />
-          </button>
+          {voice && (
+            <button type="button" className="l1r-say" onClick={play} aria-label="Listen">
+              <Icon name="speaker" size={18} />
+            </button>
+          )}
         </div>
       )}
     </div>

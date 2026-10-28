@@ -92,7 +92,8 @@ export function UnitScreen({ unit, index, paper, go }: Props) {
               <Bi k="learn" />
               {isDone("learn") && <Icon name="check" size={22} />}
             </h2>
-            <StoryStepper story={story} onEnd={() => finish("learn")} />
+            {/* Gemini voice only in lesson 1, to stay well inside its daily limit. */}
+            <StoryStepper story={story} voice={index === 0} onEnd={() => finish("learn")} />
 
             <h3 className="panel-sub">
               <Bi k="key_words" />
@@ -149,7 +150,7 @@ export function UnitScreen({ unit, index, paper, go }: Props) {
   );
 }
 
-function StoryStepper({ story, onEnd }: { story: ConceptStory; onEnd: () => void }) {
+function StoryStepper({ story, voice, onEnd }: { story: ConceptStory; voice: boolean; onEnd: () => void }) {
   const [at, setAt] = useState(0);
   const card = story.cards[at];
   const last = at === story.cards.length - 1;
@@ -166,7 +167,7 @@ function StoryStepper({ story, onEnd }: { story: ConceptStory; onEnd: () => void
           <Icon name={card.icon} size={34} />
         </span>
         <SayLine text={card.say} className="sayline-big" />
-        {card.explain_l1 ? <L1Reveal text={card.explain_l1} /> : <p className="helper-line">{card.explain}</p>}
+        {card.explain_l1 ? <L1Reveal text={card.explain_l1} voice={voice} /> : <p className="helper-line">{card.explain}</p>}
       </div>
       <div className="stepper-nav">
         <button
