@@ -164,7 +164,17 @@
     "bp_done": "Now you know the big picture!",
     "start_learning": "Start learning",
     "clip_bigpicture": "This is how health insurance works. Watch the arrows.",
-    "step_tag": "Step {n}"
+    "step_tag": "Step {n}",
+    "learn": "Learn",
+    "practice": "Practice",
+    "talk_tab": "Talk",
+    "quiz_tab": "Quiz",
+    "key_words": "Key words",
+    "see_real": "See it on a real form",
+    "lesson_n": "Lesson {n}",
+    "final_quiz": "Final quiz",
+    "quiz_done": "You got {n} of {total}!",
+    "back_to_lesson": "Back to the lesson"
   },
   "languages": [
     {
@@ -337,7 +347,17 @@
         "bp_done": "இப்போ உங்களுக்கு முழு படமும் தெரியும்!",
         "start_learning": "கத்துக்க ஆரம்பிங்க",
         "clip_bigpicture": "ஹெல்த் இன்சூரன்ஸ் இப்படித்தான் வேலை செய்யுது. அம்புக்குறிகளைப் பாருங்க.",
-        "step_tag": "படி {n}"
+        "step_tag": "படி {n}",
+        "learn": "கத்துக்கோங்க",
+        "practice": "பயிற்சி",
+        "talk_tab": "பேசுங்க",
+        "quiz_tab": "க்விஸ்",
+        "key_words": "முக்கிய வார்த்தைகள்",
+        "see_real": "நிஜ ஃபார்ம்ல பாருங்க",
+        "lesson_n": "பாடம் {n}",
+        "final_quiz": "கடைசி க்விஸ்",
+        "quiz_done": "{total}-ல {n} சரி!",
+        "back_to_lesson": "பாடத்துக்குத் திரும்பு"
       }
     },
     {
@@ -510,7 +530,17 @@
         "bp_done": "¡Ahora conoces el panorama completo!",
         "start_learning": "Empezar a aprender",
         "clip_bigpicture": "Así funciona el seguro médico. Mira las flechas.",
-        "step_tag": "Paso {n}"
+        "step_tag": "Paso {n}",
+        "learn": "Aprende",
+        "practice": "Practica",
+        "talk_tab": "Habla",
+        "quiz_tab": "Prueba",
+        "key_words": "Palabras clave",
+        "see_real": "Míralo en un formulario real",
+        "lesson_n": "Lección {n}",
+        "final_quiz": "Prueba final",
+        "quiz_done": "¡Acertaste {n} de {total}!",
+        "back_to_lesson": "Volver a la lección"
       }
     },
     {
@@ -684,7 +714,17 @@
         "bp_done": "现在你知道整个流程了！",
         "start_learning": "开始学习",
         "clip_bigpicture": "医疗保险就是这样运作的。看箭头。",
-        "step_tag": "第 {n} 步"
+        "step_tag": "第 {n} 步",
+        "learn": "学习",
+        "practice": "练习",
+        "talk_tab": "对话",
+        "quiz_tab": "测验",
+        "key_words": "重点词语",
+        "see_real": "在真实表格上看看",
+        "lesson_n": "第 {n} 课",
+        "final_quiz": "最后测验",
+        "quiz_done": "{total} 题答对了 {n} 题！",
+        "back_to_lesson": "回到课程"
       }
     },
     {
@@ -857,7 +897,17 @@
         "bp_done": "Giờ bạn đã biết toàn cảnh!",
         "start_learning": "Bắt đầu học",
         "clip_bigpicture": "Bảo hiểm y tế hoạt động như thế này. Hãy xem các mũi tên.",
-        "step_tag": "Bước {n}"
+        "step_tag": "Bước {n}",
+        "learn": "Học",
+        "practice": "Luyện tập",
+        "talk_tab": "Nói",
+        "quiz_tab": "Kiểm tra",
+        "key_words": "Từ quan trọng",
+        "see_real": "Xem trên giấy tờ thật",
+        "lesson_n": "Bài {n}",
+        "final_quiz": "Bài kiểm tra cuối",
+        "quiz_done": "Bạn đúng {n}/{total}!",
+        "back_to_lesson": "Quay lại bài học"
       }
     }
   ]

@@ -11,13 +11,16 @@ import { QuizScreen } from "./screens/Quiz";
 import { SpeakScreen } from "./screens/Speak";
 import { StoryScreen } from "./screens/Story";
 import { BigPictureScreen, seenBigPicture } from "./screens/BigPicture";
+import { UnitScreen } from "./screens/Unit";
+import { LESSONS } from "./path";
 
 // "home" is the learning path. Everything starts and ends there.
 export type Screen =
   | { name: "language" }
   | { name: "home" }
   | { name: "bigpicture" }
-  | { name: "explore"; paper: string; nodeId: string }
+  | { name: "unit"; id: string }
+  | { name: "explore"; paper: string; nodeId: string; back?: Screen }
   | { name: "story"; id: string; paper: string; nodeId: string }
   | { name: "lesson"; paper: string; words: string[]; nodeId: string }
   | { name: "quiz"; termIds: string[]; nodeId?: string; big?: boolean }
@@ -114,11 +117,17 @@ export default function App() {
 
   return (
     <LangProvider value={makeLangValue(config, language)}>
-      {screen.name === "home" && <PathScreen papers={papers} concepts={concepts} go={go} />}
+      {screen.name === "home" && <PathScreen concepts={concepts} go={go} />}
+      {screen.name === "unit" &&
+        (() => {
+          const i = LESSONS.findIndex((l) => l.id === screen.id);
+          const unit = LESSONS[i];
+          return <UnitScreen key={unit.id} unit={unit} index={i} paper={paper(unit.paper)} go={go} />;
+        })()}
       {screen.name === "bigpicture" && <BigPictureScreen go={go} />}
       {screen.name === "story" && <StoryScreen key={screen.id} id={screen.id} nodeId={screen.nodeId} go={go} />}
       {screen.name === "explore" && (
-        <ExploreScreen key={screen.paper} paper={paper(screen.paper)} nodeId={screen.nodeId} go={go} />
+        <ExploreScreen key={screen.paper} paper={paper(screen.paper)} nodeId={screen.nodeId} back={screen.back} go={go} />
       )}
       {screen.name === "lesson" && (
         <LessonScreen key={screen.nodeId} paper={paper(screen.paper)} words={screen.words} nodeId={screen.nodeId} go={go} />

@@ -11,7 +11,7 @@ import { canListen, listenOnce, type Listening } from "../audio/listen";
 import { Clip, ClipFace } from "../components/Clip";
 import { Icon } from "../components/Icon";
 import { InsuranceCard } from "../components/InsuranceCard";
-import { ListenButton } from "../components/ListenButton";
+import { L1Reveal } from "../components/L1Reveal";
 import { LoadFailed, Loading } from "../components/Loading";
 import { VoiceOrb } from "../components/VoiceOrb";
 import { SayLine, WordHero } from "../components/WordHero";
@@ -272,23 +272,11 @@ function LessonRun({
 /* ---------- The tasks ---------- */
 
 function Meet({ w }: { w: LessonWord }) {
-  const { language, t } = useLang();
   return (
     <div className="task">
       <WordHero term={w.term} say={w.say} autoSay />
       <SayLine text={w.definition} className="sayline-big" />
-      {w.l1.meaning && (
-        <div className="helper">
-          <p className="helper-big" lang={language.code}>
-            {w.l1.meaning}
-          </p>
-          <ListenButton
-            parts={[{ text: w.l1.meaning, lang: "l1", voice: "tutor", style: "tutor" }]}
-            label={t("listen")}
-            size="sm"
-          />
-        </div>
-      )}
+      <L1Reveal text={w.l1.meaning} />
     </div>
   );
 }

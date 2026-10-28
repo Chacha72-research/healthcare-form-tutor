@@ -16,7 +16,17 @@ import { prefetch, stopSpeaking } from "../speech";
 import { markDone } from "../storage";
 import type { FormReading, GlossaryTerm, Paper } from "../types";
 
-export function ExploreScreen({ paper, nodeId, go }: { paper: Paper; nodeId: string; go: (s: Screen) => void }) {
+export function ExploreScreen({
+  paper,
+  nodeId,
+  back = { name: "home" },
+  go,
+}: {
+  paper: Paper;
+  nodeId: string;
+  back?: Screen;
+  go: (s: Screen) => void;
+}) {
   const { language, pick } = useLang();
   const [glossary, setGlossary] = useState<Record<string, GlossaryTerm> | null>(null);
   const [l1, setL1] = useState<Record<string, L1>>({});
@@ -132,9 +142,9 @@ export function ExploreScreen({ paper, nodeId, go }: { paper: Paper; nodeId: str
           )}
 
           <div className="actions">
-            <button type="button" className="btn btn-primary btn-big" onClick={() => go({ name: "home" })}>
-              <Bi k="continue" />
-              <Icon name="forward" />
+            <button type="button" className="btn btn-primary btn-big" onClick={() => go(back)}>
+              <Icon name="back" />
+              <Bi k={back.name === "unit" ? "back_to_lesson" : "continue"} />
             </button>
           </div>
         </main>

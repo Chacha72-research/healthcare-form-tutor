@@ -4126,3 +4126,448 @@ mark {
     gap: 18px;
   }
 }
+
+/* ======================================================================
+   English first: Clip's English line is the big one now.
+   ====================================================================== */
+
+button.clip-native {
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: start;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+p.clip-en {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.bi-en {
+  opacity: 0.75;
+}
+
+/* The learner's language, one tap away */
+.l1r {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.l1r-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 4px 14px 4px 10px;
+  border: 1.5px solid var(--rule);
+  border-radius: 999px;
+  background: var(--sheet);
+  color: var(--scrubs-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.l1r.is-open .l1r-btn {
+  border-color: var(--scrubs);
+  background: var(--scrubs-tint);
+}
+
+.l1r-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding-left: 12px;
+  border-left: 3px solid var(--scrubs-tint);
+}
+
+.l1r-body p {
+  flex: 1;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.l1r-say {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--scrubs-tint);
+  color: var(--scrubs-dark);
+}
+
+/* ======================================================================
+   The short path
+   ====================================================================== */
+
+.path-short {
+  gap: 30px;
+  padding-top: 18px;
+}
+
+.path-short .path-step {
+  transform: translateX(calc(var(--x, 0) * 60px));
+}
+
+.path-short .node {
+  width: 92px;
+  height: 86px;
+}
+
+.path-short .node-label {
+  max-width: 16rem;
+}
+
+.path-short .node-label .bi-native {
+  font-size: 1.02rem;
+  font-weight: 800;
+}
+
+.node-parts {
+  display: flex;
+  gap: 5px;
+}
+
+.node-parts span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--rule);
+}
+
+.node-parts .is-done {
+  background: var(--go);
+}
+
+.bigpic-card.is-next {
+  border-color: #9fd0ac;
+  box-shadow: 0 5px 0 #9fd0ac;
+  animation: nudge 1.6s ease-in-out infinite;
+}
+
+/* ======================================================================
+   One lesson, one page: Learn beside Practice
+   ====================================================================== */
+
+.unit-page {
+  width: 100%;
+  max-width: 78rem;
+  margin: 0 auto;
+  padding: 18px 16px 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.unit-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: var(--u);
+  color: #fff;
+  box-shadow: 0 5px 0 var(--u-dark);
+}
+
+.unit-hero-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.unit-hero-kicker {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+
+.unit-hero h1 .bi-native {
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.unit-cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px;
+  border: 2px solid var(--rule);
+  border-radius: 20px;
+  background: var(--sheet);
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--u-dark);
+}
+
+.panel-title .icon:last-child:not(:first-child) {
+  margin-left: auto;
+  color: var(--go);
+}
+
+.panel-title .bi {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.panel-sub {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.panel-sub .bi,
+.panel-title .bi {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+}
+
+/* The story, one card at a time */
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stepper-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 150px;
+  animation: rise 0.25s ease-out both;
+}
+
+.stepper-icon {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: var(--marker);
+  box-shadow: 0 4px 0 #e2c200;
+}
+
+.stepper-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon-btn:disabled {
+  opacity: 0.35;
+}
+
+.icon-btn-go:not(:disabled) {
+  border-color: var(--go);
+  background: var(--go);
+  color: #fff;
+  box-shadow: 0 3px 0 var(--go-dark);
+}
+
+/* Key words, tap to open */
+.kw-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kw {
+  border: 1.5px solid var(--rule);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.kw-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 14px;
+  border: 0;
+  background: none;
+  text-align: start;
+}
+
+.kw-head .icon {
+  color: var(--ink-soft);
+  transition: transform 0.2s;
+}
+
+.kw.is-open .kw-head .icon {
+  transform: rotate(90deg);
+}
+
+.kw-word {
+  font-size: 1.1rem;
+  font-weight: 800;
+  background: linear-gradient(transparent 55%, var(--marker-soft) 55%);
+}
+
+.kw-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 14px 14px;
+}
+
+.kw-body .syl {
+  justify-content: flex-start;
+}
+
+/* Practice tabs */
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 5px;
+  border-radius: 16px;
+  background: var(--paper);
+}
+
+.tabs button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.tabs button.is-on {
+  background: var(--sheet);
+  color: var(--u-dark);
+  box-shadow: 0 2px 0 var(--rule);
+}
+
+.tabs .bi {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.tab-done {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--go);
+}
+
+.speak-embedded {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.speak-embedded .goal {
+  display: none;
+}
+
+/* Quiz inside a lesson */
+.mq {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: rise 0.25s ease-out both;
+}
+
+.mq-count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.mq-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-weight: 700;
+  animation: slideup 0.2s ease-out;
+}
+
+.mq-feedback.is-right {
+  background: var(--ok-tint);
+  color: var(--ok);
+}
+
+.mq-feedback.is-wrong {
+  background: var(--bad-tint);
+  color: var(--bad);
+}
+
+.mq-feedback .bi-en {
+  display: none;
+}
+
+.mq-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.mq-done-line .bi {
+  align-items: center;
+  text-align: center;
+}
+
+@media (min-width: 960px) {
+  .unit-cols {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+  }
+
+}
+
+/* Less of the learner's language on labels: English names, icons do the rest. */
+.panel-title .bi-en,
+.panel-sub .bi-en,
+.tabs .bi-en {
+  display: none;
+}
+
+.unit-hero h1 .bi-en {
+  font-size: 1rem;
+  opacity: 0.9;
+}

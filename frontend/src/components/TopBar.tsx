@@ -13,7 +13,7 @@ interface Props {
 }
 
 export function TopBar({ go, showHome = true, voiceToggle = false, children }: Props) {
-  const { language, t } = useLang();
+  const { language, t, en } = useLang();
   const [voice, setVoice] = useState(isVoiceOn());
 
   return (
@@ -21,10 +21,10 @@ export function TopBar({ go, showHome = true, voiceToggle = false, children }: P
       {showHome ? (
         <button type="button" className="topbar-btn" onClick={() => go({ name: "home" })} aria-label={t("home")}>
           <Icon name="home" size={24} />
-          <span className="topbar-label">{t("home")}</span>
+          <span className="topbar-label">{en("home")}</span>
         </button>
       ) : (
-        <span className="topbar-title">{t("app_title")}</span>
+        <span className="topbar-title">{en("app_title")}</span>
       )}
       {children}
       <span className="topbar-right">

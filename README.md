@@ -8,23 +8,25 @@ This app is built for both moments. It is made for adults who are just starting 
 
 Right after picking a language, learners see **the big picture**: how one doctor visit moves between **You**, the **Clinic**, and **Insurance**, one step at a time. An arrow lights up for each step, and a little paper (like $, CLAIM, EOB, or BILL) travels along it. Each step has one easy English sentence, read aloud, and the full explanation in the learner's language. It ends with the whole flowchart, and it stays at the top of the path to revisit.
 
-Then they land on **one learning path**: a winding line of big round buttons. Every button can be tapped, and the next one to try bounces. **Clip**, a paperclip, gives every instruction in the learner's language with simple English underneath, and a speaker button reads it aloud.
+Then they land on a short path: **5 lessons** and a **final quiz**. Every lesson can be opened in any order, and the next one to try bounces. **Clip**, a paperclip, gives each instruction in simple English with the learner's language underneath.
 
-The path goes through five real kinds of paper, in the order a patient meets them, and each one is tagged with its step in the big picture:
+| Lesson | The real paper | Talk practice |
+| --- | --- | --- |
+| 1. How health insurance works | Insurance card | At the pharmacy |
+| 2. Your rights at the clinic | New patient form | Front desk check-in |
+| 3. Who pays what | Explanation of Benefits ("THIS IS NOT A BILL") | Calling your insurance |
+| 4. What to do with a medical bill | Medical bill | Asking about a bill |
+| 5. Where to go for care | Summary of Benefits and Coverage | Making an appointment |
 
-1. **Insurance card**
-2. **New patient form**
-3. **Explanation of Benefits** ("THIS IS NOT A BILL")
-4. **Medical bill**
-5. **Summary of Benefits and Coverage**, the standard form every US health plan must give
+**Each lesson is one page.** On a laptop, Learn and Practice sit side by side. On a phone, Practice comes under Learn.
 
-They follow the layout and wording of the real forms, with pretend names and numbers (Sam Lee, Golden Valley Health Plan). Each paper has three kinds of buttons:
+- **Learn:** a short story told in 4 cards, each one easy English sentence read aloud ("You pay a premium every month."). Under it are 4 key words; tap one to see its sounds (co · PAY), a plain English meaning, and a Listen button. The learner's language is always one tap away on a small language button, which shows the fuller adult explanation and reads it aloud. A button opens the real paper, where every health word can be tapped.
+- **Practice: Talk.** Say your lines from a real conversation into the mic. The staff member's lines are read aloud, and each of your words turns green when the app hears it. Then try it with your lines hidden, or try free talk with a live AI voice.
+- **Practice: Quiz.** The story's two questions, then a few on the key words, one at a time, easiest first.
 
-- **Look at it.** The paper with its health words marked. Tricky words are bright yellow. Tap any word, in any order, and a card shows the English word split into sounds (co · PAY) with Listen and Slow buttons, what it means, what to write in that spot, and an example. English comes first and every sentence can be tapped to hear it. The learner's language sits underneath as the helper.
-- **How it works.** A short story of 4 cards, like "You pay a premium every month" or "The EOB is not a bill." Each card has one short English sentence (about 4th grade level) that is read aloud, and a fuller adult explanation in the learner's language. Two easy questions follow. Topics: your rights at the clinic, how insurance works, who pays what, what to do with a bill, and where to go for care.
-- **Word lessons** of about 3 words, one small task per screen: meet the word, say it into the mic, find it on the paper, pick the word you hear, answer an either/or question, fill in a sentence, and match a "what to write" tip. A wrong answer comes back once at the end. Nothing is lost, and the lesson ends with confetti.
+English is always the big text, so it reads clearly to anyone watching. The learner's language sits under it as the helper.
 
-After the papers come **Talk at the clinic** (six speaking scripts: you say your lines into the mic, the app checks which words came through, then you can try again with your lines hidden, or try free talk with a live AI voice) and **Quiz** (one per paper, plus one with all the words).
+The practice papers follow the layout and wording of the real forms, with pretend names and numbers (Sam Lee, Golden Valley Health Plan).
 
 **The voice orb.** Whenever the app is listening, a soft orb glows and grows with the learner's voice, so a nervous speaker can see that the app hears them. In free talk it turns purple and pulses while the AI is talking.
 

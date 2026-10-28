@@ -41,6 +41,15 @@ from app.speech import GeminiVoice, audio_cost, wav_seconds  # noqa: E402
 # (text, voice role, style) for one clip
 Clip = tuple[str, str, str]
 
+# The key words of the 5 lessons. Keep in sync with LESSONS in frontend/src/path.ts.
+LESSON_WORDS = [
+    "member_id", "group_number", "copay", "premium",
+    "policyholder", "relationship_to_patient", "not_applicable", "interpreter",
+    "explanation_of_benefits", "claim", "deductible", "coinsurance",
+    "balance_due", "date_of_service", "payment_plan", "guarantor",
+    "primary_care_provider", "urgent_care", "emergency_room", "in_network",
+]
+
 # Clip's instructions, which have a "Listen" button. Keep in sync with the app.
 CLIP_LINES = [
     "clip_hello", "clip_pick_form", "clip_tap_word", "clip_tap_card", "clip_meet", "clip_say", "clip_listen",
@@ -109,7 +118,7 @@ async def main() -> None:
     start = time.monotonic()
 
     papers = load_samples(content, TermMatcher(content.terms))
-    ids = list(dict.fromkeys(t["id"] for p in papers for t in (p.get("terms") or p["reading"]["terms"])))
+    ids = list(dict.fromkeys([*LESSON_WORDS, *(t["id"] for p in papers for t in (p.get("terms") or p["reading"]["terms"]))]))
     print(f"Preparing {lang.english_name}: {len(ids)} words on {len(papers)} practice papers and {len(content.scenarios)} conversations.")
 
     data = await lessons.explain(ids, lang)

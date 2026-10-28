@@ -48,13 +48,13 @@ export function Clip({ k, vars, mood = "happy", size = 72 }: Props) {
     <div className="clip">
       <ClipFace size={size} mood={mood} />
       <div className="clip-bubble" role="status">
-        <p className="clip-native" lang={language.code}>
-          {native}
-        </p>
+        <button type="button" className="clip-native" lang="en" dir="ltr" onClick={() => sayEnglish(english)}>
+          {english}
+        </button>
         {english !== native && (
-          <button type="button" className="clip-en" lang="en" dir="ltr" onClick={() => sayEnglish(english)}>
-            {english}
-          </button>
+          <p className="clip-en" lang={language.code}>
+            {native}
+          </p>
         )}
         <button
           type="button"

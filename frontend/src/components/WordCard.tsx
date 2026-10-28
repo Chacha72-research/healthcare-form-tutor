@@ -6,7 +6,7 @@ import { useLang } from "../i18n";
 import type { ExplainedTerm, GlossaryTerm } from "../types";
 import { Bi } from "../i18n";
 import { Icon } from "./Icon";
-import { ListenButton } from "./ListenButton";
+import { L1Reveal } from "./L1Reveal";
 import { SayLine, WordHero } from "./WordHero";
 
 export type L1 = ExplainedTerm["l1"];
@@ -20,23 +20,10 @@ interface Props {
 }
 
 export function WordCard({ g, l1, translating, onClose, onNext }: Props) {
-  const { language, t } = useLang();
+  const { t } = useLang();
   const shimmer = <p className="shimmer">{t("translating")}</p>;
-  const helper = (text: string | null | undefined, big = false) =>
-    text ? (
-      <div className="helper">
-        <p className={big ? "helper-big" : ""} lang={language.code}>
-          {text}
-        </p>
-        <ListenButton
-          parts={[{ text, lang: "l1", voice: "tutor", style: "tutor" }]}
-          label={t("listen")}
-          size="sm"
-        />
-      </div>
-    ) : translating ? (
-      shimmer
-    ) : null;
+  const helper = (text: string | null | undefined) =>
+    text ? <L1Reveal text={text} /> : translating ? shimmer : null;
 
   return (
     <article className="termcard" aria-label={g.term}>
@@ -54,7 +41,7 @@ export function WordCard({ g, l1, translating, onClose, onNext }: Props) {
           <Bi k="what_it_means" />
         </h3>
         <SayLine text={g.definition} className="sayline-big" />
-        {helper(l1?.meaning, true)}
+        {helper(l1?.meaning)}
       </section>
 
       <section className="termcard-block termcard-write">

@@ -46,15 +46,17 @@ export function Bi({ k, vars }: { k: string; vars?: Vars }) {
 }
 
 export function BiText({ native, english }: { native: string; english?: string | null }) {
+  // English first, so it reads clearly to anyone watching; the learner's language underneath as the helper.
   const { language } = useLang();
+  const both = Boolean(english) && english !== native;
   return (
     <span className="bi">
-      <span className="bi-native" lang={language.code}>
-        {native}
+      <span className="bi-native" lang={both ? "en" : language.code} dir={both ? "ltr" : undefined}>
+        {both ? english : native}
       </span>
-      {english && english !== native && (
-        <span className="bi-en" lang="en" dir="ltr">
-          {english}
+      {both && (
+        <span className="bi-en" lang={language.code}>
+          {native}
         </span>
       )}
     </span>

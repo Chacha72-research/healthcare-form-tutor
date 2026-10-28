@@ -9,7 +9,7 @@ import { getConcept } from "../api";
 import { Clip, ClipFace } from "../components/Clip";
 import { FlowDiagram, type FlowStep } from "../components/FlowDiagram";
 import { Icon } from "../components/Icon";
-import { ListenButton } from "../components/ListenButton";
+import { L1Reveal } from "../components/L1Reveal";
 import { LoadFailed, Loading } from "../components/Loading";
 import { SayLine } from "../components/WordHero";
 import { Bi, useLang } from "../i18n";
@@ -129,17 +129,8 @@ export function BigPictureScreen({ go }: { go: (s: Screen) => void }) {
               <FlowDiagram steps={steps} current={at} />
               <SayLine text={card.say} className="sayline-big" />
               {card.explain_l1 ? (
-                <div className="helper">
-                  <p className="helper-big" lang={language.code}>
-                    {card.explain_l1}
-                  </p>
-                  <ListenButton
-                    parts={[{ text: card.explain_l1, lang: "l1", voice: "tutor", style: "tutor" }]}
-                    label={t("listen")}
-                    size="sm"
-                  />
-                </div>
-              ) : (
+              <L1Reveal text={card.explain_l1} />
+            ) : (
                 <p className="helper-line" lang="en" dir="ltr">
                   {card.explain}
                 </p>

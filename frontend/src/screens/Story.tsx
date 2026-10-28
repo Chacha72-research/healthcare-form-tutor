@@ -7,7 +7,7 @@ import type { Screen } from "../App";
 import { getConcept } from "../api";
 import { Clip, ClipFace } from "../components/Clip";
 import { Icon } from "../components/Icon";
-import { ListenButton } from "../components/ListenButton";
+import { L1Reveal } from "../components/L1Reveal";
 import { LoadFailed, Loading } from "../components/Loading";
 import { SayLine } from "../components/WordHero";
 import { Bi, BiText, useLang } from "../i18n";
@@ -117,16 +117,7 @@ export function StoryScreen({ id, nodeId, go }: { id: string; nodeId: string; go
             </span>
             <SayLine text={card.say} className="sayline-big story-say" />
             {card.explain_l1 ? (
-              <div className="helper helper-story">
-                <p className="helper-big" lang={language.code}>
-                  {card.explain_l1}
-                </p>
-                <ListenButton
-                  parts={[{ text: card.explain_l1, lang: "l1", voice: "tutor", style: "tutor" }]}
-                  label={t("listen")}
-                  size="sm"
-                />
-              </div>
+              <L1Reveal text={card.explain_l1} />
             ) : (
               <p className="helper-line" lang="en" dir="ltr">
                 {card.explain}

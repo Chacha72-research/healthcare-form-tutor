@@ -27,7 +27,16 @@ interface Result {
   skipped?: boolean;
 }
 
-export function SpeakScreen({ id, nodeId, go }: { id: string; nodeId?: string; go: (s: Screen) => void }) {
+interface Props {
+  id: string;
+  nodeId?: string;
+  go: (s: Screen) => void;
+  /** Shown inside a lesson page, next to the lesson, instead of as its own page */
+  embedded?: boolean;
+  onDone?: () => void;
+}
+
+export function SpeakScreen({ id, nodeId, go, embedded = false, onDone }: Props) {
   const { config, language, pick, t } = useLang();
   const [data, setData] = useState<ScenarioDetail | null>(null);
   const [failed, setFailed] = useState(false);
@@ -37,7 +46,7 @@ export function SpeakScreen({ id, nodeId, go }: { id: string; nodeId?: string; g
   const [round, setRound] = useState(0);
   const [results, setResults] = useState<Record<number, Result>>({});
   const [hideLines, setHideLines] = useState(false);
-  const [showL1, setShowL1] = useState(true);
+  const [showL1, setShowL1] = useState(false);
   const [mode, setMode] = useState<"script" | "free">("script");
   const spokenUpTo = useRef(-1);
   const bottom = useRef<HTMLDivElement>(null);
@@ -66,7 +75,7 @@ export function SpeakScreen({ id, nodeId, go }: { id: string; nodeId?: string; g
     }
     spokenUpTo.current = Math.max(spokenUpTo.current, end - 1);
     if (lines.length) void speakParts(lines.map((text) => ({ text, lang: "en" as const, voice: "staff" as const })));
-    const timer = setTimeout(() => bottom.current?.scrollIntoView({ behavior: "smooth", block: "end" }), 60);
+    const timer = setTimeout(() => bottom.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 60);
     return () => clearTimeout(timer);
   }, [started, turn, data, round]);
 
@@ -85,9 +94,17 @@ export function SpeakScreen({ id, nodeId, go }: { id: string; nodeId?: string; g
     setResults((r) => ({ ...r, [i]: result }));
     const next = nextYou(i + 1);
     setTurn(next);
-    if (next >= dialogue.length && nodeId) markDone(nodeId);
+    if (next >= dialogue.length) {
+      if (nodeId) markDone(nodeId);
+      onDone?.();
+    }
   }
 
+  if ((failed || !data) && embedded) {
+    return (
+      <div aria-busy={!failed}>{failed ? <LoadFailed onRetry={() => setAttempt((n) => n + 1)} /> : <Loading />}</div>
+    );
+  }
   if (failed || !data) {
     return (
       <>
@@ -107,169 +124,190 @@ export function SpeakScreen({ id, nodeId, go }: { id: string; nodeId?: string; g
   const nextScenario = config.scenarios[at + 1];
   const listenable = canListen();
 
-  return (
+  const inner = (
     <>
-      <TopBar go={go} voiceToggle />
-      <main className="page speak">
+      {!embedded && (
         <h1 className="screen-title">
           <BiText native={pick(data.title)} english={data.title.en} />
         </h1>
-        <div className="goal">
-          <span className="goal-label">{t("your_goal")}</span>
-          <BiText native={pick(data.goal)} english={data.goal.en} />
-        </div>
+      )}
+      <div className="goal">
+        <span className="goal-label">{t("your_goal")}</span>
+        <BiText native={pick(data.goal)} english={data.goal.en} />
+      </div>
 
-        <details className="card-details">
-          <summary>
-            <Icon name="card" size={24} />
-            <Bi k="your_card" />
-          </summary>
-          <InsuranceCard />
-        </details>
+      <details className="card-details">
+        <summary>
+          <Icon name="card" size={24} />
+          <Bi k="your_card" />
+        </summary>
+        <InsuranceCard />
+      </details>
 
-        {mode === "free" ? (
-          <>
-            <button type="button" className="back-link" onClick={() => setMode("script")}>
-              <Icon name="back" size={20} />
-              <span>{t("back_to_script")}</span>
-            </button>
-            <FreeTalk data={data} />
-          </>
-        ) : (
-          <>
-            {data.ai_error === "ai_busy" && <p className="notice">{t("ai_busy")}</p>}
-            {!listenable && <p className="notice">{t("no_mic_support")}</p>}
+      {mode === "free" ? (
+        <>
+          <button type="button" className="back-link" onClick={() => setMode("script")}>
+            <Icon name="back" size={20} />
+            <span>{t("back_to_script")}</span>
+          </button>
+          <FreeTalk data={data} />
+        </>
+      ) : (
+        <>
+          {data.ai_error === "ai_busy" && <p className="notice">{t("ai_busy")}</p>}
+          {!listenable && <p className="notice">{t("no_mic_support")}</p>}
 
-            {!started ? (
-              <div className="speak-start">
-                <Clip k="speak_intro" />
-                <button type="button" className="btn btn-go btn-big" onClick={start}>
-                  <Icon name="mic" />
-                  <Bi k="start" />
+          {!started ? (
+            <div className="speak-start">
+              <Clip k="speak_intro" />
+              <button type="button" className="btn btn-go btn-big" onClick={start}>
+                <Icon name="mic" />
+                <Bi k="start" />
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="speak-tools">
+                <button
+                  type="button"
+                  className="toggle"
+                  aria-pressed={hideLines}
+                  onClick={() => setHideLines((h) => !h)}
+                >
+                  {hideLines ? t("show_my_lines") : t("hide_my_lines")}
+                </button>
+                <button type="button" className="toggle" aria-pressed={!showL1} onClick={() => setShowL1((s) => !s)}>
+                  {showL1 ? t("hide_meaning") : t("show_meaning")}
                 </button>
               </div>
-            ) : (
-              <>
-                <div className="speak-tools">
-                  <button type="button" className="toggle" aria-pressed={hideLines} onClick={() => setHideLines((h) => !h)}>
-                    {hideLines ? t("show_my_lines") : t("hide_my_lines")}
-                  </button>
-                  <button type="button" className="toggle" aria-pressed={!showL1} onClick={() => setShowL1((s) => !s)}>
-                    {showL1 ? t("hide_meaning") : t("show_meaning")}
-                  </button>
-                </div>
 
-                <ol className="script">
-                  {shown.map((line, i) =>
-                    line.who === "staff" ? (
-                      <li key={`${round}-${i}`} className="sline sline-staff">
-                        <span className="sline-who">{data.staff_label}</span>
-                        <div className="sline-bubble">
-                          <p lang="en" dir="ltr">
-                            {line.text}
-                          </p>
-                          {showL1 && line.l1 && <p className="sline-l1">{line.l1}</p>}
-                          <button
-                            type="button"
-                            className="sline-replay"
-                            onClick={() => sayEnglish(line.text)}
-                            aria-label={t("play_again")}
-                          >
-                            <Icon name="replay" size={18} />
-                          </button>
-                        </div>
-                      </li>
-                    ) : i === turn ? (
-                      <li key={`${round}-${i}`} className="sline sline-you sline-now">
-                        <YourTurn
-                          text={line.text}
-                          l1={line.l1}
-                          hidden={hideLines}
-                          showL1={showL1}
-                          listenable={listenable}
-                          onDone={(r) => finishLine(i, r)}
-                        />
-                      </li>
-                    ) : (
-                      <li key={`${round}-${i}`} className="sline sline-you">
-                        <span className="sline-who">{t("you")}</span>
-                        <div className={`sline-bubble${results[i]?.passed ? " is-right" : ""}`}>
-                          <p lang="en" dir="ltr">
-                            {line.text}
-                          </p>
-                          <span className="sline-badge">
-                            {results[i]?.passed ? <Icon name="check" size={18} /> : t("skipped")}
-                          </span>
-                        </div>
-                      </li>
-                    ),
-                  )}
-                </ol>
-
-                {done && (
-                  <section className="speak-done" aria-live="polite">
-                    <p className="score">
-                      <span className="score-num">{said}</span>
-                      <span className="score-of">/ {yours.length}</span>
-                    </p>
-                    <p className="speak-done-line">
-                      <Bi k="lines_done" vars={{ n: said, total: yours.length }} />
-                    </p>
-                    <ol className="score-boxes" aria-hidden="true">
-                      {yours.map((i) => (
-                        <li key={i} className={results[i]?.passed ? "is-right" : "is-wrong"} />
-                      ))}
-                    </ol>
-                    <div className="actions">
-                      {!hideLines && (
+              <ol className="script">
+                {shown.map((line, i) =>
+                  line.who === "staff" ? (
+                    <li key={`${round}-${i}`} className="sline sline-staff">
+                      <span className="sline-who">{data.staff_label}</span>
+                      <div className="sline-bubble">
+                        <p lang="en" dir="ltr">
+                          {line.text}
+                        </p>
+                        {showL1 && line.l1 && <p className="sline-l1">{line.l1}</p>}
                         <button
                           type="button"
-                          className="btn btn-primary btn-big"
-                          onClick={() => {
-                            setHideLines(true);
-                            start();
-                          }}
+                          className="sline-replay"
+                          onClick={() => sayEnglish(line.text)}
+                          aria-label={t("play_again")}
                         >
-                          <Icon name="mic" />
-                          <Bi k="hide_my_lines" />
+                          <Icon name="replay" size={18} />
                         </button>
-                      )}
-                      <button type="button" className={`btn ${hideLines ? "btn-primary btn-big" : "btn-secondary"}`} onClick={start}>
-                        <Icon name="replay" />
-                        <Bi k="practice_again" />
+                      </div>
+                    </li>
+                  ) : i === turn ? (
+                    <li key={`${round}-${i}`} className="sline sline-you sline-now">
+                      <YourTurn
+                        text={line.text}
+                        l1={line.l1}
+                        hidden={hideLines}
+                        showL1={showL1}
+                        listenable={listenable}
+                        onDone={(r) => finishLine(i, r)}
+                      />
+                    </li>
+                  ) : (
+                    <li key={`${round}-${i}`} className="sline sline-you">
+                      <span className="sline-who">{t("you")}</span>
+                      <div className={`sline-bubble${results[i]?.passed ? " is-right" : ""}`}>
+                        <p lang="en" dir="ltr">
+                          {line.text}
+                        </p>
+                        <span className="sline-badge">
+                          {results[i]?.passed ? <Icon name="check" size={18} /> : t("skipped")}
+                        </span>
+                      </div>
+                    </li>
+                  ),
+                )}
+              </ol>
+
+              {done && (
+                <section className="speak-done" aria-live="polite">
+                  <p className="score">
+                    <span className="score-num">{said}</span>
+                    <span className="score-of">/ {yours.length}</span>
+                  </p>
+                  <p className="speak-done-line">
+                    <Bi k="lines_done" vars={{ n: said, total: yours.length }} />
+                  </p>
+                  <ol className="score-boxes" aria-hidden="true">
+                    {yours.map((i) => (
+                      <li key={i} className={results[i]?.passed ? "is-right" : "is-wrong"} />
+                    ))}
+                  </ol>
+                  <div className="actions">
+                    {!hideLines && (
+                      <button
+                        type="button"
+                        className="btn btn-primary btn-big"
+                        onClick={() => {
+                          setHideLines(true);
+                          start();
+                        }}
+                      >
+                        <Icon name="mic" />
+                        <Bi k="hide_my_lines" />
                       </button>
-                      {config.features.live && (
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          onClick={() => {
-                            stopSpeaking();
-                            setMode("free");
-                          }}
-                        >
-                          <Icon name="chat" />
-                          <Bi k="free_talk" />
-                        </button>
-                      )}
+                    )}
+                    <button
+                      type="button"
+                      className={`btn ${hideLines ? "btn-primary btn-big" : "btn-secondary"}`}
+                      onClick={start}
+                    >
+                      <Icon name="replay" />
+                      <Bi k="practice_again" />
+                    </button>
+                    {config.features.live && (
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={() => {
+                          stopSpeaking();
+                          setMode("free");
+                        }}
+                      >
+                        <Icon name="chat" />
+                        <Bi k="free_talk" />
+                      </button>
+                    )}
+                    {!embedded && (
                       <button
                         type="button"
                         className="btn btn-secondary"
                         onClick={() =>
-                          go(nextScenario ? { name: "speak", id: nextScenario.id, nodeId: `talk:${nextScenario.id}` } : { name: "home" })
+                          go(
+                            nextScenario
+                              ? { name: "speak", id: nextScenario.id, nodeId: `talk:${nextScenario.id}` }
+                              : { name: "home" },
+                          )
                         }
                       >
                         <Icon name="forward" />
                         <Bi k={nextScenario ? "next_situation" : "continue"} />
                       </button>
-                    </div>
-                  </section>
-                )}
-                <div ref={bottom} />
-              </>
-            )}
-          </>
-        )}
-      </main>
+                    )}
+                  </div>
+                </section>
+              )}
+              <div ref={bottom} />
+            </>
+          )}
+        </>
+      )}
+    </>
+  );
+  if (embedded) return <div className="speak speak-embedded">{inner}</div>;
+  return (
+    <>
+      <TopBar go={go} voiceToggle />
+      <main className="page speak">{inner}</main>
     </>
   );
 }
@@ -399,9 +437,7 @@ function YourTurn({ text, l1, hidden, showL1, listenable, onDone }: TurnProps) {
               </span>
             </VoiceOrb>
             <Bi
-              k={
-                check?.passed ? "next" : phase === "listening" ? "tap_to_stop" : check ? "try_again" : "tap_to_speak"
-              }
+              k={check?.passed ? "next" : phase === "listening" ? "tap_to_stop" : check ? "try_again" : "tap_to_speak"}
             />
           </button>
         ) : (
@@ -416,7 +452,11 @@ function YourTurn({ text, l1, hidden, showL1, listenable, onDone }: TurnProps) {
             <Bi k="hear_it" />
           </button>
           {!check?.passed && (
-            <button type="button" className="reply reply-quiet" onClick={() => finish({ passed: false, skipped: true })}>
+            <button
+              type="button"
+              className="reply reply-quiet"
+              onClick={() => finish({ passed: false, skipped: true })}
+            >
               <Bi k="skip" />
             </button>
           )}
