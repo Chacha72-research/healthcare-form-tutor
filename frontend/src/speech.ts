@@ -3,10 +3,10 @@
 // device's built-in voices otherwise.
 //
 // Voice must never slow the app down, so:
-//   - at most 2 voice requests run at once (browsers only allow ~6 requests
+//   - at most 3 voice requests run at once (browsers only allow ~6 requests
 //     to a site at a time, and the rest are needed for lessons and quizzes),
 //   - each request gives up after 12 seconds,
-//   - after a failure, the device voice is used for a minute before trying again.
+//   - after a failure, the device voice is used for 30 seconds before trying again.
 
 export interface SpeechPart {
   text: string;
@@ -18,8 +18,8 @@ export interface SpeechPart {
 }
 
 const FETCH_TIMEOUT_MS = 12000;
-const MAX_IN_FLIGHT = 2;
-const SERVER_RETRY_MS = 60000;
+const MAX_IN_FLIGHT = 3;
+const SERVER_RETRY_MS = 30000;
 const VOICE_KEY = "form-helper-voice";
 // A tiny silent clip, played on the first tap so Safari allows audio later.
 const SILENT_WAV =
@@ -138,10 +138,10 @@ function fetchAudio(part: SpeechPart): Promise<string | null> {
   return pending;
 }
 
-/** Start loading audio for the next couple of lines. */
+/** Start loading audio for the next few lines, so there's no pause between them. */
 export function prefetch(parts: SpeechPart[]) {
   if (!voiceOn || !serverAvailable()) return;
-  for (const p of parts.filter((x) => x.text.trim()).slice(0, 2)) void fetchAudio(p);
+  for (const p of parts.filter((x) => x.text.trim()).slice(0, MAX_IN_FLIGHT)) void fetchAudio(p);
 }
 
 function pickVoice(lang: string): SpeechSynthesisVoice | undefined {

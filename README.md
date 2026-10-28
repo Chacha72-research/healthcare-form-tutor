@@ -46,16 +46,24 @@ Every explanation comes from the glossary in `backend/data/glossary.json`. Each 
 
 Everything the AI writes is saved in `backend/data/generated/<lang>.json`, so each word is written once and every learner sees the same text. A bilingual teacher can review it in a spreadsheet and approve or fix it.
 
-## Get your free key
+## Get your key
 
-1. Go to [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and sign in with a Google account.
-2. Click **Create API key** and copy it. No credit card is needed.
+1. Go to [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and sign in with a personal Google account. School accounts sometimes have the free tier turned off.
+2. Click **Create API key** and copy it.
 
 This one key powers the learner-language lessons, the tutor's voice, reading pictures of forms, and the live conversations.
 
-**Without any key**, the app still works for PDF and text forms in English: lessons, quizzes, and model conversations.
+**Free or paid?** The free tier is fine for trying the app, but its daily limits are small (they reset at midnight Pacific), and Google may use free-tier content to improve its products. Turning on billing in AI Studio raises the limits and keeps learners' content out of training. It's cheap because everything is saved after the first time:
 
-One thing to know: on Gemini's free tier, Google may use what you send to improve its products. That's fine for testing. Before real learners record their voices, turn on billing in AI Studio to move to the paid tier, which costs a few cents per conversation.
+| What | Rough cost (Oct 2026 prices) |
+| --- | --- |
+| One new lesson (6 words, voice included) | about 5 to 10 cents, then free every time after |
+| All six practice situations (text and voice) | about 10 to 15 cents, then free |
+| One 5-minute live role-play | about 5 to 10 cents, every time |
+
+The server window prints a running total each time it makes a new voice line.
+
+**Without any key**, the app still works for PDF and text forms in English: lessons, quizzes, and model conversations.
 
 ## Run it locally
 
@@ -88,6 +96,17 @@ npm run dev
 ```
 
 Open http://localhost:5173. Pick **தமிழ்**, tap the first button, then **Use a sample form**.
+
+### Preparing a demo
+
+Run this once before a demo, from `backend/` with `.venv` active:
+
+```bash
+python scripts/warm_demo.py            # Tamil: sample form lesson 1 and all six situations
+python scripts/warm_demo.py --lessons 5 --lang es   # every sample lesson, in Spanish
+```
+
+It makes every lesson line, translation, and voice clip ahead of time and tells you what it cost. After that, the demo and any test runs replay instantly and for free. Only the live Talk step uses the API during the demo. Keep the same models and voices in `.env` afterward, because the saved clips are tied to them.
 
 ### On phones in class
 
@@ -147,7 +166,7 @@ backend/
     glossary.json    73 words: definitions, pronunciation, check questions, CASAS codes
     scenarios.json   6 practice situations with model conversations
     languages.json   app text and tutor lines in each language
-  scripts/           comprehension report, translation review, sample form
+  scripts/           demo warm-up, key setup, comprehension report, translation review, sample form
   tests/             pytest suite; AI is faked, so it runs offline
 frontend/
   src/screens/       Upload, Lesson, Quiz, Practice, Scenario

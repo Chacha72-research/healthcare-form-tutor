@@ -29,6 +29,27 @@ STYLES = {
 }
 
 
+# Paid prices per 1M audio tokens (Gemini charges 25 audio tokens per second).
+# From https://ai.google.dev/gemini-api/docs/pricing, through Dec 31, 2026.
+AUDIO_PRICE_PER_M = {"gemini-3.8-flash-tts": 9.00, "gemini-3.8-flash-lite-tts": 6.00}
+AUDIO_TOKENS_PER_SECOND = 25
+
+
+def wav_seconds(wav: bytes) -> float:
+    try:
+        with wave.open(io.BytesIO(wav)) as w:
+            return w.getnframes() / float(w.getframerate())
+    except (wave.Error, EOFError):
+        return 0.0
+
+
+def audio_cost(seconds: float, model: str) -> float | None:
+    price = AUDIO_PRICE_PER_M.get(model)
+    if price is None:
+        return None
+    return seconds * AUDIO_TOKENS_PER_SECOND * price / 1_000_000
+
+
 def pcm_to_wav(pcm: bytes, rate: int = SAMPLE_RATE) -> bytes:
     buf = io.BytesIO()
     with wave.open(buf, "wb") as w:
@@ -48,10 +69,20 @@ class GeminiVoice:
         self.voices = voices
         self.cache_dir = cache_dir
         self._locks: dict[str, asyncio.Lock] = {}
+        # Running totals since the server started, printed after each new line.
+        self.made_lines = 0
+        self.made_seconds = 0.0
 
     def _key(self, text: str, voice: str, style: str) -> str:
         raw = f"{self.model}|{voice}|{style}|{text}".encode("utf-8")
         return hashlib.sha256(raw).hexdigest()[:40]
+
+    def _path(self, text: str, voice: str, style: str) -> Path:
+        voice_name = self.voices.get(voice, self.voices["tutor"])
+        return self.cache_dir / f"{self._key(text, voice_name, style)}.wav"
+
+    def is_saved(self, text: str, voice: str = "tutor", style: str = "tutor") -> bool:
+        return self._path(text, voice, style).exists()
 
     async def speak(self, text: str, voice: str = "tutor", style: str = "tutor") -> bytes:
         voice_name = self.voices.get(voice, self.voices["tutor"])
@@ -69,7 +100,23 @@ class GeminiVoice:
             self.cache_dir.mkdir(parents=True, exist_ok=True)
             path.write_bytes(audio)
         self._locks.pop(key, None)
+        self._log_usage(audio)
         return audio
+
+    def _log_usage(self, audio: bytes) -> None:
+        seconds = wav_seconds(audio)
+        self.made_lines += 1
+        self.made_seconds += seconds
+        cost = audio_cost(self.made_seconds, self.model)
+        money = f", about ${cost:.2f} so far" if cost is not None else ""
+        log.info(
+            "Made a new voice line (%.1f s). Since the server started: %d lines, %.1f min of audio%s. "
+            "Saved lines replay for free.",
+            seconds,
+            self.made_lines,
+            self.made_seconds / 60,
+            money,
+        )
 
     async def _synthesize(self, text: str, voice_name: str, style_text: str) -> bytes:
         COOLDOWN.check(self.model)
