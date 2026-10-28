@@ -1,6 +1,12 @@
 // Plays lesson audio. Uses Gemini's voices through the server when the free
 // key is set (natural Tamil, Vietnamese, and so on), and falls back to the
-// phone's built-in voices otherwise. Each line is fetched once and reused.
+// device's built-in voices otherwise.
+//
+// Voice must never slow the app down, so:
+//   - at most 2 voice requests run at once (browsers only allow ~6 requests
+//     to a site at a time, and the rest are needed for lessons and quizzes),
+//   - each request gives up after 12 seconds,
+//   - after a failure, the device voice is used for a minute before trying again.
 
 export interface SpeechPart {
   text: string;
@@ -11,14 +17,30 @@ export interface SpeechPart {
   style?: "tutor" | "model";
 }
 
+const FETCH_TIMEOUT_MS = 12000;
+const MAX_IN_FLIGHT = 2;
+const SERVER_RETRY_MS = 60000;
+const VOICE_KEY = "form-helper-voice";
+// A tiny silent clip, played on the first tap so Safari allows audio later.
+const SILENT_WAV =
+  "data:audio/wav;base64,UklGRsQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+
 let serverVoice = false;
+let serverDownUntil = 0;
 let l1BrowserLang = "en-US";
 let voiceOn = true;
 let generation = 0;
-let currentAudio: HTMLAudioElement | null = null;
+let player: HTMLAudioElement | null = null;
+let finishCurrent: (() => void) | null = null;
+let inFlight = 0;
+const waiting: (() => void)[] = [];
 const audioCache = new Map<string, Promise<string | null>>();
 
-const VOICE_KEY = "form-helper-voice";
+try {
+  voiceOn = localStorage.getItem(VOICE_KEY) !== "0";
+} catch {
+  /* fine */
+}
 
 export function setServerVoice(on: boolean) {
   serverVoice = on;
@@ -42,19 +64,29 @@ export function setVoiceOn(on: boolean) {
   if (!on) stopSpeaking();
 }
 
-try {
-  voiceOn = localStorage.getItem(VOICE_KEY) !== "0";
-} catch {
-  /* fine */
+function getPlayer() {
+  if (!player) player = new Audio();
+  return player;
+}
+
+/** Call from a tap. Safari only lets a page play audio after a tap has played some. */
+export function unlockAudio() {
+  const p = getPlayer();
+  if (!p.paused) return;
+  p.src = SILENT_WAV;
+  p.play().catch(() => {});
 }
 
 export function stopSpeaking() {
   generation += 1;
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio = null;
-  }
+  player?.pause();
+  finishCurrent?.();
+  finishCurrent = null;
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+}
+
+function serverAvailable() {
+  return serverVoice && Date.now() >= serverDownUntil;
 }
 
 function partUrl(part: SpeechPart) {
@@ -66,27 +98,50 @@ function partUrl(part: SpeechPart) {
   return `/api/speech?${params}`;
 }
 
+async function inSlot<T>(fn: () => Promise<T>): Promise<T> {
+  if (inFlight >= MAX_IN_FLIGHT) await new Promise<void>((resolve) => waiting.push(resolve));
+  inFlight += 1;
+  try {
+    return await fn();
+  } finally {
+    inFlight -= 1;
+    waiting.shift()?.();
+  }
+}
+
 function fetchAudio(part: SpeechPart): Promise<string | null> {
   const url = partUrl(part);
-  let pending = audioCache.get(url);
-  if (!pending) {
-    pending = fetch(url)
-      .then((r) => (r.ok ? r.blob() : null))
-      .then((b) => (b ? URL.createObjectURL(b) : null))
-      .catch(() => null);
-    // Don't remember failures, so a busy moment doesn't silence a line for good.
-    pending.then((u) => {
-      if (u === null) audioCache.delete(url);
-    });
-    audioCache.set(url, pending);
-  }
+  const cached = audioCache.get(url);
+  if (cached) return cached;
+
+  const pending = inSlot(async () => {
+    if (!serverAvailable()) return null;
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS);
+    try {
+      const resp = await fetch(url, { signal: ctrl.signal });
+      if (!resp.ok) throw new Error(String(resp.status));
+      return URL.createObjectURL(await resp.blob());
+    } catch {
+      // Busy, slow, or off: use the device's voice for a while.
+      serverDownUntil = Date.now() + SERVER_RETRY_MS;
+      return null;
+    } finally {
+      clearTimeout(timer);
+    }
+  });
+  audioCache.set(url, pending);
+  // Don't remember failures, so the line can be tried again later.
+  void pending.then((u) => {
+    if (u === null) audioCache.delete(url);
+  });
   return pending;
 }
 
-/** Start loading audio for lines that are coming up next. */
+/** Start loading audio for the next couple of lines. */
 export function prefetch(parts: SpeechPart[]) {
-  if (!serverVoice || !voiceOn) return;
-  for (const p of parts) if (p.text.trim()) void fetchAudio(p);
+  if (!voiceOn || !serverAvailable()) return;
+  for (const p of parts.filter((x) => x.text.trim()).slice(0, 2)) void fetchAudio(p);
 }
 
 function pickVoice(lang: string): SpeechSynthesisVoice | undefined {
@@ -97,31 +152,49 @@ function pickVoice(lang: string): SpeechSynthesisVoice | undefined {
   return voices.find((v) => v.lang.toLowerCase().startsWith(prefix));
 }
 
-function browserSpeak(part: SpeechPart): Promise<void> {
+function browserSpeak(part: SpeechPart, gen: number): Promise<void> {
   return new Promise((resolve) => {
-    if (!("speechSynthesis" in window)) return resolve();
+    if (!("speechSynthesis" in window) || gen !== generation) return resolve();
+    const lang = part.lang === "en" ? "en-US" : l1BrowserLang;
+    const voice = pickVoice(lang);
+    // An English voice reading Tamil is worse than silence; the text is on screen.
+    if (!voice && part.lang === "l1") return resolve();
     const u = new SpeechSynthesisUtterance(part.text);
-    u.lang = part.lang === "en" ? "en-US" : l1BrowserLang;
+    u.lang = lang;
     u.rate = part.style === "model" ? 0.7 : 0.9;
-    const v = pickVoice(u.lang);
-    if (v) u.voice = v;
-    u.onend = () => resolve();
-    u.onerror = () => resolve();
+    if (voice) u.voice = voice;
+    let done = false;
+    const finish = () => {
+      if (!done) {
+        done = true;
+        resolve();
+      }
+    };
+    u.onend = finish;
+    u.onerror = finish;
+    finishCurrent = finish;
     window.speechSynthesis.speak(u);
-    // Some browsers never fire onend for languages they lack; don't hang the lesson.
-    setTimeout(resolve, Math.max(2500, part.text.length * 140));
+    // Some browsers never fire onend; never let that hang a lesson.
+    setTimeout(finish, Math.max(2500, part.text.length * 140));
   });
 }
 
-async function playUrl(url: string, gen: number): Promise<void> {
-  if (gen !== generation) return;
-  const audio = new Audio(url);
-  currentAudio = audio;
-  await new Promise<void>((resolve) => {
-    audio.onended = () => resolve();
-    audio.onerror = () => resolve();
-    audio.onpause = () => resolve();
-    audio.play().catch(() => resolve());
+function playUrl(url: string, gen: number): Promise<void> {
+  return new Promise((resolve) => {
+    if (gen !== generation) return resolve();
+    const p = getPlayer();
+    let done = false;
+    const finish = () => {
+      if (!done) {
+        done = true;
+        resolve();
+      }
+    };
+    finishCurrent = finish;
+    p.onended = finish;
+    p.onerror = finish;
+    p.src = url;
+    p.play().catch(finish);
   });
 }
 
@@ -134,10 +207,10 @@ export async function speakParts(parts: SpeechPart[], force = false): Promise<vo
   for (const part of parts) {
     if (gen !== generation) return;
     if (!part.text.trim()) continue;
-    const url = serverVoice ? await fetchAudio(part) : null;
+    const url = serverAvailable() ? await fetchAudio(part) : null;
     if (gen !== generation) return;
     if (url) await playUrl(url, gen);
-    else await browserSpeak(part);
+    else await browserSpeak(part, gen);
   }
 }
 

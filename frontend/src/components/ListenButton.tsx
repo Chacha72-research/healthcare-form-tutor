@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { speakParts, type SpeechPart } from "../speech";
+import { speakParts, unlockAudio, type SpeechPart } from "../speech";
 import { Icon } from "./Icon";
 
 interface Props {
@@ -15,6 +15,7 @@ export function ListenButton({ parts, label, size = "md", tag }: Props) {
   const [playing, setPlaying] = useState(false);
 
   async function play() {
+    unlockAudio();
     setPlaying(true);
     try {
       await speakParts(parts, true);

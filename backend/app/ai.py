@@ -14,6 +14,7 @@ used instead for the text jobs by setting AI_PROVIDER=claude.
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import json
 import logging
@@ -92,15 +93,35 @@ def _b64(data: bytes) -> str:
     return base64.standard_b64encode(data).decode("ascii")
 
 
+def gemini_client(api_key: str):
+    """A Gemini client that retries once, quickly, instead of for up to 30 seconds.
+
+    The app has its own fallbacks (English text, the device's voice), so a
+    fast "busy" answer is much better for learners than a long silent wait.
+    """
+    from google import genai
+    from google.genai import types
+
+    return genai.Client(
+        api_key=api_key,
+        http_options=types.HttpOptions(retry_options=types.HttpRetryOptions(attempts=1)),
+    )
+
+
+async def bounded(coro, seconds: float):
+    """Wait at most `seconds` for an AI call, then give up and report busy."""
+    try:
+        return await asyncio.wait_for(coro, timeout=seconds)
+    except asyncio.TimeoutError as exc:
+        raise AIBusy("The AI service took too long.") from exc
+
+
 class GeminiAI:
     name = "gemini"
+    timeout = 45  # seconds; writing a batch of lesson text can take a while
 
     def __init__(self, api_key: str, model: str, client=None):
-        if client is None:
-            from google import genai
-
-            client = genai.Client(api_key=api_key)
-        self.client = client
+        self.client = client or gemini_client(api_key)
         self.model = model
 
     async def generate_json(
@@ -113,13 +134,18 @@ class GeminiAI:
         parts.append({"type": "text", "text": prompt})
         COOLDOWN.check(self.model)
         try:
-            interaction = await self.client.aio.interactions.create(
-                model=self.model,
-                system_instruction=system,
-                input=parts,
-                response_format={"type": "text", "mime_type": "application/json", "schema": schema},
-                store=False,  # don't keep learners' forms on Google's side
+            interaction = await bounded(
+                self.client.aio.interactions.create(
+                    model=self.model,
+                    system_instruction=system,
+                    input=parts,
+                    response_format={"type": "text", "mime_type": "application/json", "schema": schema},
+                    store=False,  # don't keep learners' forms on Google's side
+                ),
+                self.timeout,
             )
+        except AIBusy:
+            raise
         except Exception as exc:
             log.warning("Gemini request failed: %s", exc)
             err = _wrap(exc)

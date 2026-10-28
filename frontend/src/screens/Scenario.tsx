@@ -9,12 +9,13 @@ import type { Screen } from "../App";
 import { conversationUrl, getScenario } from "../api";
 import { LiveConversation, type LiveStatus } from "../audio/live";
 import { Icon } from "../components/Icon";
+import { LoadFailed, Loading } from "../components/Loading";
 import { InsuranceCard } from "../components/InsuranceCard";
 import { ListenButton } from "../components/ListenButton";
 import { Marked } from "../components/Marked";
 import { TopBar } from "../components/TopBar";
 import { Bi, BiText, useLang } from "../i18n";
-import { speakParts, stopSpeaking, type SpeechPart } from "../speech";
+import { speakParts, stopSpeaking, unlockAudio, type SpeechPart } from "../speech";
 import type { ScenarioDetail } from "../types";
 
 type Step = "listen" | "check" | "talk";
@@ -25,20 +26,22 @@ export function ScenarioScreen({ id, go }: { id: string; go: (s: Screen) => void
   const [data, setData] = useState<ScenarioDetail | null>(null);
   const [failed, setFailed] = useState(false);
   const [step, setStep] = useState<Step>("listen");
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
+    setFailed(false);
     getScenario(id, language.code)
       .then(setData)
       .catch(() => setFailed(true));
     return () => stopSpeaking();
-  }, [id, language.code]);
+  }, [id, language.code, attempt]);
 
   if (failed || !data) {
     return (
       <>
         <TopBar go={go} />
         <main className="page" aria-busy={!failed}>
-          {failed && <p className="notice notice-bad">{t("error_generic")}</p>}
+          {failed ? <LoadFailed onRetry={() => setAttempt((n) => n + 1)} /> : <Loading />}
         </main>
       </>
     );
@@ -102,6 +105,7 @@ function ListenStep({ data, onNext }: { data: ScenarioDetail; onNext: () => void
   const termLabels = data.terms.map((x) => x.term);
 
   async function playAll() {
+    unlockAudio();
     stopRef.current = false;
     for (let i = 0; i < data.dialogue.length; i++) {
       if (stopRef.current) break;

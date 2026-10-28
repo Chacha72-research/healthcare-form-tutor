@@ -15,7 +15,7 @@ import logging
 import wave
 from pathlib import Path
 
-from .ai import COOLDOWN, AIBusy, AIError, _wrap
+from .ai import COOLDOWN, AIBusy, AIError, _wrap, bounded, gemini_client
 
 log = logging.getLogger(__name__)
 
@@ -40,12 +40,10 @@ def pcm_to_wav(pcm: bytes, rate: int = SAMPLE_RATE) -> bytes:
 
 
 class GeminiVoice:
-    def __init__(self, api_key: str, model: str, voices: dict[str, str], cache_dir: Path, client=None):
-        if client is None:
-            from google import genai
+    timeout = 20  # seconds for one line; the app falls back to the device's voice after that
 
-            client = genai.Client(api_key=api_key)
-        self.client = client
+    def __init__(self, api_key: str, model: str, voices: dict[str, str], cache_dir: Path, client=None):
+        self.client = client or gemini_client(api_key)
         self.model = model
         self.voices = voices
         self.cache_dir = cache_dir
@@ -76,24 +74,29 @@ class GeminiVoice:
     async def _synthesize(self, text: str, voice_name: str, style_text: str) -> bytes:
         COOLDOWN.check(self.model)
         try:
-            interaction = await self.client.aio.interactions.create(
-                model=self.model,
-                input=[
-                    {
-                        "type": "user_input",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": text,
-                                "annotations": [{"type": "speech_metadata", "style": style_text}],
-                            }
-                        ],
-                    }
-                ],
-                response_format={"type": "audio"},
-                generation_config={"speech_config": [{"voice": voice_name}]},
-                store=False,
+            interaction = await bounded(
+                self.client.aio.interactions.create(
+                    model=self.model,
+                    input=[
+                        {
+                            "type": "user_input",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": text,
+                                    "annotations": [{"type": "speech_metadata", "style": style_text}],
+                                }
+                            ],
+                        }
+                    ],
+                    response_format={"type": "audio"},
+                    generation_config={"speech_config": [{"voice": voice_name}]},
+                    store=False,
+                ),
+                self.timeout,
             )
+        except AIBusy:
+            raise
         except Exception as exc:
             log.warning("Gemini TTS failed: %s", exc)
             err = _wrap(exc)

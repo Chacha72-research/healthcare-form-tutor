@@ -95,3 +95,14 @@ def test_rate_limit_starts_a_cooldown():
         asyncio.run(ai.generate_json(system="s", prompt="p", schema={}))
     assert inter.kwargs is None  # second call never reached Gemini
     COOLDOWN.reset()
+
+
+def test_slow_gemini_call_gives_up_fast():
+    class Slow:
+        async def create(self, **kwargs):
+            await asyncio.sleep(5)
+
+    ai = GeminiAI("k", "slow-model", client=gemini_client(Slow()))
+    ai.timeout = 0.05
+    with pytest.raises(AIBusy):
+        asyncio.run(ai.generate_json(system="s", prompt="p", schema={}))

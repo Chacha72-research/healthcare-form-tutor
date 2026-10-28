@@ -11,11 +11,12 @@ import type { Screen } from "../App";
 import { WORDS_PER_LESSON } from "../App";
 import { getLesson } from "../api";
 import { Icon } from "../components/Icon";
+import { LoadFailed, Loading } from "../components/Loading";
 import { ListenButton } from "../components/ListenButton";
 import { Marked } from "../components/Marked";
 import { TopBar } from "../components/TopBar";
 import { Bi, BiText, useLang } from "../i18n";
-import { prefetch, speakParts, stopSpeaking, type SpeechPart } from "../speech";
+import { prefetch, speakParts, stopSpeaking, unlockAudio, type SpeechPart } from "../speech";
 import { markLearned, reviewWord } from "../storage";
 import type { FormReading, Lesson, LessonWord } from "../types";
 
@@ -29,6 +30,9 @@ interface Beat {
 }
 
 const INTERACTIVE: Kind[] = ["find", "repeat", "either_or", "yes_no", "next"];
+// A line that takes longer than this to play never holds up the lesson.
+const MAX_BEAT_MS = 15000;
+const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 const en = (text: string): SpeechPart => ({ text, lang: "en", voice: "tutor", style: "model" });
 const l1 = (text: string): SpeechPart => ({ text, lang: "l1", voice: "tutor", style: "tutor" });
@@ -55,13 +59,18 @@ export function LessonScreen({ reading, index, go }: Props) {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showForm, setShowForm] = useState(() => window.innerWidth >= 960);
   const bottom = useRef<HTMLDivElement>(null);
+  // Feedback like "Yes! You got it." is spoken at the start of the next beat,
+  // so the next step appears the moment the learner taps.
+  const pendingSpeech = useRef<SpeechPart[]>([]);
+  const [lessonTry, setLessonTry] = useState(0);
 
   useEffect(() => {
+    setFailed(false);
     getLesson(reviewId ? [...termIds, reviewId] : termIds, language.code)
       .then(setLesson)
       .catch(() => setFailed(true));
     return () => stopSpeaking();
-  }, [termIds, reviewId, language.code]);
+  }, [termIds, reviewId, language.code, lessonTry]);
 
   const words = useMemo(() => lesson?.words.filter((w) => termIds.includes(w.id)) ?? [], [lesson, termIds]);
   const review = useMemo(() => lesson?.words.find((w) => w.id === reviewId) ?? null, [lesson, reviewId]);
@@ -111,11 +120,13 @@ export function LessonScreen({ reading, index, go }: Props) {
     if (!beat) return;
     let cancelled = false;
     prefetch(beats.slice(i + 1, i + 4).flatMap((b) => b.speech));
+    const parts = [...pendingSpeech.current, ...beat.speech];
+    pendingSpeech.current = [];
     void (async () => {
-      await speakParts(beat.speech);
+      await Promise.race([speakParts(parts), wait(MAX_BEAT_MS)]);
       if (cancelled) return;
       if (!INTERACTIVE.includes(beat.kind)) {
-        await new Promise((r) => setTimeout(r, 350));
+        await wait(350);
         if (!cancelled) setRevealed((r) => Math.max(r, i + 2));
       }
     })();
@@ -130,14 +141,16 @@ export function LessonScreen({ reading, index, go }: Props) {
   }, [revealed, beats, words]);
 
   function start() {
+    unlockAudio();
     setStarted(true);
     setRevealed(1);
   }
 
-  async function answer(i: number, value: string, feedback?: string) {
+  function answer(i: number, value: string, feedback?: string) {
     if (answers[i] !== undefined) return;
+    unlockAudio();
     setAnswers((a) => ({ ...a, [i]: value }));
-    if (feedback) await speakParts([l1(feedback)]);
+    if (feedback) pendingSpeech.current = [l1(feedback)];
     setRevealed((r) => Math.max(r, i + 2));
   }
 
@@ -146,7 +159,7 @@ export function LessonScreen({ reading, index, go }: Props) {
       <>
         <TopBar go={go} />
         <main className="page">
-          <p className="notice notice-bad">{t("error_generic")}</p>
+          <LoadFailed onRetry={() => setLessonTry((n) => n + 1)} />
         </main>
       </>
     );
@@ -197,12 +210,13 @@ export function LessonScreen({ reading, index, go }: Props) {
           {lesson?.ai_error === "ai_busy" && <p className="notice">{t("ai_busy")}</p>}
           {lesson && !lesson.ai_available && <p className="notice">{t("ai_needs_key")}</p>}
 
-          {!started && (
+          {!started && !lesson && <Loading />}
+          {!started && lesson && (
             <div className="lesson-start">
               <p className="lesson-start-count">
                 <Bi k="words_today" vars={{ n: termIds.length }} />
               </p>
-              <button type="button" className="btn btn-primary btn-big" onClick={start} disabled={!lesson}>
+              <button type="button" className="btn btn-primary btn-big" onClick={start}>
                 <Icon name="speaker" />
                 <Bi k="start" />
               </button>

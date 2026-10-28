@@ -1630,3 +1630,40 @@ mark {
     transition: none !important;
   }
 }
+
+/* ---------- Loading ---------- */
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 0;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.loading-sheet {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 6px;
+  color: var(--ink-soft);
+}
+
+.loading-sweep {
+  position: absolute;
+  inset-inline: 0;
+  height: 8px;
+  background: var(--marker);
+  opacity: 0.8;
+  mix-blend-mode: multiply;
+  animation: sweep 1.4s ease-in-out infinite alternate;
+}
+
+.load-failed {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}

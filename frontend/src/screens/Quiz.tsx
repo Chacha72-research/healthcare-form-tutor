@@ -3,6 +3,7 @@ import type { Screen } from "../App";
 import { WORDS_PER_LESSON } from "../App";
 import { getQuiz, saveQuizResult } from "../api";
 import { Icon } from "../components/Icon";
+import { LoadFailed, Loading } from "../components/Loading";
 import { ListenButton } from "../components/ListenButton";
 import { TopBar } from "../components/TopBar";
 import { Bi, useLang } from "../i18n";
@@ -59,7 +60,7 @@ export function QuizScreen({ termIds, teacher, go, reading, index }: Props) {
       <>
         <TopBar go={go} />
         <main className="page" aria-busy={!failed}>
-          {failed && <p className="notice notice-bad">{t("error_generic")}</p>}
+          {failed ? <LoadFailed onRetry={() => setRound((r) => r + 1)} /> : <Loading />}
         </main>
       </>
     );
