@@ -6,7 +6,7 @@
 // (6) checks understanding with an either/or question and then a yes/no
 // question, easiest first. The quiz and the practice situations come next.
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Screen } from "../App";
 import { WORDS_PER_LESSON } from "../App";
 import { getLesson } from "../api";
@@ -213,6 +213,12 @@ export function LessonScreen({ reading, index, go }: Props) {
           {!started && !lesson && <Loading />}
           {!started && lesson && (
             <div className="lesson-start">
+              {index === 0 && (
+                <p className="found">
+                  <span className="found-num">{reading.terms.length}</span>
+                  <Bi k="found_words" vars={{ n: reading.terms.length }} />
+                </p>
+              )}
               <p className="lesson-start-count">
                 <Bi k="words_today" vars={{ n: termIds.length }} />
               </p>
@@ -577,10 +583,13 @@ function LineWithMarks({
   line,
   highlight,
   onTap,
+  order = 0,
 }: {
   line: { text: string; marks: { start: number; end: number; term_id: string }[] };
   highlight: (id: string) => string;
   onTap?: (id: string) => void;
+  /** Line number, so highlights sweep down the form one line after another */
+  order?: number;
 }) {
   const out: ReactNode[] = [];
   let last = 0;
@@ -590,7 +599,13 @@ function LineWithMarks({
     const text = line.text.slice(m.start, m.end);
     out.push(
       cls ? (
-        <button key={j} type="button" className={cls} onClick={() => onTap?.(m.term_id)}>
+        <button
+          key={j}
+          type="button"
+          className={cls}
+          style={{ "--i": order } as CSSProperties}
+          onClick={() => onTap?.(m.term_id)}
+        >
           {text}
         </button>
       ) : (
@@ -624,6 +639,7 @@ function FormLines({
         <p key={i}>
           <LineWithMarks
             line={ln}
+            order={i}
             highlight={(id) => (id === currentId ? "mk mk-current" : lessonIds.includes(id) ? "mk mk-lesson" : "mk mk-other")}
             onTap={onFind}
           />

@@ -365,7 +365,17 @@ function TalkStep({ data }: { data: ScenarioDetail }) {
           <p className="hint-plain">{t("headphones_tip")}</p>
           {active && (
             <p className={`live-status live-${status}`} role="status">
-              <span className="live-dot" aria-hidden="true" />
+              {status === "connecting" ? (
+                <span className="live-dot" aria-hidden="true" />
+              ) : (
+                <span className="live-bars" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </span>
+              )}
               {t(statusKey)}
             </p>
           )}
