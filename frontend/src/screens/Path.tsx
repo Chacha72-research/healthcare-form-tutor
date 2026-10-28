@@ -62,7 +62,7 @@ export function PathScreen({ papers, concepts, go }: { papers: Paper[]; concepts
     <>
       <TopBar go={go} showHome={false} />
       <main className="path-page">
-        <Clip k="clip_hello" size={80} />
+        <Clip k="clip_hello" size={64} />
         <button type="button" className="bigpic-card" onClick={() => go({ name: "bigpicture" })}>
           <span className="bigpic-card-flow" aria-hidden="true">
             <span className="bp-dot">

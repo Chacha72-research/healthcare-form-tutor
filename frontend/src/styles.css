@@ -3857,3 +3857,272 @@ mark {
     font-size: 0.98rem;
   }
 }
+
+/* ======================================================================
+   Clean and simple: fewer boxes, less doubled text, more white space.
+   (These rules come last on purpose so they win.)
+   ====================================================================== */
+
+/* Clip: a slimmer bubble */
+.clip-bubble {
+  padding: 10px 50px 10px 14px;
+  border-radius: 16px;
+  margin-bottom: 10px;
+}
+
+.clip-native {
+  font-size: 1.02rem;
+  line-height: 1.35;
+}
+
+.clip-en {
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.clip-say {
+  width: 36px;
+  height: 36px;
+  border-width: 1.5px;
+}
+
+/* Sounds of the word: plain text with dots, the loud part highlighted */
+.syl {
+  gap: 0 10px;
+}
+
+.syl-word {
+  gap: 0;
+}
+
+.syl-part,
+.hero-small .syl-part,
+.syl-part.is-stress {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+}
+
+.syl-part + .syl-part::before {
+  content: "·";
+  margin: 0 4px;
+  color: var(--rule);
+}
+
+.syl-part.is-stress {
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration: underline 4px var(--marker);
+  text-underline-offset: 3px;
+}
+
+/* Round sound buttons with just an icon */
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 2px solid var(--rule);
+  border-radius: 50%;
+  background: var(--sheet);
+  color: var(--scrubs);
+  box-shadow: 0 3px 0 var(--rule);
+}
+
+.icon-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--rule);
+}
+
+.hero {
+  gap: 10px;
+}
+
+.hero-word,
+.hero-small .hero-word {
+  font-size: 2.1rem;
+}
+
+/* English you can tap: no box, just text with a small speaker */
+.sayline {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 1.1rem;
+}
+
+.sayline-big {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.sayline .icon {
+  margin-top: 4px;
+  opacity: 0.8;
+}
+
+/* The learner's language: quiet text under the English, no colored box */
+.helper {
+  padding: 0 0 0 12px;
+  border-left: 3px solid var(--scrubs-tint);
+  border-radius: 0;
+  background: none;
+  align-items: center;
+}
+
+.helper p,
+.helper-big {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.helper .listen {
+  width: 40px;
+  height: 40px;
+  border-width: 1.5px;
+}
+
+/* Word card: plain sections */
+.termcard {
+  gap: 20px;
+}
+
+.termcard-block {
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 1px solid #e3e9e7;
+}
+
+.termcard-write {
+  margin: 0;
+  padding: 18px 0 0;
+  border-top: 1px solid #e3e9e7;
+  border-radius: 0;
+  background: none;
+}
+
+.termcard-label {
+  font-size: 0.85rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink-soft);
+}
+
+.termcard-label .bi-en,
+.termcard .source-note {
+  display: none;
+}
+
+.termcard .sayline-big {
+  font-size: 1.15rem;
+}
+
+/* Small buttons show one language; big buttons and headings keep both */
+.reply-quiet .bi-en,
+.btn-quiet .bi-en,
+.mic .bi-en,
+.bigpic-step .bi-en,
+.yourturn-label .bi-en,
+.yourturn-verdict .bi-en,
+.lfoot-msg .bi-en {
+  display: none;
+}
+
+/* Path: banners say just the name and the step */
+.unit-about {
+  display: none;
+}
+
+.unit-banner {
+  padding: 14px 16px;
+}
+
+.path {
+  gap: 26px;
+}
+
+.node-label {
+  font-size: 0.9rem;
+}
+
+.node-label .bi-en {
+  font-size: 0.75rem;
+}
+
+/* Lessons: more air between fewer things */
+.lesson-body {
+  gap: 22px;
+  padding-top: 4px;
+}
+
+.task {
+  gap: 20px;
+}
+
+.tile-big {
+  min-height: 62px;
+  font-size: 1.15rem;
+}
+
+/* Big picture: plain step counter */
+.bigpic-step {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.story-icon {
+  width: 92px;
+  height: 92px;
+  border-radius: 26px;
+}
+
+.story-title {
+  display: none;
+}
+
+/* Speaking practice: a calmer "your turn" card */
+.yourturn {
+  gap: 10px;
+  padding: 16px;
+  border-width: 1.5px;
+  box-shadow: 0 4px 0 var(--rule);
+}
+
+.yourturn-label {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.yourturn-line {
+  font-size: 1.3rem;
+}
+
+.yourturn-small .reply {
+  min-height: 44px;
+  padding: 6px 14px;
+  border: 0;
+  background: none;
+  color: var(--scrubs-dark);
+}
+
+.sline-bubble {
+  border-width: 1px;
+}
+
+@media (max-width: 480px) {
+  .hero-word,
+  .hero-small .hero-word {
+    font-size: 1.8rem;
+  }
+
+  .sayline-big {
+    font-size: 1.15rem;
+  }
+
+  .lesson-body {
+    gap: 18px;
+  }
+}

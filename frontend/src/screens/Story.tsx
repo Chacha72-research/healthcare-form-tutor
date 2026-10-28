@@ -124,7 +124,7 @@ export function StoryScreen({ id, nodeId, go }: { id: string; nodeId: string; go
                 <ListenButton
                   parts={[{ text: card.explain_l1, lang: "l1", voice: "tutor", style: "tutor" }]}
                   label={t("listen")}
-                  tag={language.native_name}
+                  size="sm"
                 />
               </div>
             ) : (

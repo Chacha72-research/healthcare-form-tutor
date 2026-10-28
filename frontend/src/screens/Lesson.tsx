@@ -285,7 +285,7 @@ function Meet({ w }: { w: LessonWord }) {
           <ListenButton
             parts={[{ text: w.l1.meaning, lang: "l1", voice: "tutor", style: "tutor" }]}
             label={t("listen")}
-            tag={language.native_name}
+            size="sm"
           />
         </div>
       )}

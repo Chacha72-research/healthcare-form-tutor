@@ -2,7 +2,7 @@
 // English uses the browser's own voice: instant and free.
 
 import { useEffect, type ReactNode } from "react";
-import { Bi } from "../i18n";
+import { useLang } from "../i18n";
 import { sayEnglish } from "../speech";
 import { Icon } from "./Icon";
 
@@ -29,6 +29,7 @@ export function Syllables({ say }: { say: string }) {
 }
 
 export function WordHero({ term, say, autoSay = false, small = false }: { term: string; say: string; autoSay?: boolean; small?: boolean }) {
+  const { t } = useLang();
   useEffect(() => {
     if (!autoSay) return;
     const timer = setTimeout(() => void sayEnglish(term, true), 350);
@@ -42,13 +43,11 @@ export function WordHero({ term, say, autoSay = false, small = false }: { term: 
       </button>
       <Syllables say={say} />
       <div className="hero-btns">
-        <button type="button" className="pill" onClick={() => sayEnglish(term)}>
-          <Icon name="speaker" size={22} />
-          <Bi k="listen" />
+        <button type="button" className="icon-btn" onClick={() => sayEnglish(term)} aria-label={t("listen")} title={t("listen")}>
+          <Icon name="speaker" size={26} />
         </button>
-        <button type="button" className="pill" onClick={() => sayEnglish(term, true)}>
-          <Icon name="slow" size={22} />
-          <Bi k="slow" />
+        <button type="button" className="icon-btn" onClick={() => sayEnglish(term, true)} aria-label={t("slow")} title={t("slow")}>
+          <Icon name="slow" size={26} />
         </button>
       </div>
     </div>

@@ -136,7 +136,7 @@ export function BigPictureScreen({ go }: { go: (s: Screen) => void }) {
                   <ListenButton
                     parts={[{ text: card.explain_l1, lang: "l1", voice: "tutor", style: "tutor" }]}
                     label={t("listen")}
-                    tag={language.native_name}
+                    size="sm"
                   />
                 </div>
               ) : (
